@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/npm/v/koestlich?style=flat-square)](https://npmjs.com/package/coconut-xr/koestlich)
 [![License](https://img.shields.io/apm/l/koestlich?style=flat-square)](https://npmjs.com/package/coconut-xr/koestlich)
-[![Twitter](https://img.shields.io/twitter/follow/BelaBohlender?style=flat-square)](https://twitter.com/BelaBohlender)
+[![Twitter](https://img.shields.io/twitter/follow/coconut_xr?style=flat-square)](https://twitter.com/coconut_xr)
 
 ![header image](./koestlich-header.jpg)
 
