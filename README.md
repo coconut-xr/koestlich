@@ -17,6 +17,7 @@ We currently provide bindings to [react-three/fiber](https://github.com/pmndrs/r
 ## Examples
 
 * [Dashboard](https://codesandbox.io/s/koestlich-dashboard-example-8hjx90)
+
 ![dashboard example](./images/dashboard.png)
 
 ## [Documentation](https://coconut-xr.github.io/koestlich)

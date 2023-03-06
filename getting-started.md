@@ -9,6 +9,7 @@ At first, we will create 3 containers. One container is the root node, expressed
 In addition to normal css properties, the `RootContainer` also needs a function to `loadYoga`. Yoga can be manually provided from `yoga-wasm-web` via wasm or asm.js or a BASE64 version of the code can be loaded from `@coconut-xr/flex`.
 
 [CodeSandbox](https://codesandbox.io/s/koestlich-first-layout-owgw9d?file=/src/app.tsx)
+
 ![Screenshot](./first-layout.png)
 
 ```tsx
@@ -46,6 +47,7 @@ The `index` parameter can also be used to reorder elements independent of how th
 
 
 [CodeSandbox](https://codesandbox.io/s/koestlich-async-content-1fyyhw?file=/src/app.tsx)
+
 ![Screenshot](./async-content.png)
 
 ```tsx
@@ -93,6 +95,7 @@ export default function App() {
 The Text component enables rendering text using multi-channel signed distance functions (MSDF). A font can be rendered by compiling a .ttf file to an MSDF representation as a JSON and a corresponding texture. We provide a set of precompiled MSDF fonts. In the following, a Text is rendered with the Roboto font family.
 
 [CodeSandbox](https://codesandbox.io/s/koestlich-text-b8ymnm?file=/src/app.tsx)
+
 ![Screenshot](./text.png)
 
 ```tsx
@@ -147,6 +150,7 @@ Animations are built into **koestlich**, and they work out of the box. The anima
 
 
 [CodeSandbox](https://codesandbox.io/s/koestlich-animations-gnthy9?file=/src/app.tsx)
+
 ![Screenshot](./animations.gif)
 
 ```tsx
@@ -197,9 +201,10 @@ export default function Index() {
 Since **Koestlich** is a 3D UI library, it supports 3D content like GLTFs or any custom Three.js geometry and material. The following example shows how to use the `GLTF` component to directly import a 3D model, and how to use the `Object` component to insert a object with a `SphereGeomerty` and a `MeshPhongMaterial` into the layout.
 
 [CodeSandbox](https://codesandbox.io/s/koestlich-3d-content-153ljq?file=/src/app.tsx)
+
 ![Screenshot](./3d-content.png)
 
-```typescript
+```tsx
 import { RootContainer, Object, GLTF, Container } from "@coconut-xr/koestlich";
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
@@ -250,6 +255,7 @@ export default function App() {
 **Koestlich** handles clipping and scrolling for you. You only need to specify overflow "scroll" or "hidden" on any container. First, however, we need to configure react-three/fiber to support visual clipping and clipping of events, which is done via `<Canvas events={clippingEvents} gl={{ localClippingEnabled: true }}>`.
 
 [CodeSandbox](https://codesandbox.io/s/koestlich-overflow-c9nkvc?file=/src/app.tsx)
+
 ![Screenshot](./scroll.gif)
 
 ```tsx

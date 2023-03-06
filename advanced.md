@@ -9,6 +9,7 @@ The unit for expressing sizes in 2D layouts often correspond to pixels. However,
 **Koestlich** implements supports for classes and inherited property values. The following code shows how classes and the `DefaultStyleProvider` can reduce style descriptions. In the following example, one `DefaultStyleProvider` sets the `borderRadius` to `0.1` for all `Containers`. The `borderRadius` style is inherited and extended with `margin = 0.1` from a second `DefaultStyleProvider`. The constant `blue` acts as a css class and assigns the `backgroundColor` to two components.
 
 [CodeSandbox](https://codesandbox.io/s/koestlich-classes-defaults-85cdb6?file=/src/app.tsx)
+
 ![Screenshot](./classes-defaults.png)
 
 ```tsx
@@ -49,6 +50,7 @@ export default function Index() {
 **Koestlich** allows creating custom properties for multiple component types. In the following we create the `variant` property which takes the values `danger` and `success` and sets the backround colors `red` and green respectively on components of type image and container.
 
 [CodeSandbox](https://codesandbox.io/s/koestlich-custom-api-z77pr6?file=/src/app.tsx)
+
 ![Screenshot](./custom-api.png)
 
 ```tsx
