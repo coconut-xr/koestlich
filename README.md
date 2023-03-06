@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/github/license/coconut-xr/koestlich.svg?style=flat-square)](https://github.com/coconut-xr/koestlich/blob/master/LICENSE)
 [![Twitter](https://img.shields.io/twitter/follow/coconut_xr?style=flat-square)](https://twitter.com/coconut_xr)
 
-![header image](./koestlich-header.jpg)
+![header image](./images/koestlich-header.jpg)
 
 _user interfaces for Three.js_
 
@@ -16,9 +16,15 @@ We currently provide bindings to [react-three/fiber](https://github.com/pmndrs/r
 
 ## Examples
 
-*Link: Codepens*
+* [Dashboard](https://codesandbox.io/s/koestlich-dashboard-example-8hjx90)
+![dashboard example](./images/dashboard.png)
 
-## [Documentation]()
+## [Documentation](https://coconut-xr.github.io/koestlich)
 
-* [Getting Started]() - introduces **koestlich**'s features by example
-* [Components]() - Description of available components and their API
+* [Getting Started](https://coconut-xr.github.io/koestlich/#/getting-started) - introduces **koestlich**'s features by example
+* [Advanced](https://coconut-xr.github.io/koestlich/#/advanced) - introducing classes, default styles, and custom property APIs
+* [Components](https://coconut-xr.github.io/koestlich/#/components) - Description of available components and their API
+
+## Ecosystem
+
+* Text Fields & Text Areas - [@coconut-xr/input](https://github.com/coconut-xr/input)

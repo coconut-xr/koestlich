@@ -1,28 +1,42 @@
 # Advanced
 
-## Classes, DefaultStyleProvider, and Custom Property APIs
+## Precision
 
-The developer experience of the web with CSS is widely adopted. Therefore we implemented supports for classes and inherited property values. The following code shows how classes and the DefaultStyleProvider can reduce style descriptions. In the following example, the DefaultStyleProvider sets the padding values of all descendants to 0.1, and the "blue" class provides a blue backgroundColor to two components.
+The unit for expressing sizes in 2D layouts often correspond to pixels. However, in 3D layouts no such uniform unit exists. For use-cases light WebXR, 1 unit should correspond to 1 meter. However, in other use-cases another unit is more reasonable. To support different units, we provide the `precision` parameter on the root component. The default precision is `0.001` and expresses the smallest possible difference between two values. The precision also influences the z-offset between nested components. If z-fighting occurs the precision should be increased.
+
+## Classes and DefaultStyleProvider
+
+**Koestlich** implements supports for classes and inherited property values. The following code shows how classes and the `DefaultStyleProvider` can reduce style descriptions. In the following example, one `DefaultStyleProvider` sets the `borderRadius` to `0.1` for all `Containers`. The `borderRadius` style is inherited and extended with `margin = 0.1` from a second `DefaultStyleProvider`. The constant `blue` acts as a css class and assigns the `backgroundColor` to two components.
+
+[CodeSandbox](https://codesandbox.io/s/koestlich-classes-defaults-85cdb6?file=/src/app.tsx)
+![Screenshot](./classes-defaults.png)
 
 ```tsx
-import { Canvas } from "";
-import { OrbitControls } from "";
-import { RootContainer, Container, FLEX, DefaultStyleProvider } from "@coconut-xr/koestlich";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import { RootContainer, Container, flexAPI, DefaultStyleProvider } from "@coconut-xr/koestlich";
+import { loadYoga } from "@coconut-xr/flex";
 
-const blue: FLEX = {
+const blue = {
   backgroundColor: "blue",
 };
 
 export default function Index() {
   return (
     <Canvas>
-      <OrbitControls />
-
-      <DefaultStyleProvider<typeof flexAPI> padding={0.1}>
-        <RootContainer backgroundColor="red" width={2} height={1} flexDirection="row">
-          <Container flexGrow={1} padding={0.1} classes={[blue]} />
-          <Container flexGrow={1} padding={0.1} backgroundColor="green" />
-          <Container flexGrow={1} padding={0.1} classes={[blue]} />
+      <OrbitControls enableRotate={false} />
+      <DefaultStyleProvider borderRadius={0.1}>
+        <RootContainer
+          loadYoga={loadYoga}
+          backgroundColor="red"
+          width={2}
+          height={1}
+          flexDirection="row"
+        >
+          <DefaultStyleProvider margin={0.1}>
+            <Container flexGrow={1} classes={[blue]} />
+            <Container flexGrow={1} classes={[blue]} />
+          </DefaultStyleProvider>
         </RootContainer>
       </DefaultStyleProvider>
     </Canvas>
@@ -30,21 +44,27 @@ export default function Index() {
 }
 ```
 
-Additionally, we allow overwriting the property API to create custom properties for multiple component types.
+## Custom Property APIs
+
+**Koestlich** allows creating custom properties for multiple component types. In the following we create the `variant` property which takes the values `danger` and `success` and sets the backround colors `red` and green respectively on components of type image and container.
+
+[CodeSandbox](https://codesandbox.io/s/koestlich-custom-api-z77pr6?file=/src/app.tsx)
+![Screenshot](./custom-api.png)
 
 ```tsx
-import { Canvas } from "";
-import { OrbitControls } from "";
-import { Suspense } from "react";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
 import {
   RootContainer,
-  useContainer,
-  useImage,
-  flexApi,
-  ContainerNode,
-  ImageNode,
+  flexAPI,
   buildComponent,
+  ContainerNode,
+  useContainer,
+  useText,
+  TextNode,
 } from "@coconut-xr/koestlich";
+import { loadYoga } from "@coconut-xr/flex";
+import { Suspense } from "react";
 
 const customAPI = {
   ...flexAPI,
@@ -57,16 +77,24 @@ const customAPI = {
 };
 
 const CustomContainer = buildComponent(ContainerNode, useContainer, customAPI);
-const CustomImage = buildComponent(ImageNode, useImage, customAPI);
+const CustomText = buildComponent(TextNode, useText, customAPI);
 
 export default function Index() {
   return (
     <Canvas>
       <OrbitControls />
-      <RootContainer width={2} height={1} flexDirection="row">
-        <CustomContainer index={0} flexGrow={1} variant="danger" />
+      <RootContainer
+        loadYoga={loadYoga}
+        backgroundColor="black"
+        width={2}
+        height={1}
+        flexDirection="row"
+      >
+        <CustomContainer margin={0.1} index={0} flexGrow={1} variant="danger" />
         <Suspense>
-          <Image index={1} flexGrow={1} variant="success" padding={0.1} url="example.png" />
+          <CustomText index={1} flexGrow={1} flexBasis={0} variant="success" margin={0.1}>
+            Coconut XR
+          </CustomText>
         </Suspense>
       </RootContainer>
     </Canvas>
