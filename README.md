@@ -1,7 +1,7 @@
 # @coconut-xr/koestlich
 
-[![Version](https://img.shields.io/npm/v/koestlich?style=flat-square)](https://npmjs.com/package/coconut-xr/koestlich)
-[![License](https://img.shields.io/apm/l/koestlich?style=flat-square)](https://npmjs.com/package/coconut-xr/koestlich)
+[![Version](https://img.shields.io/npm/v/@coconut-xr/koestlich?style=flat-square)](https://npmjs.com/package/@coconut-xr/koestlich)
+[![License](https://img.shields.io/github/license/coconut-xr/koestlich.svg?style=flat-square)](https://github.com/coconut-xr/koestlich/blob/master/LICENSE)
 [![Twitter](https://img.shields.io/twitter/follow/coconut_xr?style=flat-square)](https://twitter.com/coconut_xr)
 
 ![header image](./koestlich-header.jpg)
