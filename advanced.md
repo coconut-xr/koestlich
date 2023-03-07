@@ -2,11 +2,11 @@
 
 ## Precision
 
-The unit for expressing sizes in 2D layouts often correspond to pixels. However, in 3D layouts no such uniform unit exists. For use-cases light WebXR, 1 unit should correspond to 1 meter. However, in other use-cases another unit is more reasonable. To support different units, we provide the `precision` parameter on the root component. The default precision is `0.001` and expresses the smallest possible difference between two values. The precision also influences the z-offset between nested components. If z-fighting occurs the precision should be increased.
+The unit for expressing sizes in 2D layouts often corresponds to pixels. However, in 3D layouts, no such uniform unit exists. For use cases like WebXR, 1 unit should correspond to 1 meter. However, in other use cases, another unit is more reasonable. We provide the `precision` parameter on the root component to support different units. The default precision is `0.001`. The precision expresses the smallest possible difference between two values. The precision also influences the z-offset between nested components. If z-fighting occurs, the precision should be increased.
 
 ## Classes and DefaultStyleProvider
 
-**Koestlich** implements supports for classes and inherited property values. The following code shows how classes and the `DefaultStyleProvider` can reduce style descriptions. In the following example, one `DefaultStyleProvider` sets the `borderRadius` to `0.1` for all `Containers`. The `borderRadius` style is inherited and extended with `margin = 0.1` from a second `DefaultStyleProvider`. The constant `blue` acts as a css class and assigns the `backgroundColor` to two components.
+**Koestlich** implements support for classes and inherited property values. The following code shows how classes and the `DefaultStyleProvider` can reduce style descriptions. In the following example, one `DefaultStyleProvider` sets the `borderRadius` to `0.1` for all `Containers`. The `borderRadius` style is inherited and extended with `margin = 0.1` from a second `DefaultStyleProvider`. The constant `blue` acts as a CSS class and assigns the `backgroundColor` to two components.
 
 [CodeSandbox](https://codesandbox.io/s/koestlich-classes-defaults-85cdb6?file=/src/app.tsx)
 
@@ -47,7 +47,7 @@ export default function Index() {
 
 ## Custom Property APIs
 
-**Koestlich** allows creating custom properties for multiple component types. In the following we create the `variant` property which takes the values `danger` and `success` and sets the backround colors `red` and green respectively on components of type image and container.
+**Koestlich** allows the creation of custom properties for multiple component types. For example, in the following, we create the `variant` property, which takes the values `danger` and `success` and sets the background colors `red` and `green`, respectively, on components of the type image and container.
 
 [CodeSandbox](https://codesandbox.io/s/koestlich-custom-api-z77pr6?file=/src/app.tsx)
 

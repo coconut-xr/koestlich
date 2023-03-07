@@ -9,7 +9,7 @@
       content="Documentation for @coconut-xr/koestlich providing user interfaces for Three.js"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/dark.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css" />
     <link rel="stylesheet" href="//unpkg.com/prismjs/themes/prism-okaidia.css" />
   </head>
   <body>
@@ -23,11 +23,12 @@
       };
     </script>
     <style>
-      .search {
-        border: none !important;
+      .markdown-section pre, .markdown-section pre>code {
+        background-color: #333;
+        color: #eee;
       }
-      .markdown-section strong {
-        color: #fff !important;
+      * {
+        --theme-color: rgba(123,175,17,.9);
       }
     </style>
     <!-- Docsify v4 -->

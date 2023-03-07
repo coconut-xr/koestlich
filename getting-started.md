@@ -1,12 +1,12 @@
 # Getting Started
 
-In the following tutorials, we will create several UIs using **koestlich** and react-three/fiber. Each example provides a CodeSandbox containg the code.
+In the following tutorials, we will create several UIs using **koestlich** and react-three/fiber. Each example provides a CodeSandbox containing the code.
 
 ## First Layout
 
 At first, we will create 3 containers. One container is the root node, expressed by `RootContainer`. The `RootContainer` has a horizontal (row) flex-direction, while the children expressed by `Container` equally fill its width with a margin between them.
 
-In addition to normal css properties, the `RootContainer` also needs a function to `loadYoga`. Yoga can be manually provided from `yoga-wasm-web` via wasm or asm.js or a BASE64 version of the code can be loaded from `@coconut-xr/flex`.
+In addition to normal CSS properties, the `RootContainer` also needs a function to `loadYoga`. Yoga can be manually provided from `yoga-wasm-web` via wasm or asm.js, or the BASE64 encoded code can be loaded from `@coconut-xr/flex`.
 
 [CodeSandbox](https://codesandbox.io/s/koestlich-first-layout-owgw9d?file=/src/app.tsx)
 
@@ -39,9 +39,9 @@ export default function Index() {
 
 ## Asynchronous Content
 
-**Koestlich** provides the components Text, Image, GLTF, and SVG, which load their content asynchronously. The components use the Suspense API from react to handle the loading state. This allows the components to be wrapped in a Suspense component to display a fallback element while loading.
+**Koestlich** provides Text, Image, GLTF, and SVG components, which load their content asynchronously. The components use the Suspense API from react to handle the loading state. This allows the components to be wrapped in a Suspense component to display a fallback element while loading.
 
-The asynchronous loading can lead to inconsistent ordering. **Koestlich** can enforce a specific order of components, by setting the `index` parameter.
+The asynchronous loading can lead to inconsistent ordering. **Koestlich** can enforce a specific order of components by setting the `index` parameter.
 
 The `index` parameter can also be used to reorder elements independent of how they are expressed in react.
 
@@ -133,7 +133,7 @@ export default function Index() {
 }
 ```
 
-Via the `FontFamilyProvider` additional MSDF fonts can be added.
+Via the `FontFamilyProvider`, additional MSDF fonts can be added.
 
 ```tsx
 <FontFamilyProvider
@@ -146,7 +146,7 @@ Via the `FontFamilyProvider` additional MSDF fonts can be added.
 
 ## Animations
 
-Animations are built into **koestlich**, and they work out of the box. The animation behavior of every component can be controlled via the animation property, which allows controlling the animation computation and the birth and death animations. The default behavior is fade in and out by opacity and a distance-based animation computation. The following example shows how the state is controlled via a button, which changes the ordering of components via the index parameter and and animates the button's color between green and red.
+Animations are built into **koestlich** and work out of the box. The animation behavior of every component can be controlled via the animation property, which allows controlling the animation computation and the birth and death animations. The default behavior is fade in and out by opacity and a distance-based animation computation. The following example shows how the state is controlled via a button, which changes the ordering of components via the index parameter and animates the button's color between green and red.
 
 
 [CodeSandbox](https://codesandbox.io/s/koestlich-animations-gnthy9?file=/src/app.tsx)
@@ -198,7 +198,7 @@ export default function Index() {
 
 ## 3D Content
 
-Since **Koestlich** is a 3D UI library, it supports 3D content like GLTFs or any custom Three.js geometry and material. The following example shows how to use the `GLTF` component to directly import a 3D model, and how to use the `Object` component to insert a object with a `SphereGeomerty` and a `MeshPhongMaterial` into the layout.
+Since **koestlich** is a 3D UI library, it supports 3D content like GLTFs or any custom Three.js geometry and material. The following example shows how to use the `GLTF` component to import a 3D model directly and how to use the `Object` component to insert an object with a `SphereGeomerty` and a `MeshPhongMaterial` into the layout.
 
 [CodeSandbox](https://codesandbox.io/s/koestlich-3d-content-153ljq?file=/src/app.tsx)
 

@@ -123,13 +123,13 @@ Renders a string into individual glyphs based on a multi-channel signed distance
 
 | Parameter            | Description                                                                                                                                       |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| fontFamily           | The name of the font family specified in the FontFamilyProvider. If none is provided the default fontFamily from the font family provider is used |
+| fontFamily           | The name of the font family specified in the FontFamilyProvider. If none is provided, the default fontFamily from the font family provider is used |
 | fontSize             | The maximum height of the rendered glyphs. The default is 0.1.                                                                                    |
 | letterSpacing        | The additional spacing between the letters/glyphs. The default is 0.                                                                              |
-| lineHeightMultiplier | The mulitplier of the line height. Influences the spacing between lines. The default is 1.2.                                                      |
+| lineHeightMultiplier | The multiplier of the line height. Influences the spacing between lines. The default is 1.2.                                                      |
 | wrapper              | The wrapping behavior for the text layouting. Values can be "breakall", "nowrap", or a custom glyph wrapper                                       |
-| horizontalAlign      | The horizontal align of the text. Values can be "left", "center", "right", or "block". The default is "left".                                     |
-| verticalAlign        | The vertical align of the text. Values can be "top", "center", or "bottom".                                                                       |
+| horizontalAlign      | The horizontal alignment of the text. Values can be "left", "center", "right", or "block". The default is "left".                                     |
+| verticalAlign        | The vertical alignment of the text. Values can be "top", "center", or "bottom".                                                                       |
 
 ## GLTF
 
@@ -138,7 +138,7 @@ The GLTF component renders a .gltf file into the 3D layout. All children are pla
 | Parameter | Description                                                                                                                                                                 |
 | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | url       | The url to the gltf.                                                                                                                                                        |
-| depth     | The depth parameter overwrites the depth depth of the gltf. Negative values are not possible. The default value is undefined which falls back to the depth of the 3d model. |
+| depth     | The depth parameter overwrites the depth of the gltf. Negative values are not possible. The default value is undefined, which falls back to the depth of the 3d model. |
 
 ## SVG
 
@@ -146,8 +146,8 @@ The SVG component renders a .svg file into the 3D layout.
 
 | Parameter | Description                                                                                             |
 | --------- | ------------------------------------------------------------------------------------------------------- |
-| url       | The url to the svg.                                                                                     |
-| depth     | The depth value of the svg. Negative values are not possible. A flat svg can be rendered via depth={0}. |
+| url       | The URL to the svg file.                                                                                     |
+| depth     | The depth of the rendered SVG. Negative values are not possible. A flat SVG can be rendered via depth={0}. |
 
 ## Box
 
