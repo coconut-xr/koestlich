@@ -22,7 +22,7 @@ const blue = {
   backgroundColor: "blue",
 };
 
-export default function Index() {
+export default function App() {
   return (
     <Canvas>
       <OrbitControls enableRotate={false} />
@@ -81,7 +81,7 @@ const customAPI = {
 const CustomContainer = buildComponent(ContainerNode, useContainer, customAPI);
 const CustomText = buildComponent(TextNode, useText, customAPI);
 
-export default function Index() {
+export default function App() {
   return (
     <Canvas>
       <OrbitControls />
