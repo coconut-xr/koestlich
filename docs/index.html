@@ -20,15 +20,17 @@
         subMaxLevel: 2,
         repo: "https://github.com/coconut-xr/koestlich",
         loadSidebar: true,
+        loadFooter: true,
       };
     </script>
     <style>
-      .markdown-section pre, .markdown-section pre>code {
+      .markdown-section pre,
+      .markdown-section pre > code {
         background-color: #333;
         color: #eee;
       }
       * {
-        --theme-color: rgba(123,175,17,.9);
+        --theme-color: rgba(123, 175, 17, 0.9);
       }
     </style>
     <!-- Docsify v4 -->
@@ -37,5 +39,6 @@
     <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-jsx.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-typescript.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-tsx.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/@alertbox/docsify-footer/dist/docsify-footer.min.js"></script>
   </body>
 </html>

@@ -83,7 +83,7 @@ Renders any Three.js 3d Mesh.
 | Parameter | Description                                                                                                                                                              |
 | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | object    | The Three.js mesh to be rendered.                                                                                                                                        |
-| depth     | The depth parameter overwrites the depth of the 3d mesh. Negative values are not possible. The default value is undefined, which falls back to the depth of the 3d mesh. |
+| depth     | The depth property sets the size of the 3d Object along the z-Axis. Negative values are not possible. If no depth value is provided for a 3D model, the depth will be set according to the original width/depth ratio. |
 
 ## Container
 
@@ -138,7 +138,7 @@ The GLTF component renders a .gltf file into the 3D layout. All children are pla
 | Parameter | Description                                                                                                                                                                 |
 | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | url       | The url to the gltf.                                                                                                                                                        |
-| depth     | The depth parameter overwrites the depth of the gltf. Negative values are not possible. The default value is undefined, which falls back to the depth of the 3d model. |
+| depth     | The depth property sets the size of the 3d Object along the z-Axis. Negative values are not possible. If no depth value is provided for a 3D model, the depth will be set according to the original width/depth ratio. |
 
 ## SVG
 
@@ -147,7 +147,7 @@ The SVG component renders a .svg file into the 3D layout.
 | Parameter | Description                                                                                             |
 | --------- | ------------------------------------------------------------------------------------------------------- |
 | url       | The URL to the svg file.                                                                                     |
-| depth     | The depth of the rendered SVG. Negative values are not possible. A flat SVG can be rendered via depth={0}. |
+| depth     | The size of the rendered SVG in the z-Axis (yes SVGs are 3D Models). Negative values are not possible. A flat SVG can be rendered via depth={0}. |
 
 ## Box
 
@@ -155,4 +155,4 @@ The Box component renders a simple 3D box into the layout.
 
 | Parameter | Description                                             |
 | --------- | ------------------------------------------------------- |
-| depth     | The depth of the box. Negative values are not possible. |
+| depth     | The size of the box along the z-Axis. Negative values are not possible. |
