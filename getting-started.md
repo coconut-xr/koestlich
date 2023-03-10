@@ -152,7 +152,7 @@ For text fields and text areas, we provide the [@coconut-xr/input](https://githu
 
 ## Animations
 
-Animations are built into **koestlich** and work out of the box. Almost all properties can be animated. In contrast to HTML/CSS, elements can transition from one place in a list to another, a feature often referred to as AutoTransition. To declare how UI elements relate between two different layouts, the `id` property is used. Placing the same `id` property on two UI components in different layouts will keep the underlying UI element alive and automatically transition. However, both UI components need to have the same type. Therefore, it is impossible to transition an Image to a Text component.
+Animations are built into **koestlich** and work out of the box. Almost all properties can be animated. In contrast to HTML/CSS, elements can transition from one place in a layout to another, a feature often referred to as AutoTransition. To declare how UI elements relate between two different layouts, the `id` property is used. Placing the same `id` property on two UI components in different layouts will keep the underlying UI element alive and automatically transition. However, both UI components need to have the same type. Therefore, it is impossible to transition an Image to a Text component.
 Koestlich provides the animation property to control birth, death, and transition behavior. The following example shows how the state is controlled via a button, which changes the ordering of components via the index parameter and animates the button's color between green and red.
 
 
