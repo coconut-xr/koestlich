@@ -92,7 +92,7 @@ export default function App() {
 
 ## Text
 
-The Text component enables rendering text using multi-channel signed distance functions (MSDF). A font can be from a .ttf file to an MSDF representation as a JSON and a corresponding texture using [`msdf-bmfont-xml`](https://www.npmjs.com/package/msdf-bmfont-xml). We provide a set of precompiled MSDF fonts from [here](https://github.com/coconut-xr/msdf-fonts). In the following, a Text is rendered with the Roboto font family.
+The Text component enables rendering text using multi-channel signed distance functions (MSDF). A font can be created from a .ttf file to an MSDF representation as a JSON and a corresponding texture using [`msdf-bmfont-xml`](https://www.npmjs.com/package/msdf-bmfont-xml). We provide a set of precompiled MSDF fonts from [here](https://github.com/coconut-xr/msdf-fonts). In the following, a Text is rendered with the Roboto font family.
 
 [CodeSandbox](https://codesandbox.io/s/koestlich-text-b8ymnm?file=/src/app.tsx)
 
