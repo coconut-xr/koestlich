@@ -1,7 +1,7 @@
 import { Mesh, Object3D, Vector4 } from "three";
 import { BackgroundMaterial } from "./background-material.js";
 import { ContainerState } from "./components/index.js";
-import { saveDivideScalar } from "./utils.js";
+import { saveDivideNumber, saveDivideScalar } from "./utils.js";
 
 export function linkBackground(
   current: ContainerState,
@@ -33,10 +33,7 @@ export function updateBackgroundValues(
   );
   mesh.visible = current.borderOpacity.x > 0.001 || current.backgroundOpacity.x > 0.001;
   material.borderOpacity = current.borderOpacity.x;
-  material.ratio = current.scale.x / current.scale.y;
-  if (!isFinite(material.ratio)) {
-    material.ratio = 0;
-  }
+  material.ratio = saveDivideNumber(current.scale.x, current.scale.y);
   saveDivideScalar(material.borderRadius.copy(current.borderRadius), current.scale.y).min(_0_5);
   saveDivideScalar(material.borderSize.copy(current.borderSize), current.scale.y);
 }

@@ -20,6 +20,10 @@ export function saveDivide<V extends Vector123>(target: V, vector: V): V {
   return target;
 }
 
+export function saveDivideNumber(v1: number, v2: number): number {
+  return v2 === 0 ? 0 : v1 / v2;
+}
+
 export function saveDivideScalar<V extends Vector1 | Vector2 | Vector3 | Vector4>(
   target: V,
   scalar: number,

@@ -109,7 +109,7 @@ export default function Index() {
               <RootObject
                 loadYoga={loadYoga}
                 padding={0.03}
-                color="white"
+                color="black"
                 id="root"
                 object={bgObj}
                 overflow="scroll"
@@ -132,7 +132,10 @@ export default function Index() {
                   ></Object>
 
                   <Suspense fallback={null}>
-                    <Image index={2} id="image1" classes={[imageClass]} url="example.png" />
+                    <Image borderRadius={0.1} border={0.01} borderColor="green" index={2} id="image1" classes={[imageClass]} url="example.png" />
+                  </Suspense>
+                  <Suspense fallback={null}>
+                    <Image borderRadius={0.02} border={0.01} borderColor="red" index={2.5} id="image2" width={0.1} url="test.png" />
                   </Suspense>
 
                   <Suspense fallback={null}>

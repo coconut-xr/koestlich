@@ -28,9 +28,12 @@ import { linkBackground, updateBackgroundValues } from "../background.js";
 import { BackgroundMaterial } from "../background-material.js";
 import { InvertOptional } from "./text.js";
 import { applyEventHandlers } from "../events.js";
+import { saveDivideNumber, saveDivideScalar } from "../utils.js";
 
 const geometry = new PlaneGeometry();
 geometry.translate(0.5, -0.5, 0);
+
+const _0_5 = new Vector4(0.5, 0.5, 0.5, 0.5);
 
 export type ImageState = {
   opacity: Vector1;
@@ -54,7 +57,7 @@ export class ImageNode extends BaseNode<ImageState> {
     borderRadius: new Vector4(),
     borderSize: new Vector4(),
   };
-  private material = new MeshBasicMaterial({
+  private material = new BackgroundMaterial({
     transparent: true,
     toneMapped: false,
   });
@@ -114,10 +117,22 @@ export class ImageNode extends BaseNode<ImageState> {
   }
 
   computeImageTransformation(): void {
-    this.target.imageScale.set(1, 1);
-    this.target.imageOffset.set(0, 0);
+    const { x: topBorder, y: rightBorder, z: bottomBorder, w: leftBorder } = this.target.borderSize;
+    const xBorder = leftBorder + rightBorder;
+    const yBorder = topBorder + bottomBorder;
+    this.target.imageScale.set(
+      1 - saveDivideNumber(xBorder, this.target.scale.x),
+      1 - saveDivideNumber(yBorder, this.target.scale.y),
+    );
+    this.target.imageOffset.set(
+      saveDivideNumber(leftBorder, this.target.scale.x),
+      -saveDivideNumber(topBorder, this.target.scale.y),
+    );
 
-    const meshRatio = this.target.scale.y === 0 ? 0 : this.target.scale.x / this.target.scale.y;
+    const meshRatio = saveDivideNumber(
+      this.target.scale.x - xBorder,
+      this.target.scale.y - yBorder,
+    );
 
     const texture = this.material.map;
     texture?.matrix.identity();
@@ -159,6 +174,21 @@ export class ImageNode extends BaseNode<ImageState> {
 
     this.material.opacity = current.opacity.x;
     this.mesh.visible = current.opacity.x > 0.001;
+
+    this.material.ratio = saveDivideNumber(current.scale.x, current.scale.y);
+    this.material.borderRadius.copy(current.borderRadius);
+    const { x: topBorder, y: rightBorder, z: bottomBorder, w: leftBorder } = current.borderSize;
+
+    //top-left
+    this.material.borderRadius.x -= Math.max(topBorder, leftBorder);
+    //top-right
+    this.material.borderRadius.y -= Math.max(topBorder, rightBorder);
+    //bottom-right
+    this.material.borderRadius.z -= Math.max(bottomBorder, rightBorder);
+    //bottom-left
+    this.material.borderRadius.w -= Math.max(bottomBorder, leftBorder);
+
+    saveDivideScalar(this.material.borderRadius, current.scale.y).min(_0_5);
 
     updateBackgroundValues(current, this.backgroundMesh, this.backgroundMaterial);
   }
