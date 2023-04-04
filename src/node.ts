@@ -643,5 +643,5 @@ export function useNode<T extends BaseNode>(
       ref.current = node;
     }
     return node;
-  }, [root, nodeMap, bucket, precision, providedId, nodeClass, yoga]);
+  }, [root, nodeMap, bucket, precision, providedId, nodeClass, yoga, parentId]);
 }

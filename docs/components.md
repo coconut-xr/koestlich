@@ -80,9 +80,9 @@ _Event Properties_
 
 Renders any Three.js 3d Mesh.
 
-| Parameter | Description                                                                                                                                                              |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| object    | The Three.js mesh to be rendered.                                                                                                                                        |
+| Parameter | Description                                                                                                                                                                                                            |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| object    | The Three.js mesh to be rendered.                                                                                                                                                                                      |
 | depth     | The depth property sets the size of the 3d Object along the z-Axis. Negative values are not possible. If no depth value is provided for a 3D model, the depth will be set according to the original width/depth ratio. |
 
 ## Container
@@ -112,47 +112,47 @@ The container renders a 2D plane with a special shader for borderRadius, borderS
 
 The image renders a 2D plane with an image. The image also has the properties of the container to render a background.
 
-| Parameter | Description                                      |
-| --------- | ------------------------------------------------ |
-| url       | The url to the image.                            |
-| fit       | The values can be "cover", "contain", or "fill". |
+| Parameter | Description                                                                                                                                                                                                                                                                                                                                 |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| url       | The url to the image.                                                                                                                                                                                                                                                                                                                       |
+| fit       | The values can be "cover", "contain", or "fill". The fit property will only be effective if the element has a aspect ratio that differs from the image source aspect ratio. To force an image to a specific size that violate the aspect ratio of the image source, use the "maxWidth", "minWidth", "maxHeight", and "minHeight" properties. |
 
 ## Text
 
 Renders a string into individual glyphs based on a multi-channel signed distance function. The text requires the provision of a FontFamilyProvider. The text also has the properties of the container to render a background.
 
-| Parameter            | Description                                                                                                                                       |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Parameter            | Description                                                                                                                                        |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | fontFamily           | The name of the font family specified in the FontFamilyProvider. If none is provided, the default fontFamily from the font family provider is used |
-| fontSize             | The maximum height of the rendered glyphs. The default is 0.1.                                                                                    |
-| letterSpacing        | The additional spacing between the letters/glyphs. The default is 0.                                                                              |
-| lineHeightMultiplier | The multiplier of the line height. Influences the spacing between lines. The default is 1.2.                                                      |
-| wrapper              | The wrapping behavior for the text layouting. Values can be "breakall", "nowrap", or a custom glyph wrapper                                       |
-| horizontalAlign      | The horizontal alignment of the text. Values can be "left", "center", "right", or "block". The default is "left".                                     |
-| verticalAlign        | The vertical alignment of the text. Values can be "top", "center", or "bottom".                                                                       |
+| fontSize             | The maximum height of the rendered glyphs. The default is 0.1.                                                                                     |
+| letterSpacing        | The additional spacing between the letters/glyphs. The default is 0.                                                                               |
+| lineHeightMultiplier | The multiplier of the line height. Influences the spacing between lines. The default is 1.2.                                                       |
+| wrapper              | The wrapping behavior for the text layouting. Values can be "breakall", "nowrap", or a custom glyph wrapper                                        |
+| horizontalAlign      | The horizontal alignment of the text. Values can be "left", "center", "right", or "block". The default is "left".                                  |
+| verticalAlign        | The vertical alignment of the text. Values can be "top", "center", or "bottom".                                                                    |
 
 ## GLTF
 
 The GLTF component renders a .gltf file into the 3D layout. All children are placed in front of the 3D model.
 
-| Parameter | Description                                                                                                                                                                 |
-| --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| url       | The url to the gltf.                                                                                                                                                        |
+| Parameter | Description                                                                                                                                                                                                            |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| url       | The url to the gltf.                                                                                                                                                                                                   |
 | depth     | The depth property sets the size of the 3d Object along the z-Axis. Negative values are not possible. If no depth value is provided for a 3D model, the depth will be set according to the original width/depth ratio. |
 
 ## SVG
 
 The SVG component renders a .svg file into the 3D layout.
 
-| Parameter | Description                                                                                             |
-| --------- | ------------------------------------------------------------------------------------------------------- |
-| url       | The URL to the svg file.                                                                                     |
+| Parameter | Description                                                                                                                                      |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| url       | The URL to the svg file.                                                                                                                         |
 | depth     | The size of the rendered SVG in the z-Axis (yes SVGs are 3D Models). Negative values are not possible. A flat SVG can be rendered via depth={0}. |
 
 ## Box
 
 The Box component renders a simple 3D box into the layout.
 
-| Parameter | Description                                             |
-| --------- | ------------------------------------------------------- |
+| Parameter | Description                                                             |
+| --------- | ----------------------------------------------------------------------- |
 | depth     | The size of the box along the z-Axis. Negative values are not possible. |

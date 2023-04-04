@@ -214,8 +214,8 @@ export function useImage(
   { url, opacity, fit, ...props }: ImageProperties,
   children: ReactNode | undefined,
 ): ReactNode | undefined {
-  const t = useLoader(TextureLoader, url);
-  const texture = useMemo(() => t.clone(), [t]); //clone since we change parameters on the texture (can be removed when we use instancing for the images)
+  //TODO: stop updating texture value on the node
+  const texture = useLoader(TextureLoader, url);
   texture.encoding = sRGBEncoding;
   texture.wrapS = texture.wrapT = RepeatWrapping;
   texture.matrixAutoUpdate = false;
