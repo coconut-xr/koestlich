@@ -1,6 +1,6 @@
 {
   "name": "@coconut-xr/koestlich",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "homepage": "https://coconut-xr.github.io/koestlich",
   "license": "SEE LICENSE IN LICENSE",
   "description": "user interfaces for Three.js",
@@ -47,15 +47,17 @@
     "prettier": "^2.8.4",
     "react": "^18.2.0",
     "three": "^0.147.0",
+    "three-stdlib": "^2.21.8",
     "typescript": "^4.9.5"
   },
   "peerDependencies": {
     "@react-three/fiber": "*",
+    "three-stdlib": "*",
     "react": "*",
     "three": ">=0.140.0"
   },
   "dependencies": {
-    "@coconut-xr/glyph": "^0.0.1",
-    "@coconut-xr/flex": "^3.0.2"
+    "@coconut-xr/flex": "^3.0.2",
+    "@coconut-xr/glyph": "^0.0.2"
   }
 }

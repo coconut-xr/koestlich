@@ -13,6 +13,7 @@ import {
   NowrapWrapper,
   updateGlyphMesh,
   Font,
+  WordWrapper,
 } from "@coconut-xr/glyph";
 import {
   createContext,
@@ -528,10 +529,10 @@ export const textDefaults: Omit<
   children: "",
   color: 0x0,
   opacity: 1,
-  wrapper: "breakall",
+  wrapper: "breakword",
 };
 
-export type GlyphWrapperProperty = GlyphWrapper | "breakall" | "nowrap";
+export type GlyphWrapperProperty = GlyphWrapper | "breakall" | "nowrap" | "breakword";
 
 export type TextProperties = {
   color?: ColorRepresentation;
@@ -548,6 +549,8 @@ export function resolveGlyphWrapper(property: GlyphWrapperProperty) {
   switch (property) {
     case "breakall":
       return BreakallWrapper;
+    case "breakword":
+      return WordWrapper;
     case "nowrap":
       return NowrapWrapper;
   }

@@ -22,11 +22,11 @@ import { useLoader } from "@react-three/fiber";
 import { ReactNode, useEffect, useMemo } from "react";
 import { flexAPI } from "../properties/index.js";
 import { ContainerState, updateEventProperties } from "./container.js";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { GLTFLoader } from "three-stdlib/loaders/GLTFLoader.js";
 import { InvertOptional } from "./text.js";
 import { saveDivide } from "../utils.js";
 import { applyEventHandlers } from "../events.js";
-import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
+import { SVGLoader } from "three-stdlib/loaders/SVGLoader.js";
 import { ExtendedEventHandlers } from "../scroll-handler.js";
 import { YogaProperties } from "@coconut-xr/flex";
 
@@ -62,6 +62,9 @@ export class Object3DNode extends BaseNode<Object3DState> {
 
   applyRenderOrder(renderOrder: number): void {
     this.group.traverse((mesh) => {
+      if ("isMesh" in mesh != mesh instanceof Mesh) {
+        console.log(mesh.constructor, Mesh);
+      }
       if (mesh instanceof Mesh) {
         mesh.renderOrder = renderOrder;
       }

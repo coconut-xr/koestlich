@@ -12,7 +12,6 @@ import {
   buildComponent,
   clippingEvents,
   flexAPI,
-  TextNode,
   Object,
   RootObject,
 } from "@coconut-xr/koestlich";
@@ -20,7 +19,7 @@ import { Canvas } from "@react-three/fiber";
 import { Fullscreen } from "./fullscreen";
 import { OrbitControls } from "@react-three/drei";
 import { Mesh, MeshPhongMaterial, MOUSE, PlaneGeometry } from "three";
-import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry";
+import { RoundedBoxGeometry } from "three-stdlib/geometries/RoundedBoxGeometry";
 import { loadYoga } from "@coconut-xr/flex";
 
 const imageClass = {
@@ -40,7 +39,6 @@ const customAPI = {
 const CustomContainer = buildComponent(ContainerNode, useContainer, customAPI);
 
 export default function Index() {
-  const textRef = useRef<TextNode>();
   const [show, setShow] = useState(true);
   const [red, setRed] = useState(true);
 
@@ -132,10 +130,26 @@ export default function Index() {
                   ></Object>
 
                   <Suspense fallback={null}>
-                    <Image borderRadius={0.1} border={0.01} borderColor="green" index={2} id="image1" classes={[imageClass]} url="example.png" />
+                    <Image
+                      borderRadius={0.1}
+                      border={0.01}
+                      borderColor="green"
+                      index={2}
+                      id="image1"
+                      classes={[imageClass]}
+                      url="example.png"
+                    />
                   </Suspense>
                   <Suspense fallback={null}>
-                    <Image borderRadius={0.02} border={0.01} borderColor="red" index={2.5} id="image2" width={0.1} url="test.png" />
+                    <Image
+                      borderRadius={0.02}
+                      border={0.01}
+                      borderColor="red"
+                      index={2.5}
+                      id="image2"
+                      width={0.1}
+                      url="test.png"
+                    />
                   </Suspense>
 
                   <Suspense fallback={null}>
@@ -158,15 +172,24 @@ export default function Index() {
                   >
                     <Suspense fallback={null}>
                       <Text
-                        borderRadius={0.03}
+                        backgroundColor="red"
                         index={0}
                         padding={0.03}
                         paddingLeft={0.1}
                         color={0x0}
-                        id="text"
-                        ref={textRef}
+                        id="c-xr"
                       >
                         Coconut XR
+                      </Text>
+                    </Suspense>
+                    <Suspense>
+                      <Text
+                        index={1}
+                        fontSize={0.05}
+                        color={0x0}
+                        id="lorem-ipsum"
+                      >
+                        "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness."
                       </Text>
                     </Suspense>
                   </CustomContainer>
