@@ -112,24 +112,24 @@ The container renders a 2D plane with a special shader for borderRadius, borderS
 
 The image renders a 2D plane with an image. The image also has the properties of the container to render a background.
 
-| Parameter | Description                                                                                                                                                                                                                                                                                                                                 |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| url       | The url to the image.                                                                                                                                                                                                                                                                                                                       |
+| Parameter | Description                                                                                                                                                                                                                                                                                                                                  |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| url       | The url to the image.                                                                                                                                                                                                                                                                                                                        |
 | fit       | The values can be "cover", "contain", or "fill". The fit property will only be effective if the element has a aspect ratio that differs from the image source aspect ratio. To force an image to a specific size that violate the aspect ratio of the image source, use the "maxWidth", "minWidth", "maxHeight", and "minHeight" properties. |
 
 ## Text
 
 Renders a string into individual glyphs based on a multi-channel signed distance function. The text requires the provision of a FontFamilyProvider. The text also has the properties of the container to render a background.
 
-| Parameter            | Description                                                                                                                                        |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| fontFamily           | The name of the font family specified in the FontFamilyProvider. If none is provided, the default fontFamily from the font family provider is used |
-| fontSize             | The maximum height of the rendered glyphs. The default is 0.1.                                                                                     |
-| letterSpacing        | The additional spacing between the letters/glyphs. The default is 0.                                                                               |
-| lineHeightMultiplier | The multiplier of the line height. Influences the spacing between lines. The default is 1.2.                                                       |
-| wrapper              | The wrapping behavior for the text layouting. Values can be "breakall", "nowrap", or a custom glyph wrapper                                        |
-| horizontalAlign      | The horizontal alignment of the text. Values can be "left", "center", "right", or "block". The default is "left".                                  |
-| verticalAlign        | The vertical alignment of the text. Values can be "top", "center", or "bottom".                                                                    |
+| Parameter            | Description                                                                                                                                           |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| fontFamily           | The name of the font family specified in the FontFamilyProvider. If none is provided, the default fontFamily from the font family provider is used    |
+| fontSize             | The maximum height of the rendered glyphs. The default is 0.1.                                                                                        |
+| letterSpacing        | The additional spacing between the letters/glyphs. The default is 0.                                                                                  |
+| lineHeightMultiplier | The multiplier of the line height. Influences the spacing between lines. The default is 1.2.                                                          |
+| wrapper              | The wrapping behavior for the text layouting. Values can be "breakall", "nowrap", "breakword", or a custom glyph wrapper. The default is "breakword". |
+| horizontalAlign      | The horizontal alignment of the text. Values can be "left", "center", "right", or "block". The default is "left".                                     |
+| verticalAlign        | The vertical alignment of the text. Values can be "top", "center", or "bottom".                                                                       |
 
 ## GLTF
 
