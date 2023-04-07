@@ -14,6 +14,7 @@ import {
   flexAPI,
   Object,
   RootObject,
+  RootContainer,
 } from "@coconut-xr/koestlich";
 import { Canvas } from "@react-three/fiber";
 import { Fullscreen } from "./fullscreen";
@@ -183,13 +184,11 @@ export default function Index() {
                       </Text>
                     </Suspense>
                     <Suspense>
-                      <Text
-                        index={1}
-                        fontSize={0.05}
-                        color={0x0}
-                        id="lorem-ipsum"
-                      >
-                        "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness."
+                      <Text index={1} fontSize={0.05} color={0x0} id="lorem-ipsum">
+                        "But I must explain to you how all this mistaken idea of denouncing pleasure
+                        and praising pain was born and I will give you a complete account of the
+                        system, and expound the actual teachings of the great explorer of the truth,
+                        the master-builder of human happiness."
                       </Text>
                     </Suspense>
                   </CustomContainer>

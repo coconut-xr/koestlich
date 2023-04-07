@@ -26,10 +26,10 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "check": "run-s check:prettier check:eslint",
-    "check:prettier": "prettier --check src/**/*.{ts,tsx}",
+    "check:prettier": "prettier --check 'src/**/*.{ts,tsx}'",
     "check:eslint": "eslint src",
     "fix": "run-s fix:prettier fix:eslint",
-    "fix:prettier": "prettier --write src/**/*.{ts,tsx}",
+    "fix:prettier": "prettier --write 'src/**/*.{ts,tsx}'",
     "fix:eslint": "eslint src --fix"
   },
   "devDependencies": {

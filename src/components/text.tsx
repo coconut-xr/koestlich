@@ -130,17 +130,6 @@ export class TextNode extends BaseNode<TextState> {
       : this.selection[0];
   }
 
-  applyRenderOrder(renderOrder: number): void {
-    this.backgroundMesh.renderOrder = renderOrder;
-    this.selectionMeshCache.forEach((mesh) => {
-      mesh.renderOrder = renderOrder + selectionOffset;
-    });
-    if (this.mesh != null) {
-      this.mesh.renderOrder = renderOrder + textOffset;
-    }
-    this.caretMesh.renderOrder = renderOrder + caretOffset;
-  }
-
   applyClippingPlanes(planes: Plane[] | null): void {
     this.backgroundMaterial.clippingPlanes = planes;
     this.backgroundMaterial.needsUpdate = true;
@@ -235,8 +224,6 @@ export class TextNode extends BaseNode<TextState> {
       this.bucket.remove(this.mesh);
       this.mesh.dispose();
     }
-
-    mesh.renderOrder = this.renderOrder + textOffset;
 
     this.mesh = mesh;
     this.bucket.add(this.mesh);
@@ -488,11 +475,10 @@ export class TextNode extends BaseNode<TextState> {
 
   private getSelectionMeshes(count: number): Mesh[] {
     if (count > this.selectionMeshCache.length) {
-      const newMeshes = Array.from({ length: count - this.selectionMeshCache.length }, () => {
-        const mesh = new Mesh(geometry, this.selectionMaterial);
-        mesh.renderOrder = this.renderOrder + selectionOffset;
-        return mesh;
-      });
+      const newMeshes = Array.from(
+        { length: count - this.selectionMeshCache.length },
+        () => new Mesh(geometry, this.selectionMaterial),
+      );
       this.bucket.add(...newMeshes);
       this.selectionMeshCache.splice(this.selectionMeshCache.length, 0, ...newMeshes);
     } else if (count === this.selectionMeshCache.length) {

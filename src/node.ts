@@ -147,7 +147,6 @@ export abstract class BaseNode<S extends AnimationState = AnimationState> extend
   protected isDying = false;
 
   public index = 0;
-  protected renderOrder = 0;
 
   public animationConfig: AnimationConfig = distanceFadeAnimation;
 
@@ -325,9 +324,6 @@ export abstract class BaseNode<S extends AnimationState = AnimationState> extend
     }
     this.parent = this.nextParent;
 
-    this.renderOrder = this.parent == null ? 0 : this.parent.renderOrder + 1;
-    this.applyRenderOrder(this.renderOrder);
-
     this.updateScroll();
     this.updateTransformationTarget(false);
 
@@ -376,8 +372,6 @@ export abstract class BaseNode<S extends AnimationState = AnimationState> extend
   abstract onCleanup(): void;
 
   abstract linkCurrent(current: S): void;
-
-  abstract applyRenderOrder(renderOrder: number): void;
 
   abstract applyClippingPlanes(planes: Array<Plane> | null): void;
 

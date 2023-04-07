@@ -71,11 +71,6 @@ export class ImageNode extends BaseNode<ImageState> {
 
   private fit: ImageFit = "fill";
 
-  applyRenderOrder(renderOrder: number): void {
-    this.mesh.renderOrder = renderOrder + 0.5;
-    this.backgroundMesh.renderOrder = renderOrder;
-  }
-
   applyClippingPlanes(planes: Plane[] | null): void {
     this.backgroundMaterial.clippingPlanes = planes;
     this.backgroundMaterial.needsUpdate = true;

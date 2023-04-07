@@ -60,17 +60,6 @@ export class Object3DNode extends BaseNode<Object3DState> {
   private depthRatio = 0;
   private overwrittenDepth: number | undefined;
 
-  applyRenderOrder(renderOrder: number): void {
-    this.group.traverse((mesh) => {
-      if ("isMesh" in mesh != mesh instanceof Mesh) {
-        console.log(mesh.constructor, Mesh);
-      }
-      if (mesh instanceof Mesh) {
-        mesh.renderOrder = renderOrder;
-      }
-    });
-  }
-
   applyClippingPlanes(planes: Plane[] | null): void {
     this.group.traverse((object) => {
       if (object instanceof Mesh) {
@@ -108,7 +97,6 @@ export class Object3DNode extends BaseNode<Object3DState> {
     this.group.add(this.object);
 
     this.applyClippingPlanes(this.clippingPlanes);
-    this.applyRenderOrder(this.renderOrder);
     this.updateDepth();
   }
 

@@ -43,10 +43,6 @@ export class ContainerNode extends BaseNode<ContainerState> {
   });
   private backgroundMesh = new Mesh(geometry, this.backgroundMaterial);
 
-  applyRenderOrder(renderOrder: number): void {
-    this.backgroundMesh.renderOrder = renderOrder;
-  }
-
   applyClippingPlanes(planes: Plane[] | null): void {
     this.backgroundMaterial.clippingPlanes = planes;
     this.backgroundMaterial.needsUpdate = true;
