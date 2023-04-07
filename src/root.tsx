@@ -10,7 +10,7 @@ import React, {
 import { Bucket } from "./bucket.js";
 import { UseComponent } from "./component.js";
 import { BaseNode, NodeClass, useNode } from "./node.js";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import {
   flexAPI,
   PropertiesFromAPI,
@@ -20,6 +20,8 @@ import {
 import { YogaProperties } from "@coconut-xr/flex";
 import { Yoga } from "yoga-wasm-web";
 import { suspend } from "suspend-react";
+import { patchRenderOrder } from "./index.js";
+import { Vector3 } from "three";
 
 const BaseNodeContext = createContext<BaseNode>(null as any);
 
@@ -81,6 +83,7 @@ export function buildRoot<T extends BaseNode, P extends YogaProperties, C, A ext
   >(({ loadYoga, precision, id = "root", children, classes, ...props }, ref) => {
     const yoga = suspend(loadYoga, [loadYoga, LoadYogaSymbol]);
     const dirtyRef = useRef(false);
+    const renderer = useThree(({ gl }) => gl);
     const rootStorage = useMemo<RootStorage>(
       () => ({
         yoga,
@@ -101,12 +104,15 @@ export function buildRoot<T extends BaseNode, P extends YogaProperties, C, A ext
     const node = useNode(rootStorage, undefined, undefined, id, nodeClass, ref);
     const reactChildren = useComponent(node, properties, children);
     useFrame((state, deltaTime) => {
+      state.camera.getWorldDirection(cameraWorldDirection);
       if (dirtyRef.current) {
         node.calculateLayout();
         dirtyRef.current = false;
       }
       node.update(deltaTime);
     });
+    const cameraWorldDirection = useMemo(() => new Vector3(), []);
+    useEffect(() => patchRenderOrder(renderer, cameraWorldDirection), [renderer]);
 
     useEffect(() => {
       if (node.setParent(undefined)) {

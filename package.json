@@ -1,6 +1,6 @@
 {
   "name": "@coconut-xr/koestlich",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "homepage": "https://coconut-xr.github.io/koestlich",
   "license": "SEE LICENSE IN LICENSE",
   "description": "user interfaces for Three.js",
@@ -58,6 +58,6 @@
   },
   "dependencies": {
     "@coconut-xr/flex": "^3.0.2",
-    "@coconut-xr/glyph": "^0.0.2"
+    "@coconut-xr/glyph": "^0.0.3"
   }
 }
