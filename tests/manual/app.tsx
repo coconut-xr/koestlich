@@ -105,116 +105,118 @@ export default function Index() {
         >
           {(width, height) =>
             show ? (
-              <RootObject
-                loadYoga={loadYoga}
-                padding={0.03}
-                color="black"
-                id="root"
-                object={bgObj}
-                overflow="scroll"
-                width={width}
-                height={height}
-              >
-                <DefaultStyleProvider<typeof flexAPI>>
-                  <Suspense fallback={null}>
-                    <Image index={1} id="image0" classes={[imageClass]} url="example.png" />
-                  </Suspense>
-
-                  <Object
-                    object={obj}
-                    width={0.2}
-                    height={0.2}
-                    index={1.5}
-                    color={red ? "red" : "blue"}
-                    id="rounded"
-                    onClick={() => setRed((red) => !red)}
-                  ></Object>
-
-                  <Suspense fallback={null}>
-                    <Image
-                      borderRadius={0.1}
-                      border={0.01}
-                      borderColor="green"
-                      index={2}
-                      id="image1"
-                      classes={[imageClass]}
-                      url="example.png"
-                    />
-                  </Suspense>
-                  <Suspense fallback={null}>
-                    <Image
-                      borderRadius={0.02}
-                      border={0.01}
-                      borderColor="red"
-                      index={2.5}
-                      id="image2"
-                      width={0.1}
-                      url="test.png"
-                    />
-                  </Suspense>
-
-                  <Suspense fallback={null}>
-                    <SVG id="svg1" depth={0} index={3} url="example.svg" height={0.05} />
-                    <SVG
-                      depth={0}
-                      id="svg2"
-                      index={4}
-                      color={0xffff00}
-                      url="example.svg"
-                      height={0.1}
-                    />
-                  </Suspense>
-                  <CustomContainer
-                    borderRadius={0.05}
-                    padding={0.05}
-                    index={5}
-                    id="x"
-                    variant="success"
-                  >
+              <group position={[0, 0, -1]}>
+                <RootObject
+                  loadYoga={loadYoga}
+                  padding={0.03}
+                  color="black"
+                  id="root"
+                  object={bgObj}
+                  overflow="scroll"
+                  width={width}
+                  height={height}
+                >
+                  <DefaultStyleProvider<typeof flexAPI>>
                     <Suspense fallback={null}>
-                      <Text
-                        backgroundColor="red"
-                        index={0}
-                        padding={0.03}
-                        paddingLeft={0.1}
-                        color={0x0}
-                        id="c-xr"
-                      >
-                        Coconut XR
-                      </Text>
+                      <Image index={1} id="image0" classes={[imageClass]} url="example.png" />
                     </Suspense>
-                    <Suspense>
-                      <Text index={1} fontSize={0.05} color={0x0} id="lorem-ipsum">
-                        "But I must explain to you how all this mistaken idea of denouncing pleasure
-                        and praising pain was born and I will give you a complete account of the
-                        system, and expound the actual teachings of the great explorer of the truth,
-                        the master-builder of human happiness."
-                      </Text>
-                    </Suspense>
-                  </CustomContainer>
-                  <Container index={6}>
+
+                    <Object
+                      object={obj}
+                      width={0.2}
+                      height={0.2}
+                      index={1.5}
+                      color={red ? "red" : "blue"}
+                      id="rounded"
+                      onClick={() => setRed((red) => !red)}
+                    ></Object>
+
                     <Suspense fallback={null}>
-                      <GLTF
-                        scaleX={1}
-                        scaleY={1}
-                        alignItems="center"
-                        justifyContent="center"
-                        id="gltf"
-                        url="example.glb"
-                        width={0.2}
-                        index={5}
-                        height={0.2}
-                      >
-                        <Suspense fallback={null}>
-                          <Text index={0} fontSize={0.01} id="text2" color={0x0}>
-                            COCONUT XR
-                          </Text>
-                        </Suspense>
-                      </GLTF>
+                      <Image
+                        borderRadius={0.1}
+                        border={0.01}
+                        borderColor="green"
+                        index={2}
+                        id="image1"
+                        classes={[imageClass]}
+                        url="example.png"
+                      />
                     </Suspense>
-                  </Container>
-                </DefaultStyleProvider>
-              </RootObject>
+                    <Suspense fallback={null}>
+                      <Image
+                        borderRadius={0.02}
+                        border={0.01}
+                        borderColor="red"
+                        index={2.5}
+                        id="image2"
+                        width={0.1}
+                        url="test.png"
+                      />
+                    </Suspense>
+
+                    <Suspense fallback={null}>
+                      <SVG id="svg1" depth={0} index={3} url="example.svg" height={0.05} />
+                      <SVG
+                        depth={0}
+                        id="svg2"
+                        index={4}
+                        color={0xffff00}
+                        url="example.svg"
+                        height={0.1}
+                      />
+                    </Suspense>
+                    <CustomContainer
+                      borderRadius={0.05}
+                      padding={0.05}
+                      index={5}
+                      id="x"
+                      variant="success"
+                    >
+                      <Suspense fallback={null}>
+                        <Text
+                          backgroundColor="red"
+                          index={0}
+                          padding={0.03}
+                          paddingLeft={0.1}
+                          color={0x0}
+                          id="c-xr"
+                        >
+                          Coconut XR
+                        </Text>
+                      </Suspense>
+                      <Suspense>
+                        <Text index={1} fontSize={0.05} color={0x0} id="lorem-ipsum">
+                          "But I must explain to you how all this mistaken idea of denouncing
+                          pleasure and praising pain was born and I will give you a complete account
+                          of the system, and expound the actual teachings of the great explorer of
+                          the truth, the master-builder of human happiness."
+                        </Text>
+                      </Suspense>
+                    </CustomContainer>
+                    <Container index={6}>
+                      <Suspense fallback={null}>
+                        <GLTF
+                          scaleX={1}
+                          scaleY={1}
+                          alignItems="center"
+                          justifyContent="center"
+                          id="gltf"
+                          url="example.glb"
+                          width={0.2}
+                          index={5}
+                          height={0.2}
+                        >
+                          <Suspense fallback={null}>
+                            <Text index={0} fontSize={0.01} id="text2" color={0x0}>
+                              COCONUT XR
+                            </Text>
+                          </Suspense>
+                        </GLTF>
+                      </Suspense>
+                    </Container>
+                  </DefaultStyleProvider>
+                </RootObject>
+              </group>
             ) : (
               <></>
             )

@@ -103,16 +103,16 @@ export function buildRoot<T extends BaseNode, P extends YogaProperties, C, A ext
     );
     const node = useNode(rootStorage, undefined, undefined, id, nodeClass, ref);
     const reactChildren = useComponent(node, properties, children);
+    const cameraWorldPosition = useMemo(() => new Vector3(), []);
     useFrame((state, deltaTime) => {
-      state.camera.getWorldDirection(cameraWorldDirection);
+      state.camera.getWorldPosition(cameraWorldPosition);
       if (dirtyRef.current) {
         node.calculateLayout();
         dirtyRef.current = false;
       }
       node.update(deltaTime);
     });
-    const cameraWorldDirection = useMemo(() => new Vector3(), []);
-    useEffect(() => patchRenderOrder(renderer, cameraWorldDirection), [renderer]);
+    useEffect(() => patchRenderOrder(renderer, cameraWorldPosition), [renderer]);
 
     useEffect(() => {
       if (node.setParent(undefined)) {

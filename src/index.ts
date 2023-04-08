@@ -2,8 +2,9 @@ import { Object3D, RenderItem, Vector3, WebGLRenderer } from "three";
 import { Bucket } from "./bucket.js";
 
 const normalHelper = new Vector3();
+const positionNormalHelper = new Vector3();
 
-function reversePainterSortStable(cameraWorldDirection: Vector3, a: RenderItem, b: RenderItem) {
+function reversePainterSortStable(cameraWorldPosition: Vector3, a: RenderItem, b: RenderItem) {
   if (a.groupOrder !== b.groupOrder) {
     return a.groupOrder - b.groupOrder;
   }
@@ -12,8 +13,12 @@ function reversePainterSortStable(cameraWorldDirection: Vector3, a: RenderItem, 
   }
   const aBucket = getBucketParent(a.object);
   if (aBucket != null && aBucket === getBucketParent(b.object)) {
-    const sign = cameraWorldDirection.dot(aBucket.getWorldDirection(normalHelper)) >= 0 ? 1 : -1;
-    return sign * (b.object.position.z - a.object.position.z);
+    aBucket.getWorldPosition(positionNormalHelper).sub(cameraWorldPosition);
+    let distance = b.object.position.z - a.object.position.z;
+    if (positionNormalHelper.dot(aBucket.getWorldDirection(normalHelper)) < 0) {
+      distance = -distance;
+    }
+    return distance;
   }
   if (a.z !== b.z) {
     return b.z - a.z;
@@ -21,8 +26,8 @@ function reversePainterSortStable(cameraWorldDirection: Vector3, a: RenderItem, 
   return a.id - b.id;
 }
 
-export function patchRenderOrder(renderer: WebGLRenderer, cameraWorldDirection: Vector3): void {
-  renderer.setTransparentSort(reversePainterSortStable.bind(null, cameraWorldDirection));
+export function patchRenderOrder(renderer: WebGLRenderer, cameraWorldPosition: Vector3): void {
+  renderer.setTransparentSort(reversePainterSortStable.bind(null, cameraWorldPosition));
 }
 
 function getBucketParent(object: Object3D): Bucket | undefined {
