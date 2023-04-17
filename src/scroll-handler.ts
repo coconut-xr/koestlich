@@ -1,11 +1,8 @@
 import { EventHandlers, ThreeEvent } from "@react-three/fiber/dist/declarations/src/core/events.js";
-import { Object3D, PerspectiveCamera, Plane, Ray, Vector3 } from "three";
+import { Object3D, PerspectiveCamera, Vector3 } from "three";
 
 const distanceHelper = new Vector3();
 const localPointHelper = new Vector3();
-
-const rayHelper = new Ray();
-const planeHelper = new Plane();
 
 export type ExtendedThreeEvent<T> = ThreeEvent<T> & { preventDefault: () => void };
 export type ExtendEventhandler<EventHandler extends EventHandlers[keyof EventHandlers]> =
@@ -33,6 +30,7 @@ export abstract class ScrollHandler implements EventHandlers {
   private hasPrevIntersection = false;
   private dragDistance: number | undefined;
   protected abstract parent: ScrollHandler | undefined;
+  public abstract readonly precision: number;
 
   customEvents: ExtendedEventHandlers = {};
 
@@ -112,16 +110,8 @@ export abstract class ScrollHandler implements EventHandlers {
     ) {
       return;
     }
-
-    event.camera.getWorldPosition(rayHelper.origin);
-    event.camera.getWorldDirection(rayHelper.direction);
-    planeHelper.setFromNormalAndCoplanarPoint(rayHelper.direction, event.point);
-    const distance = rayHelper.distanceToPlane(planeHelper);
-    const heightOfThePlaneWeScrollOn = Math.tan((event.camera.fov / 180) * Math.PI) * distance * 2;
-
-    const elementBounds = event.nativeEvent.target.getBoundingClientRect();
-    const xScroll = (-event.deltaX / elementBounds.width) * heightOfThePlaneWeScrollOn * 0.15;
-    const yScroll = (event.deltaY / elementBounds.height) * heightOfThePlaneWeScrollOn * 0.15;
+    const xScroll = -event.deltaX * this.precision;
+    const yScroll = event.deltaY * this.precision;
 
     if (!this.onScroll(xScroll, yScroll)) {
       return;

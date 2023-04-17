@@ -2,7 +2,7 @@
 
 ## Precision
 
-The unit for expressing sizes in 2D layouts often corresponds to pixels. However, in 3D layouts, no such uniform unit exists. For use cases like WebXR, 1 unit should correspond to 1 meter. However, in other use cases, another unit is more reasonable. We provide the `precision` parameter on the root component to support different units. The default precision is `0.001`. The precision expresses the smallest possible difference between two values. The precision also influences the z-offset between nested components. If z-fighting occurs, the precision should be increased.
+The unit for expressing sizes in 2D layouts often corresponds to pixels. However, in 3D layouts, no such uniform unit exists. For use cases like WebXR, 1 unit should correspond to 1 meter. However, in other use cases, another unit may be more reasonable. We provide the `precision` parameter on the root component to support different units. The default precision is `0.001`. The precision expresses the smallest possible difference between two values. The precision influeces the layout computation, the z-offset between nested components, and the scroll speed. If z-fighting occurs or the scrolling is too slow/fast the precision should be modified.
 
 ## Classes and DefaultStyleProvider
 
