@@ -15,7 +15,7 @@ import { buildRoot } from "../root.js";
 import { Vector1 } from "../vector.js";
 import { buildComponent } from "../component.js";
 import { TextureLoader } from "three/src/loaders/TextureLoader.js";
-import { useLoader } from "@react-three/fiber";
+import { useLoader, useThree } from "@react-three/fiber";
 import { ReactNode, useEffect, useMemo } from "react";
 import { flexAPI } from "../properties/index.js";
 import {
@@ -211,9 +211,13 @@ export function useImage(
 ): ReactNode | undefined {
   //TODO: stop updating texture value on the node
   const texture = useLoader(TextureLoader, url);
-  texture.encoding = sRGBEncoding;
-  texture.wrapS = texture.wrapT = RepeatWrapping;
-  texture.matrixAutoUpdate = false;
+  const gl = useThree((state) => state.gl);
+  useEffect(() => {
+    gl.initTexture(texture);
+    texture.encoding = sRGBEncoding;
+    texture.wrapS = texture.wrapT = RepeatWrapping;
+    texture.matrixAutoUpdate = false;
+  }, [gl, texture]);
   useEffect(() => {
     //updates in use effect to respect the lifcycles
     updateContainerProperties(node, props);
