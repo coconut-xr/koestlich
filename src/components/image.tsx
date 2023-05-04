@@ -1,11 +1,11 @@
 import {
   Mesh,
-  MeshBasicMaterial,
   Plane,
   PlaneGeometry,
   RepeatWrapping,
   sRGBEncoding,
   Texture,
+  TextureLoader,
   Vector2,
   Vector3,
   Vector4,
@@ -14,9 +14,8 @@ import { BaseNode } from "../node.js";
 import { buildRoot } from "../root.js";
 import { Vector1 } from "../vector.js";
 import { buildComponent } from "../component.js";
-import { TextureLoader } from "three/src/loaders/TextureLoader.js";
 import { useLoader, useThree } from "@react-three/fiber";
-import { ReactNode, useEffect, useMemo } from "react";
+import { ReactNode, useEffect } from "react";
 import { flexAPI } from "../properties/index.js";
 import {
   ContainerProperties,
