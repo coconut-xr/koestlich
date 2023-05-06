@@ -39,3 +39,9 @@ Description of available components and their API
 * Text Fields & Text Areas - [@coconut-xr/input](https://github.com/coconut-xr/input)
 
 <img src="./images/text.gif"  width="200">
+
+
+## React Native
+
+Use `expo-three` and overwrite the `PlatformConstants.TextureLoader` with the `TextureLoader` from `expo-three`:
+[Example](https://github.com/coconut-xr/koestlich-expo-test)
