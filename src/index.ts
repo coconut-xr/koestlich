@@ -1,4 +1,4 @@
-import { Object3D, RenderItem, Vector3, WebGLRenderer } from "three";
+import { Object3D, RenderItem, TextureLoader, Vector3, WebGLRenderer } from "three";
 import { Bucket } from "./bucket.js";
 
 const normalHelper = new Vector3();
@@ -39,6 +39,10 @@ function getBucketParent(object: Object3D): Bucket | undefined {
   }
   return getBucketParent(object.parent);
 }
+
+export const PlatformConstants = {
+  TextureLoader: TextureLoader,
+};
 
 export * from "./vector.js";
 export * from "./utils.js";

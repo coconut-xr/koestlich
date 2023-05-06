@@ -5,7 +5,6 @@ import {
   RepeatWrapping,
   sRGBEncoding,
   Texture,
-  TextureLoader,
   Vector2,
   Vector3,
   Vector4,
@@ -28,6 +27,7 @@ import { BackgroundMaterial } from "../background-material.js";
 import { InvertOptional } from "./text.js";
 import { applyEventHandlers } from "../events.js";
 import { saveDivideNumber, saveDivideScalar } from "../utils.js";
+import { PlatformConstants } from "../index.js";
 
 const geometry = new PlaneGeometry();
 geometry.translate(0.5, -0.5, 0);
@@ -209,13 +209,13 @@ export function useImage(
   children: ReactNode | undefined,
 ): ReactNode | undefined {
   //TODO: stop updating texture value on the node
-  const texture = useLoader(TextureLoader, url);
+  const texture = useLoader(PlatformConstants.TextureLoader, url);
   const gl = useThree((state) => state.gl);
   useEffect(() => {
-    gl.initTexture(texture);
     texture.encoding = sRGBEncoding;
     texture.wrapS = texture.wrapT = RepeatWrapping;
     texture.matrixAutoUpdate = false;
+    gl.initTexture(texture);
   }, [gl, texture]);
   useEffect(() => {
     //updates in use effect to respect the lifcycles

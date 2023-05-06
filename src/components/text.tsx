@@ -51,10 +51,10 @@ import {
 } from "./container.js";
 import { useThree } from "@react-three/fiber";
 import { suspend } from "suspend-react";
-import { TextureLoader } from "three";
 import { loadFont } from "@coconut-xr/glyph";
 import { setMeasureFunc, YogaProperties } from "@coconut-xr/flex";
 import { MeasureFunction } from "yoga-wasm-web";
+import { PlatformConstants } from "../index.js";
 
 const geometry = new PlaneGeometry();
 geometry.translate(0.5, -0.5, 0);
@@ -570,9 +570,6 @@ export function FontFamilyProvider<F extends FontFamilies>({
   );
 }
 
-const textureLoader = new TextureLoader();
-const loadFontTexture = textureLoader.loadAsync.bind(textureLoader);
-
 const defaultFontFamilyContext: FontFamilyContext = {
   defaultFontFamily: "roboto",
   fontFamilies: {
@@ -589,19 +586,25 @@ const defaultFontFamilyContext: FontFamilyContext = {
  */
 export function useFont(fontFamily?: string): Font<Texture> {
   const fontContext = useContext(fontFamilyContext) ?? defaultFontFamilyContext;
-  const renderer = useThree(({ gl }) => gl);
-  const maxAnisotropy = renderer.capabilities.getMaxAnisotropy();
-  return suspend(
-    async (fontFamily, fontContext, maxAnisotropy) => {
+  const font = suspend(
+    async (fontFamily, fontContext) => {
+      const textureLoader = new PlatformConstants.TextureLoader();
+      const loadFontTexture = textureLoader.loadAsync.bind(textureLoader);
       const [baseFontUrl, fontUrl] =
         fontContext.fontFamilies[fontFamily ?? fontContext.defaultFontFamily];
       const font = await loadFont(baseFontUrl, fontUrl, loadFontTexture);
-      font.page.flipY = false;
-      font.page.anisotropy = maxAnisotropy;
       return font;
     },
-    [fontFamily, fontContext, maxAnisotropy],
+    [fontFamily, fontContext],
   );
+  const gl = useThree((state) => state.gl);
+  useEffect(() => {
+    const maxAnisotropy = gl.capabilities.getMaxAnisotropy();
+    font.page.flipY = false;
+    font.page.anisotropy = maxAnisotropy;
+    gl.initTexture(font.page);
+  }, [gl, font.page]);
+  return font;
 }
 
 export function useText(
