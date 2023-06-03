@@ -313,11 +313,53 @@ export function useSVG(
   return useObject(node, { object, ...props }, children, true);
 }
 
+const svgLoader = new SVGLoader();
+
+export function useSVGFromText(
+  node: Object3DNode,
+  {
+    text,
+    ...props
+  }: {
+    text: string;
+  } & BaseObject3DProperties,
+  children: ReactNode | undefined,
+): ReactNode | undefined {
+  const result = svgLoader.parse(text);
+  const object = useMemo(() => {
+    const object = new Object3D();
+    let i = 0;
+    for (const path of result.paths) {
+      const shapes = SVGLoader.createShapes(path);
+      const material = new MeshPhongMaterial({
+        color: path.color,
+        transparent: true,
+        toneMapped: false,
+      });
+      for (const shape of shapes) {
+        const geometry = new ExtrudeGeometry(shape, {
+          depth: 1,
+          bevelEnabled: false,
+        });
+        const mesh = new Mesh(geometry, material);
+        mesh.scale.y = -1;
+        mesh.position.z = i++ * node.precision;
+        object.add(mesh);
+      }
+    }
+    return object;
+  }, [result]);
+  return useObject(node, { object, ...props }, children, true);
+}
+
 export const GLTF = buildComponent(Object3DNode, useGLTF, flexAPI);
 export const RootGLTF = buildRoot(Object3DNode, useGLTF, flexAPI);
 
 export const SVG = buildComponent(Object3DNode, useSVG, flexAPI);
 export const RootSVG = buildRoot(Object3DNode, useSVG, flexAPI);
+
+export const SVGFromText = buildComponent(Object3DNode, useSVGFromText, flexAPI);
+export const RootSVGFromText = buildRoot(Object3DNode, useSVGFromText, flexAPI);
 
 export const Box = buildComponent(Object3DNode, useBox, flexAPI);
 export const RootBox = buildRoot(Object3DNode, useBox, flexAPI);

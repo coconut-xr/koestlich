@@ -25,6 +25,7 @@ function reversePainterSortStable(a: RenderItem, b: RenderItem) {
     b.z = bBucket.screenSpaceZ;
   }
 
+  //TODO: this won't work for e.g. GLTFs (because objects somewhere in the gltf can have a different orientation => position.z not the same direction)
   if (aBucket != null && aBucket === bBucket) {
     aBucket.getWorldPosition(positionNormalHelper).sub(cameraWorldPosition);
     let distance = b.object.position.z - a.object.position.z;
