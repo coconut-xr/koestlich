@@ -304,7 +304,7 @@ export function useSVG(
         });
         const mesh = new Mesh(geometry, material);
         mesh.scale.y = -1;
-        mesh.renderOrder = i++;
+        mesh.position.z = i++ * node.precision;
         object.add(mesh);
       }
     }

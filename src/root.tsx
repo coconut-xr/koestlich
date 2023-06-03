@@ -20,8 +20,7 @@ import {
 import { YogaProperties } from "@coconut-xr/flex";
 import { Yoga } from "yoga-wasm-web";
 import { suspend } from "suspend-react";
-import { patchRenderOrder } from "./index.js";
-import { Vector3 } from "three";
+import { cameraWorldPosition, patchRenderOrder } from "./index.js";
 
 const BaseNodeContext = createContext<BaseNode>(null as any);
 
@@ -103,16 +102,17 @@ export function buildRoot<T extends BaseNode, P extends YogaProperties, C, A ext
     );
     const node = useNode(rootStorage, undefined, undefined, id, nodeClass, ref);
     const reactChildren = useComponent(node, properties, children);
-    const cameraWorldPosition = useMemo(() => new Vector3(), []);
     useFrame((state, deltaTime) => {
-      state.camera.getWorldPosition(cameraWorldPosition);
+      cameraWorldPosition.setFromMatrixPosition(state.camera.matrixWorld);
       if (dirtyRef.current) {
         node.calculateLayout();
         dirtyRef.current = false;
       }
       node.update(deltaTime);
+      //reset
+      rootStorage.bucket.screenSpaceZ = undefined;
     });
-    useEffect(() => patchRenderOrder(renderer, cameraWorldPosition), [renderer]);
+    useEffect(() => patchRenderOrder(renderer), [renderer]);
 
     useEffect(() => {
       if (node.setParent(undefined)) {

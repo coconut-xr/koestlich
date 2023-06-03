@@ -1,6 +1,8 @@
 import { Group, InstancedMesh } from "three";
 
 export class Bucket extends Group {
+  public screenSpaceZ?: number;
+
   /*addInstancedMesh(): Control {
         //finds a bucket to put this in
     }
