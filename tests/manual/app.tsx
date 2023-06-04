@@ -140,7 +140,9 @@ export default function Index() {
                   >
                     <DefaultStyleProvider<typeof flexAPI>>
                       <Suspense fallback={null}>
-                        <Image index={1} id="image0" classes={[imageClass]} url="example.png" />
+                        <Image index={1} id="image0" classes={[imageClass]} url="example.png" >
+                          <Text positionType="absolute" positionLeft={0.3} positionTop={0.26}>I am outside of the picture</Text>
+                          </Image>
                       </Suspense>
 
                       <Object

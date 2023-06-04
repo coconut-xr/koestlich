@@ -11,15 +11,20 @@ export function computeClippingBounds(
   { translate, scale }: Transformation,
   target: Vector4,
   parentClippingBounds: Vector4 | undefined,
+  overflowClipped: boolean,
 ): void {
-  //left and top offsets should be negative
-  //right and bottom offsets should be positive
-  target.set(
-    translate.y, //top
-    translate.x + scale.x, //right
-    -translate.y + scale.y, //bottom
-    -translate.x, //left
-  );
+  if (overflowClipped) {
+    //left and top offsets should be negative
+    //right and bottom offsets should be positive
+    target.set(
+      translate.y, //top
+      translate.x + scale.x, //right
+      -translate.y + scale.y, //bottom
+      -translate.x, //left
+    );
+  } else {
+    target.set(Infinity, Infinity, Infinity, Infinity);
+  }
 
   if (parentClippingBounds != null) {
     //since left & top offset are negative and bottom & right offsets are positive we can minimize here to get the smaller bounds

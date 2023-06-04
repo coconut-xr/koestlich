@@ -1,4 +1,4 @@
-import { Vector2, Vector3, Vector4 } from "three";
+import { Intersection, Vector2, Vector3, Vector4 } from "three";
 import { Vector1 } from "./vector.js";
 import { RootState, EventManager, events } from "@react-three/fiber";
 import { UseBoundStore } from "zustand";
@@ -45,20 +45,22 @@ export function asVector3(vec2: Vector2, z: number): Vector3 {
 export function clippingEvents(store: UseBoundStore<RootState>): EventManager<HTMLElement> {
   return {
     ...events(store),
-    filter: (intersections) =>
-      intersections.filter((intersection) => {
-        if (
-          intersection.object instanceof Mesh &&
-          intersection.object.material.clippingPlanes != null
-        ) {
-          const planes = intersection.object.material.clippingPlanes as Array<Plane>;
-          for (const plane of planes) {
-            if (plane.distanceToPoint(intersection.point) < 0) {
-              return false;
-            }
-          }
-        }
-        return true;
-      }),
+    filter: (intersections) => intersections.filter(isIntersectionClipped),
   };
+}
+
+export function isIntersectionClipped(intersection: Intersection): boolean {
+  if (
+    !(intersection.object instanceof Mesh) ||
+    intersection.object.material.clippingPlanes == null
+  ) {
+    return true;
+  }
+  const planes = intersection.object.material.clippingPlanes as Array<Plane>;
+  for (const plane of planes) {
+    if (plane.distanceToPoint(intersection.point) < 0) {
+      return false;
+    }
+  }
+  return true;
 }

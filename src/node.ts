@@ -141,7 +141,7 @@ export abstract class BaseNode<S extends AnimationState = AnimationState> extend
   protected depth: number;
 
   protected clippingPlanes: Array<Plane> | null = null;
-  protected overflowInvisible = false;
+  protected overflowClipped = false;
   protected clippingBounds = new Vector4();
 
   protected isDying = false;
@@ -306,7 +306,7 @@ export abstract class BaseNode<S extends AnimationState = AnimationState> extend
       return;
     }
 
-    this.overflowInvisible = this.yoga.getOverflow() != OVERFLOW_VISIBLE;
+    this.overflowClipped = this.yoga.getOverflow() != OVERFLOW_VISIBLE;
 
     if (this.current == null) {
       this.onInit();
@@ -476,7 +476,7 @@ export abstract class BaseNode<S extends AnimationState = AnimationState> extend
     }
 
     //either overflow is hidden/scroll or the parent has clipping planes
-    if (this.overflowInvisible || this.parent?.clippingPlanes != null) {
+    if (this.overflowClipped || this.parent?.clippingPlanes != null) {
       //create clipping planes
       if (this.clippingPlanes == null) {
         this.clippingPlanes = [new Plane(), new Plane(), new Plane(), new Plane()];
@@ -488,6 +488,7 @@ export abstract class BaseNode<S extends AnimationState = AnimationState> extend
         this.current,
         this.clippingBounds,
         this.parent?.clippingPlanes != null ? this.parent.clippingBounds : undefined,
+        this.overflowClipped,
       );
 
       clippingPlanesFromBounds(this.clippingPlanes, this.clippingBounds, this.precision);

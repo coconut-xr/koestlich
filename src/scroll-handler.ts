@@ -24,6 +24,8 @@ function extendEvent<T>(event: ThreeEvent<T>): ExtendedThreeEvent<T> {
 
 export abstract class ScrollHandler implements EventHandlers {
   //TODO: this probably does not work correctly with objects that were scaled via flexbox transformation
+  //TODO: make compatible with multiple pointers (identified by pointerId)
+
   //root object all interactions relate too
   protected abstract bucket: Object3D;
   private prevIntersection = new Vector3();
@@ -103,11 +105,7 @@ export abstract class ScrollHandler implements EventHandlers {
 
   onWheel = (event: ThreeEvent<WheelEvent>): void => {
     this.customEvents.onWheel?.(extendEvent(event));
-    if (
-      event.defaultPrevented ||
-      !(event.nativeEvent.target instanceof HTMLElement) ||
-      !(event.camera instanceof PerspectiveCamera)
-    ) {
+    if (event.defaultPrevented || !(event.nativeEvent.target instanceof HTMLElement)) {
       return;
     }
     const xScroll = -event.deltaX * this.precision;
