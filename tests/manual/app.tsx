@@ -1,5 +1,6 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/no-unknown-property */
-import React, { Suspense, useMemo, useRef, useState } from "react";
+import React, { Suspense, useMemo, useState } from "react";
 import {
   Image,
   Text,
@@ -21,7 +22,6 @@ import { Fullscreen } from "./fullscreen";
 import { OrbitControls } from "@react-three/drei";
 import { Mesh, MeshPhongMaterial, MOUSE, PlaneGeometry } from "three";
 import { RoundedBoxGeometry } from "three-stdlib/geometries/RoundedBoxGeometry";
-import { loadYoga } from "@coconut-xr/flex";
 
 const imageClass = {
   height: 0.3,
@@ -80,7 +80,7 @@ export default function Index() {
         gl={{ localClippingEnabled: true }}
         style={{ height: "100vh" }}
       >
-        <color args={["white"]} attach={"background"} />
+        <color args={["black"]} attach={"background"} />
         <directionalLight
           shadow-mapSize={2048}
           castShadow
@@ -109,7 +109,6 @@ export default function Index() {
               <>
                 <group position={[0, 0, 0]}>
                   <RootContainer
-                    loadYoga={loadYoga}
                     padding={0.03}
                     id="root"
                     overflow="scroll"
@@ -128,7 +127,6 @@ export default function Index() {
                 </group>
                 <group position={[0, 0, -1]}>
                   <RootObject
-                    loadYoga={loadYoga}
                     padding={0.03}
                     color="gray"
                     precision={0.002}
@@ -140,9 +138,11 @@ export default function Index() {
                   >
                     <DefaultStyleProvider<typeof flexAPI>>
                       <Suspense fallback={null}>
-                        <Image index={1} id="image0" classes={[imageClass]} url="example.png" >
-                          <Text positionType="absolute" positionLeft={0.3} positionTop={0.26}>I am outside of the picture</Text>
-                          </Image>
+                        <Image index={1} id="image0" classes={[imageClass]} url="example.png">
+                          <Text positionType="absolute" positionLeft={0.3} positionTop={0.26}>
+                            I am outside of the picture
+                          </Text>
+                        </Image>
                       </Suspense>
 
                       <Object
@@ -179,13 +179,7 @@ export default function Index() {
                       </Suspense>
 
                       <Suspense fallback={null}>
-                        <SVG
-                          id="svg1"
-                          depth={0}
-                          index={3}
-                          url="example.svg"
-                          height={0.05}
-                        />
+                        <SVG id="svg1" depth={0} index={3} url="example.svg" height={0.05} />
                         <SVG
                           depth={0}
                           id="svg2"
@@ -194,13 +188,7 @@ export default function Index() {
                           url="example.svg"
                           height={0.1}
                         />
-                        <SVG
-                          depth={0}
-                          id="svg3"
-                          index={4}
-                          url="mozilla.svg"
-                          height={0.2}
-                        />
+                        <SVG depth={0} id="svg3" index={4} url="mozilla.svg" height={0.2} />
                       </Suspense>
                       <CustomContainer
                         borderRadius={0.05}

@@ -45,11 +45,11 @@ export function asVector3(vec2: Vector2, z: number): Vector3 {
 export function clippingEvents(store: UseBoundStore<RootState>): EventManager<HTMLElement> {
   return {
     ...events(store),
-    filter: (intersections) => intersections.filter(isIntersectionClipped),
+    filter: (intersections) => intersections.filter(isIntersectionNotClipped),
   };
 }
 
-export function isIntersectionClipped(intersection: Intersection): boolean {
+export function isIntersectionNotClipped(intersection: Intersection): boolean {
   if (
     !(intersection.object instanceof Mesh) ||
     intersection.object.material.clippingPlanes == null

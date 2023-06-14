@@ -8,8 +8,7 @@
   "dependencies": {
     "@coconut-xr/koestlich": "file:../..",
     "@react-three/drei": "^9.50.3",
-    "react-dom": "^18.2.0",
-    "three": "^0.148.0"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.26",

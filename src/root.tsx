@@ -17,7 +17,7 @@ import {
   PropertyAPI,
   translateProperties,
 } from "./properties/index.js";
-import { YogaProperties } from "@coconut-xr/flex";
+import { YogaProperties, loadYoga as loadYogaFromGHP } from "@coconut-xr/flex";
 import { Yoga } from "yoga-wasm-web";
 import { suspend } from "suspend-react";
 import { cameraWorldPosition, patchRenderOrder } from "./index.js";
@@ -77,9 +77,9 @@ export function buildRoot<T extends BaseNode, P extends YogaProperties, C, A ext
         id?: string;
         children?: C;
         classes?: Array<Partial<P & PropertiesFromAPI<P, A>>>;
-        loadYoga: () => Promise<Yoga>;
+        loadYoga?: () => Promise<Yoga>;
       }
-  >(({ loadYoga, precision, id = "root", children, classes, ...props }, ref) => {
+  >(({ loadYoga = loadYogaFromGHP, precision, id = "root", children, classes, ...props }, ref) => {
     const yoga = suspend(loadYoga, [loadYoga, LoadYogaSymbol]);
     const dirtyRef = useRef(false);
     const renderer = useThree(({ gl }) => gl);

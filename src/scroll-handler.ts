@@ -1,5 +1,5 @@
 import { EventHandlers, ThreeEvent } from "@react-three/fiber/dist/declarations/src/core/events.js";
-import { Object3D, PerspectiveCamera, Vector3 } from "three";
+import { Object3D, Vector3 } from "three";
 
 const distanceHelper = new Vector3();
 const localPointHelper = new Vector3();
@@ -24,13 +24,13 @@ function extendEvent<T>(event: ThreeEvent<T>): ExtendedThreeEvent<T> {
 
 export abstract class ScrollHandler implements EventHandlers {
   //TODO: this probably does not work correctly with objects that were scaled via flexbox transformation
-  //TODO: make compatible with multiple pointers (identified by pointerId)
 
   //root object all interactions relate too
   protected abstract bucket: Object3D;
-  private prevIntersection = new Vector3();
-  private hasPrevIntersection = false;
-  private dragDistance: number | undefined;
+  private pointerInteractionMap = new Map<
+    number,
+    { prevIntersection: Vector3; hasPrevIntersection: boolean }
+  >();
   protected abstract parent: ScrollHandler | undefined;
   public abstract readonly precision: number;
 
@@ -40,10 +40,7 @@ export abstract class ScrollHandler implements EventHandlers {
     this.customEvents.onContextMenu?.(extendEvent(event));
   };
   onDoubleClick = (event: ThreeEvent<MouseEvent>) => {
-    if (!this.isAncestorDragging()) {
-      this.customEvents.onDoubleClick?.(extendEvent(event));
-    }
-    this.dragDistance = undefined;
+    this.customEvents.onDoubleClick?.(extendEvent(event));
   };
   onPointerOver = (event: ThreeEvent<PointerEvent>) => {
     this.customEvents.onPointerOver?.(extendEvent(event));
@@ -59,14 +56,12 @@ export abstract class ScrollHandler implements EventHandlers {
   };
 
   onPointerUp = (event: ThreeEvent<PointerEvent>) => {
-    setTimeout(() => (this.dragDistance = undefined), 0);
-    this.hasPrevIntersection = false;
+    this.getPointerInteractionData(event.pointerId).hasPrevIntersection = false;
     this.customEvents.onPointerUp?.(extendEvent(event));
   };
 
   onPointerOut = (event: ThreeEvent<PointerEvent>) => {
-    setTimeout(() => (this.dragDistance = undefined), 0);
-    this.hasPrevIntersection = false;
+    this.getPointerInteractionData(event.pointerId).hasPrevIntersection = false;
     this.customEvents.onPointerOut?.(extendEvent(event));
   };
 
@@ -75,8 +70,9 @@ export abstract class ScrollHandler implements EventHandlers {
     if (event.defaultPrevented) {
       return;
     }
-    this.hasPrevIntersection = true;
-    this.bucket.worldToLocal(this.prevIntersection.copy(event.point));
+    const interactionData = this.getPointerInteractionData(event.pointerId);
+    interactionData.hasPrevIntersection = true;
+    this.bucket.worldToLocal(interactionData.prevIntersection.copy(event.point));
   };
 
   onPointerEnter = (event: ThreeEvent<PointerEvent>): void => {
@@ -84,21 +80,22 @@ export abstract class ScrollHandler implements EventHandlers {
     if (event.defaultPrevented || event.buttons != 1) {
       return;
     }
-    this.hasPrevIntersection = true;
-    this.bucket.worldToLocal(this.prevIntersection.copy(event.point));
+    const interactionData = this.getPointerInteractionData(event.pointerId);
+    interactionData.hasPrevIntersection = true;
+    this.bucket.worldToLocal(interactionData.prevIntersection.copy(event.point));
   };
 
   onPointerMove = (event: ThreeEvent<PointerEvent>): void => {
+    const interactionData = this.getPointerInteractionData(event.pointerId);
     this.customEvents.onPointerMove?.(extendEvent(event));
-    if (event.defaultPrevented || !this.hasPrevIntersection) {
+    if (event.defaultPrevented || !interactionData.hasPrevIntersection) {
       return;
     }
     this.bucket.worldToLocal(localPointHelper.copy(event.point));
-    distanceHelper.copy(localPointHelper).sub(this.prevIntersection);
-    this.prevIntersection.copy(localPointHelper);
+    distanceHelper.copy(localPointHelper).sub(interactionData.prevIntersection);
+    interactionData.prevIntersection.copy(localPointHelper);
 
     if (this.onScroll(distanceHelper.x, distanceHelper.y)) {
-      this.dragDistance = distanceHelper.length() + (this.dragDistance ?? 0);
       event.stopPropagation();
     }
   };
@@ -118,23 +115,21 @@ export abstract class ScrollHandler implements EventHandlers {
   };
 
   onClick = (event: ThreeEvent<MouseEvent>): void => {
-    if (this.isAncestorDragging()) {
-      event.stopPropagation();
-      return;
-    }
     this.customEvents.onClick?.(extendEvent(event));
   };
 
-  private isAncestorDragging(): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    let ancestor: ScrollHandler | undefined = this;
-    while (ancestor != null) {
-      if (ancestor.dragDistance != null && ancestor.dragDistance > 0.05) {
-        return true;
-      }
-      ancestor = ancestor.parent;
+  private getPointerInteractionData(pointerId: number) {
+    let interactionData = this.pointerInteractionMap.get(pointerId);
+    if (interactionData == null) {
+      this.pointerInteractionMap.set(
+        pointerId,
+        (interactionData = {
+          hasPrevIntersection: false,
+          prevIntersection: new Vector3(),
+        }),
+      );
     }
-    return false;
+    return interactionData;
   }
 
   protected abstract onScroll(distanceX: number, distanceY: number): boolean;

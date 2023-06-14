@@ -16,7 +16,6 @@ The unit for expressing sizes in 2D layouts often corresponds to pixels. However
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { RootContainer, Container, flexAPI, DefaultStyleProvider } from "@coconut-xr/koestlich";
-import { loadYoga } from "@coconut-xr/flex";
 
 const blue = {
   backgroundColor: "blue",
@@ -27,13 +26,7 @@ export default function App() {
     <Canvas>
       <OrbitControls enableRotate={false} />
       <DefaultStyleProvider borderRadius={0.1}>
-        <RootContainer
-          loadYoga={loadYoga}
-          backgroundColor="red"
-          width={2}
-          height={1}
-          flexDirection="row"
-        >
+        <RootContainer backgroundColor="red" width={2} height={1} flexDirection="row">
           <DefaultStyleProvider margin={0.1}>
             <Container flexGrow={1} classes={[blue]} />
             <Container flexGrow={1} classes={[blue]} />
@@ -65,7 +58,6 @@ import {
   useText,
   TextNode,
 } from "@coconut-xr/koestlich";
-import { loadYoga } from "@coconut-xr/flex";
 import { Suspense } from "react";
 
 const customAPI = {
@@ -85,13 +77,7 @@ export default function App() {
   return (
     <Canvas>
       <OrbitControls />
-      <RootContainer
-        loadYoga={loadYoga}
-        backgroundColor="black"
-        width={2}
-        height={1}
-        flexDirection="row"
-      >
+      <RootContainer backgroundColor="black" width={2} height={1} flexDirection="row">
         <CustomContainer margin={0.1} index={0} flexGrow={1} variant="danger" />
         <Suspense>
           <CustomText index={1} flexGrow={1} flexBasis={0} variant="success" margin={0.1}>
