@@ -6,8 +6,6 @@ In the following tutorials, we will create several UIs using **koestlich** and r
 
 At first, we will create 3 containers. One container is the root node, expressed by `RootContainer`. The `RootContainer` has a horizontal (row) flex-direction, while the children expressed by `Container` equally fill its width with a margin between them.
 
-In addition to normal CSS properties, the `RootContainer` also needs a function to `loadYoga`. Yoga can be manually provided from `yoga-wasm-web` via wasm or asm.js to safe space, or the 30% bigger BASE64 encoded code can be loaded from `@coconut-xr/flex`.
-
 [CodeSandbox](https://codesandbox.io/s/koestlich-first-layout-owgw9d?file=/src/app.tsx)
 
 ![Screenshot](./first-layout.png)
@@ -16,14 +14,12 @@ In addition to normal CSS properties, the `RootContainer` also needs a function 
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { RootContainer, Container } from "@coconut-xr/koestlich";
-import { loadYoga } from "@coconut-xr/flex";
 
 export default function App() {
   return (
     <Canvas>
       <OrbitControls />
       <RootContainer
-        loadYoga={loadYoga}
         backgroundColor="red"
         width={2}
         height={1}
@@ -54,7 +50,6 @@ The `index` parameter can also be used to reorder elements independent of how th
 import { RootContainer, Container, Image } from "@coconut-xr/koestlich";
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { loadYoga } from "@coconut-xr/flex";
 import { Suspense } from "react";
 
 export default function App() {
@@ -62,7 +57,6 @@ export default function App() {
     <Canvas>
       <OrbitControls />
       <RootContainer
-        loadYoga={loadYoga}
         backgroundColor="red"
         width={2}
         height={1}
@@ -103,14 +97,12 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { RootContainer, Container, Text } from "@coconut-xr/koestlich";
 import { Suspense } from "react";
-import { loadYoga } from "@coconut-xr/flex";
 
 export default function App() {
   return (
     <Canvas>
       <OrbitControls />
       <RootContainer
-        loadYoga={loadYoga}
         backgroundColor="red"
         width={2}
         height={1}
@@ -165,7 +157,6 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { RootContainer, Container, Image } from "@coconut-xr/koestlich";
 import { Suspense, useState } from "react";
-import { loadYoga } from "@coconut-xr/flex";
 
 export default function App() {
   const [state, setState] = useState(true);
@@ -173,7 +164,6 @@ export default function App() {
     <Canvas>
       <OrbitControls />
       <RootContainer
-        loadYoga={loadYoga}
         backgroundColor="black"
         width={2}
         height={1}
@@ -221,7 +211,6 @@ The previous examples showed 2D elements positioned in the x/y plane. Integratin
 import { RootContainer, Object, GLTF, Container } from "@coconut-xr/koestlich";
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { loadYoga } from "@coconut-xr/flex";
 import { Suspense, useMemo } from "react";
 import { Mesh, MeshPhongMaterial, SphereBufferGeometry } from "three";
 
@@ -241,7 +230,6 @@ export default function App() {
       <ambientLight intensity={0.1} />
       <OrbitControls />
       <RootContainer
-        loadYoga={loadYoga}
         backgroundColor="red"
         width={3}
         height={1}
@@ -272,7 +260,6 @@ Our example dashboard interface can be built using `ExtrudeGeometry` from three.
 import { RootContainer, Object, SVG } from "@coconut-xr/koestlich";
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { loadYoga } from "@coconut-xr/flex";
 import { ExtrudeGeometry, Shape, Mesh, MeshPhongMaterial } from "three";
 import { Suspense, useMemo } from "react";
 
@@ -295,7 +282,6 @@ export default function App() {
       <ambientLight intensity={0.5} />
       <directionalLight intensity={0.8} position={[1, 1, 1]} />
       <RootContainer
-        loadYoga={loadYoga}
         backgroundColor="black"
         width={2}
         height={1}
@@ -366,14 +352,12 @@ import {
   Container,
   clippingEvents
 } from "@coconut-xr/koestlich";
-import { loadYoga } from "@coconut-xr/flex";
 
 export default function App() {
   return (
     <Canvas events={clippingEvents} gl={{ localClippingEnabled: true }}>
       <OrbitControls enableRotate={false} />
       <RootContainer
-        loadYoga={loadYoga}
         backgroundColor="red"
         width={2}
         height={1}
