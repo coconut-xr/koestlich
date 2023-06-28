@@ -24,8 +24,10 @@ import {
   useMemo,
 } from "react";
 import {
+  BufferAttribute,
   Color,
   ColorRepresentation,
+  Material,
   Mesh,
   Plane,
   PlaneGeometry,
@@ -34,7 +36,6 @@ import {
   Vector3,
   Vector4,
 } from "three";
-import { BackgroundMaterial } from "../background-material.js";
 import { linkBackground, updateBackgroundValues } from "../background.js";
 import { buildComponent } from "../component.js";
 import { applyEventHandlers } from "../events.js";
@@ -54,10 +55,18 @@ import { suspend } from "suspend-react";
 import { loadFont } from "@coconut-xr/glyph";
 import { setMeasureFunc, YogaProperties } from "@coconut-xr/flex";
 import { MeasureFunction } from "yoga-wasm-web";
-import { PlatformConstants } from "../index.js";
+import { BackgroundMaterial, PlatformConstants, containerDefaults } from "../index.js";
+import { Constructor, InstanceOf } from "@coconut-xr/xmaterials";
 
 const geometry = new PlaneGeometry();
 geometry.translate(0.5, -0.5, 0);
+const position = geometry.getAttribute("position");
+const array = new Float32Array((4 * position.array.length) / position.itemSize);
+const tangent = [1, 0, 0, 1];
+for (let i = 0; i < array.length; i++) {
+  array[i] = tangent[i % 4];
+}
+geometry.setAttribute("tangent", new BufferAttribute(array, 4));
 
 const lineBounds = new Bounds();
 
@@ -86,6 +95,7 @@ export class TextNode extends BaseNode<TextState> {
     borderOpacity: new Vector1(),
     borderRadius: new Vector4(),
     borderSize: new Vector4(),
+    borderBend: new Vector1(),
   };
 
   private mesh: InstancedGlypthMesh | undefined;
@@ -101,11 +111,8 @@ export class TextNode extends BaseNode<TextState> {
   private hasStructuralChanges = false;
   private hasTransformationChanges = false;
 
-  private backgroundMaterial = new BackgroundMaterial({
-    transparent: true,
-    toneMapped: false,
-  });
-  protected backgroundMesh = new Mesh(geometry, this.backgroundMaterial);
+  private backgroundMaterial?: InstanceOf<typeof BackgroundMaterial>;
+  protected backgroundMesh = new Mesh(geometry);
 
   private caretMaterial = new BackgroundMaterial({
     transparent: true,
@@ -130,9 +137,32 @@ export class TextNode extends BaseNode<TextState> {
       : this.selection[0];
   }
 
+  setBackgroundMaterialClass(constructor: Constructor<Material>) {
+    if ((this.backgroundMaterial instanceof constructor) as any) {
+      //already set
+      return;
+    }
+
+    const backgroundMaterial = new constructor({
+      transparent: true,
+      toneMapped: false,
+    }) as InstanceOf<typeof BackgroundMaterial>;
+    this.backgroundMesh.material = backgroundMaterial;
+    this.backgroundMaterial?.dispose();
+    this.backgroundMaterial = backgroundMaterial;
+
+    if (this.current != null) {
+      this.linkCurrent(this.current);
+      this.backgroundMaterial.clippingPlanes = this.clippingPlanes;
+      this.backgroundMaterial.needsUpdate = true;
+    }
+  }
+
   applyClippingPlanes(planes: Plane[] | null): void {
-    this.backgroundMaterial.clippingPlanes = planes;
-    this.backgroundMaterial.needsUpdate = true;
+    if (this.backgroundMaterial != null) {
+      this.backgroundMaterial.clippingPlanes = planes;
+      this.backgroundMaterial.needsUpdate = true;
+    }
 
     this.caretMaterial.clippingPlanes = planes;
     this.caretMaterial.needsUpdate = true;
@@ -148,6 +178,9 @@ export class TextNode extends BaseNode<TextState> {
 
   linkCurrent(current: TextState): void {
     //link global transformation directly (more efficiently then in onUpdate)
+    if (this.backgroundMaterial == null) {
+      return;
+    }
     linkBackground(current, this.backgroundMesh, this.backgroundMaterial);
   }
 
@@ -264,7 +297,9 @@ export class TextNode extends BaseNode<TextState> {
   }
 
   onUpdate(current: TextState): void {
-    updateBackgroundValues(current, this.backgroundMesh, this.backgroundMaterial);
+    if (this.backgroundMaterial != null) {
+      updateBackgroundValues(current, this.backgroundMesh, this.backgroundMaterial);
+    }
 
     if (this.material != null) {
       this.material.opacity = current.opacity.x;
@@ -619,6 +654,7 @@ export function useText(
     wrapper,
     horizontalAlign,
     verticalAlign,
+    material,
     ...props
   }: TextProperties & YogaProperties,
   children: string | undefined,
@@ -661,6 +697,8 @@ export function useText(
     colorHelper.set(color ?? textDefaults["color"]);
     node.target.color.set(colorHelper.r, colorHelper.g, colorHelper.b);
     node.target.opacity.set(opacity ?? textDefaults["opacity"]);
+
+    node.setBackgroundMaterialClass(material ?? containerDefaults["material"]);
 
     node.updateGlyphProperties(text, glyphProperties, structuralChanges);
     node.setProperties(props);

@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/no-unknown-property */
-import React, { Suspense, useMemo, useState } from "react";
+import { Suspense, useMemo, useRef, useState } from "react";
 import {
   Image,
   Text,
@@ -16,12 +16,14 @@ import {
   Object,
   RootObject,
   RootContainer,
+  RootText,
 } from "@coconut-xr/koestlich";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { Fullscreen } from "./fullscreen";
 import { OrbitControls } from "@react-three/drei";
-import { Mesh, MeshPhongMaterial, MOUSE, PlaneGeometry } from "three";
+import { Group, Mesh, MeshPhongMaterial, MOUSE, PlaneGeometry } from "three";
 import { RoundedBoxGeometry } from "three-stdlib/geometries/RoundedBoxGeometry";
+import { makeBorderMaterial } from "@coconut-xr/xmaterials";
 
 const imageClass = {
   height: 0.3,
@@ -80,6 +82,8 @@ export default function Index() {
         gl={{ localClippingEnabled: true }}
         style={{ height: "100vh" }}
       >
+        <RotateUI />
+        <AppleUI />
         <color args={["black"]} attach={"background"} />
         <directionalLight
           shadow-mapSize={2048}
@@ -250,5 +254,62 @@ export default function Index() {
         </Fullscreen>
       </Canvas>
     </>
+  );
+}
+
+const FancyMaterial = makeBorderMaterial(MeshPhongMaterial, {
+  specular: 0x111111,
+  shininess: 100,
+});
+
+function AppleUI() {
+  return (
+    <group position={[1, -0.5, 0]}>
+      <RootText
+        backgroundColor="black"
+        fontSize={0.05}
+        color="white"
+        anchorX="center"
+        anchorY="center"
+        padding={0.03}
+        id="root"
+        borderRadius={0.05}
+        borderColor="black"
+        borderBend={0.3}
+        border={0.01}
+        material={FancyMaterial}
+      >
+        I look fancy
+      </RootText>
+    </group>
+  );
+}
+
+function RotateUI() {
+  const ref = useRef<Group>(null);
+  useFrame((state) => {
+    if (ref.current == null) {
+      return;
+    }
+    ref.current.rotation.y = state.clock.getElapsedTime() * 5;
+    ref.current.rotation.x = state.clock.getElapsedTime() * 5;
+  });
+  return (
+    <group position={[0, -0.5, 0]} ref={ref}>
+      <RootContainer
+        backgroundColor="red"
+        anchorX="center"
+        anchorY="center"
+        padding={0.03}
+        id="root"
+        overflow="scroll"
+      >
+        <Suspense>
+          <Text index={1} fontSize={0.05} color={"white"} id="lorem-ipsum">
+            Hello World!
+          </Text>
+        </Suspense>
+      </RootContainer>
+    </group>
   );
 }

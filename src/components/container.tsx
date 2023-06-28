@@ -1,19 +1,37 @@
-import { Color, ColorRepresentation, Mesh, Plane, PlaneGeometry, Vector3, Vector4 } from "three";
+import {
+  BufferAttribute,
+  Color,
+  ColorRepresentation,
+  Material,
+  Mesh,
+  MeshBasicMaterial,
+  Plane,
+  PlaneGeometry,
+  Vector3,
+  Vector4,
+} from "three";
 import { AnimationConfig, BaseNode, distanceFadeAnimation } from "../node.js";
 import { buildRoot } from "../root.js";
 import { Vector1 } from "../vector.js";
 import { buildComponent } from "../component.js";
 import { ReactNode, useEffect } from "react";
 import { flexAPI } from "../properties/index.js";
-import { BackgroundMaterial } from "../background-material.js";
 import { linkBackground, updateBackgroundValues } from "../background.js";
 import { InvertOptional } from "./index.js";
 import { applyEventHandlers } from "../events.js";
 import { ExtendedEventHandlers } from "../scroll-handler.js";
 import { YogaProperties } from "@coconut-xr/flex";
+import { Constructor, InstanceOf, makeBorderMaterial } from "@coconut-xr/xmaterials";
 
 const geometry = new PlaneGeometry();
 geometry.translate(0.5, -0.5, 0.5);
+const position = geometry.getAttribute("position");
+const array = new Float32Array((4 * position.array.length) / position.itemSize);
+const tangent = [1, 0, 0, 1];
+for (let i = 0; i < array.length; i++) {
+  array[i] = tangent[i % 4];
+}
+geometry.setAttribute("tangent", new BufferAttribute(array, 4));
 
 export type ContainerState = {
   translate: Vector3;
@@ -24,6 +42,7 @@ export type ContainerState = {
   borderSize: Vector4;
   borderRadius: Vector4;
   borderOpacity: Vector1;
+  borderBend: Vector1;
 };
 
 export class ContainerNode extends BaseNode<ContainerState> {
@@ -36,19 +55,43 @@ export class ContainerNode extends BaseNode<ContainerState> {
     borderOpacity: new Vector1(),
     borderRadius: new Vector4(),
     borderSize: new Vector4(),
+    borderBend: new Vector1(),
   };
-  private backgroundMaterial = new BackgroundMaterial({
-    transparent: true,
-    toneMapped: false,
-  });
-  private backgroundMesh = new Mesh(geometry, this.backgroundMaterial);
+  private backgroundMaterial?: InstanceOf<typeof BackgroundMaterial>;
+  private backgroundMesh = new Mesh(geometry);
 
   applyClippingPlanes(planes: Plane[] | null): void {
+    if (this.backgroundMaterial == null) {
+      return;
+    }
     this.backgroundMaterial.clippingPlanes = planes;
     this.backgroundMaterial.needsUpdate = true;
   }
 
+  setBackgroundMaterialClass(constructor: Constructor<Material>) {
+    if ((this.backgroundMaterial instanceof constructor) as any) {
+      //already set
+      return;
+    }
+
+    const backgroundMaterial = new constructor({
+      transparent: true,
+      toneMapped: false,
+    }) as InstanceOf<typeof BackgroundMaterial>;
+    this.backgroundMesh.material = backgroundMaterial;
+    this.backgroundMaterial?.dispose();
+    this.backgroundMaterial = backgroundMaterial;
+
+    if (this.current != null) {
+      this.linkCurrent(this.current);
+      this.applyClippingPlanes(this.clippingPlanes);
+    }
+  }
+
   linkCurrent(current: ContainerState): void {
+    if (this.backgroundMaterial == null) {
+      return;
+    }
     //link global transformation directly (more efficiently then in onUpdate)
     linkBackground(current, this.backgroundMesh, this.backgroundMaterial);
   }
@@ -63,6 +106,9 @@ export class ContainerNode extends BaseNode<ContainerState> {
   }
 
   onUpdate(current: ContainerState): void {
+    if (this.backgroundMaterial == null) {
+      return;
+    }
     updateBackgroundValues(current, this.backgroundMesh, this.backgroundMaterial);
   }
 
@@ -72,6 +118,8 @@ export class ContainerNode extends BaseNode<ContainerState> {
 }
 
 const colorHelper = new Color();
+
+export const BackgroundMaterial = makeBorderMaterial(MeshBasicMaterial);
 
 export const containerDefaults: Omit<
   InvertOptional<ContainerProperties>,
@@ -91,7 +139,9 @@ export const containerDefaults: Omit<
   borderRadiusTopRight: 0,
   borderRadiusBottomRight: 0,
   borderRadiusBottomLeft: 0,
+  borderBend: 0,
   animation: distanceFadeAnimation,
+  material: BackgroundMaterial,
 };
 
 export function updateContainerProperties(
@@ -112,6 +162,7 @@ export function updateContainerProperties(
     scaleY,
     scaleZ,
     animation,
+    borderBend,
   }: ContainerProperties,
 ): void {
   node.setManualTransformation(
@@ -134,6 +185,8 @@ export function updateContainerProperties(
   node.target.borderOpacity.set(
     borderOpacity ?? (borderColor == null ? 0 : containerDefaults["borderOpacity"]),
   );
+
+  node.target.borderBend.set(borderBend ?? containerDefaults["borderBend"]);
 
   node.target.borderRadius.set(
     borderRadiusTopLeft ?? containerDefaults["borderRadiusTopLeft"],
@@ -179,6 +232,7 @@ export type ContainerProperties = YogaProperties & {
   animation?: AnimationConfig;
   backgroundColor?: ColorRepresentation;
   backgroundOpacity?: number;
+  borderBend?: number;
   borderColor?: ColorRepresentation;
   borderOpacity?: number;
   borderRadiusTopLeft?: number;
@@ -191,6 +245,7 @@ export type ContainerProperties = YogaProperties & {
   scaleX?: number;
   scaleY?: number;
   scaleZ?: number;
+  material?: Constructor<Material>;
 } & Omit<ExtendedEventHandlers, "onPointerMissed">;
 
 export function useContainer(
@@ -201,6 +256,7 @@ export function useContainer(
   useEffect(() => {
     //updates need to happen inside an effect
     updateContainerProperties(node, properties);
+    node.setBackgroundMaterialClass(properties.material ?? containerDefaults["material"]);
     updateEventProperties(node, properties);
     node.setProperties(properties);
   });

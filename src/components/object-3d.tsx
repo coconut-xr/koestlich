@@ -41,7 +41,7 @@ export type Object3DState = {
   opacity: Vector1;
   overwriteDefaultColor: Vector1;
   color: Vector3;
-} & Omit<ContainerState, "borderColor" | "borderRadius" | "borderOpacity">;
+} & Omit<ContainerState, "borderColor" | "borderRadius" | "borderOpacity" | "borderBend">;
 
 export class Object3DNode extends BaseNode<Object3DState> {
   public target: Readonly<Object3DState> = {

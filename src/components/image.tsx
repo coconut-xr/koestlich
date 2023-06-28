@@ -1,4 +1,6 @@
 import {
+  BufferAttribute,
+  Material,
   Mesh,
   Plane,
   PlaneGeometry,
@@ -23,14 +25,21 @@ import {
   updateEventProperties,
 } from "./container.js";
 import { linkBackground, updateBackgroundValues } from "../background.js";
-import { BackgroundMaterial } from "../background-material.js";
 import { InvertOptional } from "./text.js";
 import { applyEventHandlers } from "../events.js";
 import { saveDivideNumber, saveDivideScalar } from "../utils.js";
-import { PlatformConstants } from "../index.js";
+import { BackgroundMaterial, containerDefaults, PlatformConstants } from "../index.js";
+import { Constructor, InstanceOf } from "@coconut-xr/xmaterials";
 
 const geometry = new PlaneGeometry();
 geometry.translate(0.5, -0.5, 0);
+const position = geometry.getAttribute("position");
+const array = new Float32Array((4 * position.array.length) / position.itemSize);
+const tangent = [1, 0, 0, 1];
+for (let i = 0; i < array.length; i++) {
+  array[i] = tangent[i % 4];
+}
+geometry.setAttribute("tangent", new BufferAttribute(array, 4));
 
 const _0_5 = new Vector4(0.5, 0.5, 0.5, 0.5);
 
@@ -55,6 +64,7 @@ export class ImageNode extends BaseNode<ImageState> {
     borderOpacity: new Vector1(),
     borderRadius: new Vector4(),
     borderSize: new Vector4(),
+    borderBend: new Vector1(),
   };
   private material = new BackgroundMaterial({
     transparent: true,
@@ -62,17 +72,16 @@ export class ImageNode extends BaseNode<ImageState> {
   });
   private mesh = new Mesh(geometry, this.material);
 
-  private backgroundMaterial = new BackgroundMaterial({
-    transparent: true,
-    toneMapped: false,
-  });
-  private backgroundMesh = new Mesh(geometry, this.backgroundMaterial);
+  private backgroundMaterial?: InstanceOf<typeof BackgroundMaterial>;
+  private backgroundMesh = new Mesh(geometry);
 
   private fit: ImageFit = "fill";
 
   applyClippingPlanes(planes: Plane[] | null): void {
-    this.backgroundMaterial.clippingPlanes = planes;
-    this.backgroundMaterial.needsUpdate = true;
+    if (this.backgroundMaterial != null) {
+      this.backgroundMaterial.clippingPlanes = planes;
+      this.backgroundMaterial.needsUpdate = true;
+    }
 
     this.material.clippingPlanes = planes;
     this.material.needsUpdate = true;
@@ -80,7 +89,30 @@ export class ImageNode extends BaseNode<ImageState> {
 
   linkCurrent(current: ImageState): void {
     //link global transformation directly (more efficiently then in onUpdate)
-    linkBackground(current, this.backgroundMesh, this.backgroundMaterial);
+    if (this.backgroundMaterial != null) {
+      linkBackground(current, this.backgroundMesh, this.backgroundMaterial);
+    }
+  }
+
+  setBackgroundMaterialClass(constructor: Constructor<Material>) {
+    if ((this.backgroundMaterial instanceof constructor) as any) {
+      //already set
+      return;
+    }
+
+    const backgroundMaterial = new constructor({
+      transparent: true,
+      toneMapped: false,
+    }) as InstanceOf<typeof BackgroundMaterial>;
+    this.backgroundMesh.material = backgroundMaterial;
+    this.backgroundMaterial?.dispose();
+    this.backgroundMaterial = backgroundMaterial;
+
+    if (this.current != null) {
+      this.linkCurrent(this.current);
+      this.backgroundMaterial.clippingPlanes = this.clippingPlanes;
+      this.backgroundMaterial.needsUpdate = true;
+    }
   }
 
   setTexture(texture: Texture): void {
@@ -184,7 +216,9 @@ export class ImageNode extends BaseNode<ImageState> {
 
     saveDivideScalar(this.material.borderRadius, current.scale.y).min(_0_5);
 
-    updateBackgroundValues(current, this.backgroundMesh, this.backgroundMaterial);
+    if (this.backgroundMaterial != null) {
+      updateBackgroundValues(current, this.backgroundMesh, this.backgroundMaterial);
+    }
   }
 
   onCleanup(): void {
@@ -205,7 +239,7 @@ export type ImageProperties = {
 
 export function useImage(
   node: ImageNode,
-  { url, opacity, fit, ...props }: ImageProperties,
+  { url, opacity, fit, material, ...props }: ImageProperties,
   children: ReactNode | undefined,
 ): ReactNode | undefined {
   //TODO: stop updating texture value on the node
@@ -221,6 +255,7 @@ export function useImage(
     //updates in use effect to respect the lifcycles
     updateContainerProperties(node, props);
     updateEventProperties(node, props);
+    node.setBackgroundMaterialClass(material ?? containerDefaults["material"]);
 
     node.target.opacity.set(opacity ?? imageDefaults["opacity"]);
     node.setTexture(texture);

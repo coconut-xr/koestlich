@@ -62,7 +62,6 @@ export const PlatformConstants = {
 export * from "./vector.js";
 export * from "./utils.js";
 export * from "./bucket.js";
-export * from "./background-material.js";
 export * from "./background.js";
 export * from "./scroll-handler.js";
 export * from "./transition.js";
