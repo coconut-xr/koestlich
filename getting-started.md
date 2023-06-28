@@ -19,12 +19,7 @@ export default function App() {
   return (
     <Canvas>
       <OrbitControls />
-      <RootContainer
-        backgroundColor="red"
-        width={2}
-        height={1}
-        flexDirection="row"
-      >
+      <RootContainer backgroundColor="red" width={2} height={1} flexDirection="row">
         <Container flexGrow={1} margin={0.1} backgroundColor="green" />
         <Container flexGrow={1} margin={0.1} backgroundColor="blue" />
       </RootContainer>
@@ -41,7 +36,6 @@ The asynchronous loading can lead to inconsistent ordering. **Koestlich** can en
 
 The `index` parameter can also be used to reorder elements independent of how they are expressed in react.
 
-
 [CodeSandbox](https://codesandbox.io/s/koestlich-async-content-1fyyhw?file=/src/app.tsx)
 
 ![Screenshot](./async-content.png)
@@ -56,32 +50,15 @@ export default function App() {
   return (
     <Canvas>
       <OrbitControls />
-      <RootContainer
-        backgroundColor="red"
-        width={2}
-        height={1}
-        flexDirection="row"
-      >
-        <Container
-          index={0}
-          flexGrow={1}
-          margin={0.1}
-          backgroundColor="green"
-        />
+      <RootContainer backgroundColor="red" width={2} height={1} flexDirection="row">
+        <Container index={0} flexGrow={1} margin={0.1} backgroundColor="green" />
         <Suspense>
-          <Image
-            index={1}
-            flexBasis={0}
-            flexGrow={1}
-            margin={0.1}
-            url="example.png"
-          />
+          <Image index={1} flexBasis={0} flexGrow={1} margin={0.1} url="example.png" />
         </Suspense>
       </RootContainer>
     </Canvas>
   );
 }
-
 ```
 
 ## Text
@@ -102,18 +79,8 @@ export default function App() {
   return (
     <Canvas>
       <OrbitControls />
-      <RootContainer
-        backgroundColor="red"
-        width={2}
-        height={1}
-        flexDirection="row"
-      >
-        <Container
-          index={0}
-          flexGrow={1}
-          margin={0.1}
-          backgroundColor="green"
-        />
+      <RootContainer backgroundColor="red" width={2} height={1} flexDirection="row">
+        <Container index={0} flexGrow={1} margin={0.1} backgroundColor="green" />
         <Suspense>
           <Text index={1} margin={0.1} marginLeft={0}>
             Coconut XR
@@ -130,7 +97,7 @@ Via the `FontFamilyProvider`, additional MSDF fonts can be added.
 ```tsx
 <FontFamilyProvider
   fontFamilies={{
-    otherFont: ["<baseUrl>", "<pathToJson>"]
+    otherFont: ["<baseUrl>", "<pathToJson>"],
   }}
   defaultFontFamily="otherFont"
 ></FontFamilyProvider>
@@ -147,7 +114,6 @@ For text fields and text areas, we provide the [@coconut-xr/input](https://githu
 Animations are built into **koestlich** and work out of the box. Almost all properties can be animated. In contrast to HTML/CSS, elements can transition from one place in a layout to another, a feature often referred to as AutoTransition. To declare how UI elements relate between two different layouts, the `id` property is used. Placing the same `id` property on two UI components in different layouts will keep the underlying UI element alive and automatically transition. However, both UI components need to have the same type. Therefore, it is impossible to transition an Image to a Text component.
 Koestlich provides the animation property to control birth, death, and transition behavior. The following example shows how the state is controlled via a button, which changes the ordering of components via the index parameter and animates the button's color between green and red.
 
-
 [CodeSandbox](https://codesandbox.io/s/koestlich-animations-gnthy9?file=/src/app.tsx)
 
 ![Screenshot](./animations.gif)
@@ -163,12 +129,7 @@ export default function App() {
   return (
     <Canvas>
       <OrbitControls />
-      <RootContainer
-        backgroundColor="black"
-        width={2}
-        height={1}
-        flexDirection="row"
-      >
+      <RootContainer backgroundColor="black" width={2} height={1} flexDirection="row">
         <Container
           index={0}
           id="btn"
@@ -177,16 +138,16 @@ export default function App() {
           margin={0.1}
           backgroundColor={state ? "green" : "red"}
         />
-          <Suspense>
-            <Image
-              index={state ? -1 : 1}
-              id="img"
-              flexBasis={0}
-              flexGrow={1}
-              margin={0.1}
-              url="example.png"
-            />
-          </Suspense>
+        <Suspense>
+          <Image
+            index={state ? -1 : 1}
+            id="img"
+            flexBasis={0}
+            flexGrow={1}
+            margin={0.1}
+            url="example.png"
+          />
+        </Suspense>
       </RootContainer>
     </Canvas>
   );
@@ -219,9 +180,9 @@ export default function App() {
     () =>
       new Mesh(
         new SphereBufferGeometry(),
-        new MeshPhongMaterial({ toneMapped: false, color: "blue" })
+        new MeshPhongMaterial({ toneMapped: false, color: "blue" }),
       ),
-    []
+    [],
   );
 
   return (
@@ -347,11 +308,7 @@ class CardGeometry extends ExtrudeGeometry {
 ```tsx
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import {
-  RootContainer,
-  Container,
-  clippingEvents
-} from "@coconut-xr/koestlich";
+import { RootContainer, Container, clippingEvents } from "@coconut-xr/koestlich";
 
 export default function App() {
   return (
@@ -367,6 +324,50 @@ export default function App() {
         <Container width={1.5} margin={0.1} backgroundColor="green" />
         <Container width={1.5} margin={0.1} backgroundColor="blue" />
       </RootContainer>
+    </Canvas>
+  );
+}
+```
+
+## Custom Materials
+
+**Koestlich** allows to provide custom materials for the background on the `Text`, `Container`, and `Image` components. Using the library `@coconut-xr/xmaterials`, a new material can be built based on the existing three materials. Every provided material must be at least be a border material created through `makeBorderMaterial`. The `makeBorderMaterial` allows to provide default properties to the material. In the following example, we are creating a text element with a material based on the phong material with high specular and shininess. Using the border properties, we can create a border that creates the illusion of a 3d mesh. Specifically, the `borderBend` property allows bending the normals on the border to create this effect efficiently. The `anchorX` and `anchorY` properties allow the button in the following example to have its origin in (0,0,0).
+
+[CodeSandbox](https://codesandbox.io/s/koestlich-overflow-c9nkvc?file=/src/app.tsx)
+
+![Screenshot](./custom-materials.jpg)
+
+```tsx
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import { clippingEvents, RootText } from "@coconut-xr/koestlich";
+import { makeBorderMaterial } from "@coconut-xr/xmaterials";
+import { MeshPhongMaterial } from "three";
+
+const FancyMaterial = makeBorderMaterial(MeshPhongMaterial, {
+  specular: 0x111111,
+  shininess: 100,
+});
+
+export default function App() {
+  return (
+    <Canvas events={clippingEvents} gl={{ localClippingEnabled: true }}>
+      <OrbitControls enableRotate={false} />
+      <RootText
+        backgroundColor="black"
+        fontSize={0.05}
+        color="white"
+        anchorX="center"
+        anchorY="center"
+        padding={0.03}
+        borderRadius={0.05}
+        borderColor="black"
+        borderBend={0.3}
+        border={0.01}
+        material={FancyMaterial}
+      >
+        I look fancy
+      </RootText>
     </Canvas>
   );
 }

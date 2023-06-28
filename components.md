@@ -76,6 +76,14 @@ _Event Properties_
 | onContextMenu   | (event: ThreeEvent<MouseEvent>) => void   |
 | onClick         | (event: ThreeEvent<MouseEvent>) => void   |
 
+_Root Properties_
+| Property | Type |
+| --------------- | ----------------------------------------- |
+| precision | number |
+| loadYoga | function to load yoga |
+| anchorX | "left" , "center" , "right" |
+| anchorY | "top", "center", "bottom" |
+
 ## Object
 
 Renders any Three.js 3d Mesh.
@@ -107,6 +115,8 @@ The container renders a 2D plane with a special shader for borderRadius, borderS
 | border                  | number              |
 | borderX                 | number              |
 | borderY                 | number              |
+| borderBend              | number              |
+| material                | Material class      |
 
 ## Image
 
