@@ -183,16 +183,9 @@ export default function Index() {
                       </Suspense>
 
                       <Suspense fallback={null}>
-                        <SVG id="svg1" depth={0} index={3} url="example.svg" height={0.05} />
-                        <SVG
-                          depth={0}
-                          id="svg2"
-                          index={4}
-                          color={0xffff00}
-                          url="example.svg"
-                          height={0.1}
-                        />
-                        <SVG depth={0} id="svg3" index={4} url="mozilla.svg" height={0.2} />
+                        <SVG id="svg1" index={3} url="example.svg" height={0.05} />
+                        <SVG id="svg2" index={4} color={0xffff00} url="example.svg" height={0.1} />
+                        <SVG id="svg3" index={4} url="mozilla.svg" height={0.2} />
                       </Suspense>
                       <CustomContainer
                         borderRadius={0.05}
