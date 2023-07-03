@@ -51,7 +51,7 @@ export const useDefaultStyles = useContext.bind(null, defaultStyleContext);
 export function DefaultStyleProvider<P = YogaProperties, A extends PropertyAPI = typeof flexAPI>({
   children,
   ...props
-}: PropsWithChildren<PropertiesFromAPI<P, A>>) {
+}: PropsWithChildren<P & PropertiesFromAPI<P, A>>) {
   const existingDefaultSytles = useDefaultStyles();
   const value = useMemo(
     () => (existingDefaultSytles == null ? props : { ...props, ...existingDefaultSytles }),
