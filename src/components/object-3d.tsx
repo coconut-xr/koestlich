@@ -331,7 +331,7 @@ export function useSVGFromText(
     let i = 0;
     for (const path of result.paths) {
       const shapes = SVGLoader.createShapes(path);
-      const material = new MeshPhongMaterial({
+      const material = new MeshBasicMaterial({
         color: path.color,
         transparent: true,
         toneMapped: false,
@@ -349,7 +349,7 @@ export function useSVGFromText(
     }
     return object;
   }, [result]);
-  return useObject(node, { object, ...props }, children, true);
+  return useObject(node, { object, depth: 0, ...props }, children, true);
 }
 
 export const GLTF = buildComponent(Object3DNode, useGLTF, flexAPI);
