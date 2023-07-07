@@ -264,7 +264,8 @@ function AppleUI() {
         color="white"
         anchorX="center"
         anchorY="center"
-        padding={0.03}
+        padding={0.5}
+        paddingLeft={undefined}
         id="root"
         borderRadius={0.05}
         borderColor="black"

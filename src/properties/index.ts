@@ -95,7 +95,7 @@ export function translateProperties<P extends YogaProperties, A extends Property
       const apiEntry = api[key];
       if (apiEntry == null) {
         //no translation necassary just assign property to result:
-        result[key as keyof YogaProperties] = value as any;
+        result[key as keyof YogaProperties] = (value as any) ?? result[key as keyof YogaProperties];
         continue;
       }
       api[key]?.(result, value, key);
