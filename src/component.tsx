@@ -38,9 +38,9 @@ export function buildComponent<
     const defaultProperties = useDefaultStyles();
     const properties = translateProperties<P, A>(
       api,
-      props as any,
       defaultProperties ?? {},
       ...(classes ?? []),
+      props as any,
     );
     const storage = useRootStorage();
     const parent = useBaseNodeContext();

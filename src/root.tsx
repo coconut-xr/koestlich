@@ -54,7 +54,7 @@ export function DefaultStyleProvider<P = YogaProperties, A extends PropertyAPI =
 }: PropsWithChildren<P & PropertiesFromAPI<P, A>>) {
   const existingDefaultSytles = useDefaultStyles();
   const value = useMemo(
-    () => (existingDefaultSytles == null ? props : { ...props, ...existingDefaultSytles }),
+    () => (existingDefaultSytles == null ? props : { ...existingDefaultSytles, ...props }),
     [existingDefaultSytles, props],
   );
   return <defaultStyleContext.Provider value={value}>{children}</defaultStyleContext.Provider>;

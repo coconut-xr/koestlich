@@ -15,31 +15,29 @@ We currently provide bindings to [react-three/fiber](https://github.com/pmndrs/r
 
 `npm install @coconut-xr/koestlich`
 
-
-
 [<span style="font-size: 2rem">⤷ Getting Started</span>](https://coconut-xr.github.io/koestlich/#/getting-started)
 
 ## Examples
 
-* [Dashboard](https://codesandbox.io/s/koestlich-dashboard-example-8hjx90)
+- [Dashboard](https://codesandbox.io/s/koestlich-dashboard-example-8hjx90)
 
 <img src="./images/dashboard.gif"  width="250">
 
-
 ## [Documentation](https://coconut-xr.github.io/koestlich)
-* [Getting Started](https://coconut-xr.github.io/koestlich/#/getting-started)
-introduces **koestlich**'s features by example
-* [Advanced](https://coconut-xr.github.io/koestlich/#/advanced)
-introducing classes, default styles, and custom property APIs
-* [Components](https://coconut-xr.github.io/koestlich/#/components)
-Description of available components and their API
+
+- [Getting Started](https://coconut-xr.github.io/koestlich/#/getting-started)
+  introduces **koestlich**'s features by example
+- [Advanced](https://coconut-xr.github.io/koestlich/#/advanced)
+  introducing classes, default styles, and custom property APIs
+- [Components](https://coconut-xr.github.io/koestlich/#/components)
+  Description of available components and their API
 
 ## Ecosystem
 
-* Text Fields & Text Areas - [@coconut-xr/input](https://github.com/coconut-xr/input)
-
-<img src="./images/text.gif"  width="200">
-
+- WebXR Interactions - [@coconut-xr/natuerlich](https://github.com/coconut-xr/natuerlich)
+- Text Fields & Text Areas - [@coconut-xr/input](https://github.com/coconut-xr/input)
+- Pre-designed UI Components - [@coconut-xr/apfel-kruemel](https://github.com/coconut-xr/apfel-kruemel)
+- Lucice Icons for Koestlich - [@coconut-xr/lucide-koestlich](https://github.com/coconut-xr/lucide-koestlich)
 
 ## React Native
 
