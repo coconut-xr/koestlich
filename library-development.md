@@ -6,7 +6,7 @@ The following setup shows how the `KoestlichTestCanvas` component can be used to
 
 [CodeSandbox](https://codesandbox.io/s/koestlich-scale-test-env-8l4pj4?file=/src/app.tsx)
 
-![Screenshot]()
+![Screenshot](./library-development.jpg)
 
 ```tsx
 import { KoestlichTestCanvas, Text } from "@coconut-xr/koestlich";
@@ -19,3 +19,5 @@ export default function App() {
   );
 }
 ```
+
+We provide a starting point for implementing many custom components like Sliders, Dropdown, Tabs, and more [here](https://github.com/coconut-xr/kruemel).
