@@ -337,7 +337,7 @@ export default function App() {
 
 **Koestlich** allows to provide custom materials for the background on the `Text`, `Container`, and `Image` components. Using the library `@coconut-xr/xmaterials`, a new material can be built based on the existing three materials. Every provided material must be at least be a border material created through `makeBorderMaterial`. The `makeBorderMaterial` allows to provide default properties to the material. In the following example, we are creating a text element with a material based on the phong material with high specular and shininess. Using the border properties, we can create a border that creates the illusion of a 3d mesh. Specifically, the `borderBend` property allows bending the normals on the border to create this effect efficiently. The `anchorX` and `anchorY` properties allow the button in the following example to have its origin in (0,0,0).
 
-[CodeSandbox](https://codesandbox.io/s/koestlich-overflow-c9nkvc?file=/src/app.tsx)
+[CodeSandbox](https://codesandbox.io/s/koestlich-custom-materials-vchy5l?file=/src/app.tsx)
 
 ![Screenshot](./custom-materials.jpg)
 
