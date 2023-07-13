@@ -31,6 +31,8 @@ We currently provide bindings to [react-three/fiber](https://github.com/pmndrs/r
   introducing classes, default styles, and custom property APIs
 - [Components](https://coconut-xr.github.io/koestlich/#/components)
   Description of available components and their API
+- [Library Development](https://coconut-xr.github.io/koestlich/#/library-development)
+  information for developing custom component libraries
 
 ## Ecosystem
 
