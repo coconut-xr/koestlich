@@ -71,3 +71,4 @@ export * from "./root.js";
 export * from "./component.js";
 export * from "./properties/index.js";
 export * from "./components/index.js";
+export * from "./test.js";

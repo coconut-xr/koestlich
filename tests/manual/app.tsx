@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/no-unknown-property */
 import { Suspense, useMemo, useRef, useState } from "react";
@@ -17,6 +18,7 @@ import {
   RootObject,
   RootContainer,
   RootText,
+  KoestlichTestCanvas,
 } from "@coconut-xr/koestlich";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Fullscreen } from "./fullscreen";
@@ -70,7 +72,7 @@ export default function Index() {
   return (
     <>
       <button
-        style={{ zIndex: 1, position: "absolute", left: 10, top: 10 }}
+        style={{ zIndex: 1, position: "absolute", right: 10, bottom: 10 }}
         onClick={() => setShow((show) => !show)}
       >
         toggle show
@@ -82,9 +84,9 @@ export default function Index() {
         gl={{ localClippingEnabled: true }}
         style={{ height: "100vh" }}
       >
+        <color attach="background" args={[0]} />
         <RotateUI />
         <AppleUI />
-        <color args={["black"]} attach={"background"} />
         <directionalLight
           shadow-mapSize={2048}
           castShadow
@@ -116,8 +118,11 @@ export default function Index() {
                     padding={0.03}
                     id="root"
                     overflow="scroll"
-                    width={width}
-                    height={height}
+                    anchorX="left"
+                    anchorY="top"
+                    pixelSize={1}
+                    sizeX={width}
+                    sizeY={height}
                   >
                     <Suspense>
                       <Text index={1} fontSize={0.05} color={"white"} id="lorem-ipsum">
@@ -137,13 +142,21 @@ export default function Index() {
                     id="root"
                     object={bgObj}
                     overflow="scroll"
-                    width={width}
-                    height={height}
+                    anchorX="left"
+                    anchorY="top"
+                    pixelSize={1}
+                    sizeX={width}
+                    sizeY={height}
                   >
-                    <DefaultStyleProvider<typeof flexAPI>>
+                    <DefaultStyleProvider>
                       <Suspense fallback={null}>
                         <Image index={1} id="image0" classes={[imageClass]} url="example.png">
-                          <Text positionType="absolute" positionLeft={0.3} positionTop={0.26}>
+                          <Text
+                            fontSize={0.1}
+                            positionType="absolute"
+                            positionLeft={0.3}
+                            positionTop={0.26}
+                          >
                             I am outside of the picture
                           </Text>
                         </Image>
@@ -201,6 +214,7 @@ export default function Index() {
                             padding={0.03}
                             paddingLeft={0.1}
                             color={0x0}
+                            fontSize={0.1}
                             id="c-xr"
                           >
                             Coconut XR
@@ -246,6 +260,9 @@ export default function Index() {
           }
         </Fullscreen>
       </Canvas>
+      <KoestlichTestCanvas>
+        <Text color="white">Sample Text</Text>
+      </KoestlichTestCanvas>
     </>
   );
 }
@@ -260,17 +277,16 @@ function AppleUI() {
     <group position={[1, -0.5, 0]}>
       <RootText
         backgroundColor="black"
-        fontSize={0.05}
         color="white"
         anchorX="center"
         anchorY="center"
-        padding={0.5}
+        padding={16}
         paddingLeft={undefined}
         id="root"
-        borderRadius={0.05}
+        borderRadius={16}
         borderColor="black"
         borderBend={0.3}
-        border={0.01}
+        border={4}
         material={FancyMaterial}
       >
         I look fancy
@@ -296,10 +312,11 @@ function RotateUI() {
         anchorY="center"
         padding={0.03}
         id="root"
+        pixelSize={0.005}
         overflow="scroll"
       >
         <Suspense>
-          <Text index={1} fontSize={0.05} color={"white"} id="lorem-ipsum">
+          <Text index={1} color={"white"} id="lorem-ipsum">
             Hello World!
           </Text>
         </Suspense>

@@ -542,7 +542,7 @@ export const textDefaults: Omit<
   InvertOptional<TextProperties & { children: string | undefined }>,
   "fontFamily" | keyof ContainerProperties
 > = {
-  fontSize: 0.1,
+  fontSize: 16,
   horizontalAlign: "left",
   letterSpacing: 0,
   lineHeightMultiplier: 1.2,

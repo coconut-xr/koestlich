@@ -83,6 +83,11 @@ _Root Properties_
 | loadYoga | function to load yoga |
 | anchorX | "left" , "center" , "right" |
 | anchorY | "top", "center", "bottom" |
+| sizeX | number - size of the container in three.js units |
+| sizeY | number - size of the container in three.js units|
+| pixelSize | number - size of one pixel in relation to three.js units |
+| position | Vector3 |
+| rotation | Euler |
 
 ## Object
 

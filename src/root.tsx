@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import React, {
   createContext,
   forwardRef,
@@ -10,7 +11,7 @@ import React, {
 import { Bucket } from "./bucket.js";
 import { UseComponent } from "./component.js";
 import { BaseNode, NodeClass, useNode } from "./node.js";
-import { useFrame, useThree } from "@react-three/fiber";
+import { Euler, useFrame, useThree, Vector3, Vector3Props } from "@react-three/fiber";
 import {
   flexAPI,
   PropertiesFromAPI,
@@ -21,7 +22,6 @@ import { YogaProperties, loadYoga as loadYogaFromGHP } from "@coconut-xr/flex";
 import { Yoga } from "yoga-wasm-web";
 import { suspend } from "suspend-react";
 import { cameraWorldPosition, patchRenderOrder } from "./index.js";
-import { Group } from "three";
 
 const BaseNodeContext = createContext<BaseNode>(null as any);
 
@@ -75,30 +75,41 @@ export function buildRoot<T extends BaseNode, P extends YogaProperties, C, A ext
   // eslint-disable-next-line react/display-name
   return forwardRef<
     T | undefined,
-    P &
-      PropertiesFromAPI<P, A> & {
-        precision?: number;
-        id?: string;
-        children?: C;
-        classes?: Array<Partial<P & PropertiesFromAPI<P, A>>>;
-        loadYoga?: () => Promise<Yoga>;
-        anchorX?: keyof typeof anchorXMap;
-        anchorY?: keyof typeof anchorYMap;
-      }
+    Omit<P & PropertiesFromAPI<P, A>, "width" | "height"> & {
+      precision?: number;
+      id?: string;
+      children?: C;
+      classes?: Array<Partial<P & PropertiesFromAPI<P, A>>>;
+      loadYoga?: () => Promise<Yoga>;
+      anchorX?: keyof typeof anchorXMap;
+      anchorY?: keyof typeof anchorYMap;
+      sizeX?: number;
+      sizeY?: number;
+      pixelSize?: number;
+      position?: Vector3;
+      rotation?: Euler;
+    }
   >(
     (
       {
         loadYoga = loadYogaFromGHP,
         precision,
         id = "root",
-        anchorX = "left",
-        anchorY = "top",
+        anchorX = "center",
+        anchorY = "center",
+        position,
+        rotation,
+        pixelSize = 0.002,
+        sizeX,
+        sizeY,
         children,
         classes,
         ...props
       },
       ref,
     ) => {
+      (props as any).width = sizeX == null ? undefined : sizeX / pixelSize;
+      (props as any).height = sizeY == null ? undefined : sizeY / pixelSize;
       const yoga = suspend(loadYoga, [loadYoga, LoadYogaSymbol]);
       const dirtyRef = useRef(false);
       const renderer = useThree(({ gl }) => gl);
@@ -122,8 +133,6 @@ export function buildRoot<T extends BaseNode, P extends YogaProperties, C, A ext
       const node = useNode(rootStorage, undefined, undefined, id, nodeClass, ref);
       const reactChildren = useComponent(node, properties, children);
 
-      const groupRef = useRef<Group>(null);
-
       useFrame((state, deltaTime) => {
         cameraWorldPosition.setFromMatrixPosition(state.camera.matrixWorld);
         if (dirtyRef.current) {
@@ -134,11 +143,11 @@ export function buildRoot<T extends BaseNode, P extends YogaProperties, C, A ext
         //reset
         rootStorage.bucket.screenSpaceZ = undefined;
         const currentAnimationState = node["current"];
-        if (groupRef.current == null || currentAnimationState == null) {
+        if (currentAnimationState == null) {
           return;
         }
-        groupRef.current.position.x = currentAnimationState.scale.x * anchorXMap[anchorX];
-        groupRef.current.position.y = currentAnimationState.scale.y * anchorYMap[anchorY];
+        rootStorage.bucket.position.x = currentAnimationState.scale.x * anchorXMap[anchorX];
+        rootStorage.bucket.position.y = currentAnimationState.scale.y * anchorYMap[anchorY];
       });
       useEffect(() => patchRenderOrder(renderer), [renderer]);
 
@@ -154,7 +163,7 @@ export function buildRoot<T extends BaseNode, P extends YogaProperties, C, A ext
             {<BaseNodeContextProvider value={node}>{reactChildren}</BaseNodeContextProvider>}
           </storageContext.Provider>
           {
-            <group ref={groupRef} {...emptyHandlers}>
+            <group position={position} scale={pixelSize} rotation={rotation} {...emptyHandlers}>
               {
                 // eslint-disable-next-line react/no-unknown-property
                 <primitive object={rootStorage.bucket} />
