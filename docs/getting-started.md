@@ -4,7 +4,7 @@ In the following tutorials, we will create several UIs using **koestlich** and r
 
 ## First Layout
 
-At first, we will create 3 containers. One container is the root node, expressed by `RootContainer`. The `RootContainer` has a horizontal (row) flex-direction, while the children expressed by `Container` equally fill its width with a margin between them.
+At first, we will create 3 containers. One container is the root node with a size of 2 by 1 three.js untits, expressed by `RootContainer`. The `RootContainer` has a horizontal (row) flex-direction, while the children expressed by `Container` equally fill its width with a margin between them.
 
 [CodeSandbox](https://codesandbox.io/s/koestlich-first-layout-owgw9d?file=/src/app.tsx)
 
@@ -19,14 +19,18 @@ export default function App() {
   return (
     <Canvas>
       <OrbitControls />
-      <RootContainer backgroundColor="red" width={2} height={1} flexDirection="row">
-        <Container flexGrow={1} margin={0.1} backgroundColor="green" />
-        <Container flexGrow={1} margin={0.1} backgroundColor="blue" />
+      <RootContainer backgroundColor="red" sizeX={2} sizeY={1} flexDirection="row">
+        <Container flexGrow={1} margin={48} backgroundColor="green" />
+        <Container flexGrow={1} margin={48} backgroundColor="blue" />
       </RootContainer>
     </Canvas>
   );
 }
 ```
+
+## Scaling & Sizing
+
+Sizing of UI elements with absolute values, such as the `width` of an image or the `fontSize` of a text element, is oriented on web development. The root element, for example, a `RootContainer` can be set to a specific `sizeX` and `sizeY`, corresponding to a size in three.js units. The content inside the root element is sized based on a pixel unit. The relation between three.js units and pixel units can be set using the `pixelSize` property. The property expresses the size of one pixel in three.js units and defaults to `0.002`. With this default, `500px` is equal to 1 three.js unit. To make interoperability between code bases and different component libraries easier, we encourage to use the intuition of pixel sizes from the web. For instance, the default text height relates to 16 pixels. If these pixel sizes appear too small or too high in the szene, the `pixelSize` should be increased or decreased respectively.
 
 ## Asynchronous Content
 
@@ -50,10 +54,10 @@ export default function App() {
   return (
     <Canvas>
       <OrbitControls />
-      <RootContainer backgroundColor="red" width={2} height={1} flexDirection="row">
-        <Container index={0} flexGrow={1} margin={0.1} backgroundColor="green" />
+      <RootContainer backgroundColor="red" sizeX={2} sizeY={1} flexDirection="row">
+        <Container index={0} flexGrow={1} margin={48} backgroundColor="green" />
         <Suspense>
-          <Image index={1} flexBasis={0} flexGrow={1} margin={0.1} url="example.png" />
+          <Image index={1} flexBasis={0} flexGrow={1} margin={48} url="example.png" />
         </Suspense>
       </RootContainer>
     </Canvas>
@@ -79,10 +83,10 @@ export default function App() {
   return (
     <Canvas>
       <OrbitControls />
-      <RootContainer backgroundColor="red" width={2} height={1} flexDirection="row">
-        <Container index={0} flexGrow={1} margin={0.1} backgroundColor="green" />
+      <RootContainer backgroundColor="red" sizeX={2} sizeY={1} flexDirection="row">
+        <Container index={0} flexGrow={1} margin={48} backgroundColor="green" />
         <Suspense>
-          <Text index={1} margin={0.1} marginLeft={0}>
+          <Text fontSize={64} index={1} margin={48} marginLeft={0}>
             Coconut XR
           </Text>
         </Suspense>
@@ -129,13 +133,13 @@ export default function App() {
   return (
     <Canvas>
       <OrbitControls />
-      <RootContainer backgroundColor="black" width={2} height={1} flexDirection="row">
+      <RootContainer backgroundColor="black" sizeX={2} sizeY={1} flexDirection="row">
         <Container
           index={0}
           id="btn"
           onClick={() => setState(!state)}
           flexGrow={state ? 2 : 1}
-          margin={0.1}
+          margin={48}
           backgroundColor={state ? "green" : "red"}
         />
         <Suspense>
@@ -144,7 +148,7 @@ export default function App() {
             id="img"
             flexBasis={0}
             flexGrow={1}
-            margin={0.1}
+            margin={48}
             url="example.png"
           />
         </Suspense>
@@ -192,15 +196,15 @@ export default function App() {
       <OrbitControls />
       <RootContainer
         backgroundColor="red"
-        width={3}
-        height={1}
-        borderRadius={0.2}
+        sizeX={3}
+        sizeY={1}
+        borderRadius={48}
         flexDirection="row"
         overflow="hidden"
         justifyContent="space-evenly"
-        padding={0.1}
+        padding={32}
       >
-        <Object aspectRatio={1} index={0} object={sphere} padding={0.2}>
+        <Object aspectRatio={1} index={0} object={sphere} padding={96}>
           <Container flexGrow={1} backgroundColor="green" />
         </Object>
         <Suspense>
@@ -244,35 +248,35 @@ export default function App() {
       <directionalLight intensity={0.8} position={[1, 1, 1]} />
       <RootContainer
         backgroundColor="black"
-        width={2}
-        height={1}
+        sizeX={2}
+        sizeY={1}
         flexDirection="row"
       >
         <Object
-          depth={0.1}
+          depth={48}
           object={mesh1}
           {...}
         >
           <Suspense>
-            <SVG url="bank.svg" flexShrink={1} depth={0} />
+            <SVG url="bank.svg" flexShrink={1} />
           </Suspense>
         </Object>
         <Object
-          depth={0.1}
+          depth={48}
           object={mesh2}
           {...}
         >
           <Suspense>
-            <SVG url="message.svg" flexShrink={1} depth={0} />
+            <SVG url="message.svg" flexShrink={1} />
           </Suspense>
         </Object>
         <Object
-          depth={0.1}
+          depth={48}
           object={mesh3}
           {...}
         >
           <Suspense>
-            <SVG url="clock.svg" flexShrink={1} depth={0} />
+            <SVG url="clock.svg" flexShrink={1} />
           </Suspense>
         </Object>
       </RootContainer>
@@ -316,13 +320,13 @@ export default function App() {
       <OrbitControls enableRotate={false} />
       <RootContainer
         backgroundColor="red"
-        width={2}
-        height={1}
+        sizeX={2}
+        sizeY={1}
         flexDirection="row"
         overflow="scroll"
       >
-        <Container width={1.5} margin={0.1} backgroundColor="green" />
-        <Container width={1.5} margin={0.1} backgroundColor="blue" />
+        <Container width={750} margin={48} backgroundColor="green" />
+        <Container width={750} margin={48} backgroundColor="blue" />
       </RootContainer>
     </Canvas>
   );
@@ -355,15 +359,15 @@ export default function App() {
       <OrbitControls enableRotate={false} />
       <RootText
         backgroundColor="black"
-        fontSize={0.05}
         color="white"
         anchorX="center"
         anchorY="center"
-        padding={0.03}
-        borderRadius={0.05}
+        padding={24}
+        borderRadius={32}
+        fontSize={32}
         borderColor="black"
         borderBend={0.3}
-        border={0.01}
+        border={8}
         material={FancyMaterial}
       >
         I look fancy

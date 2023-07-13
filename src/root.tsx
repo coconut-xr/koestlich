@@ -93,7 +93,7 @@ export function buildRoot<T extends BaseNode, P extends YogaProperties, C, A ext
     (
       {
         loadYoga = loadYogaFromGHP,
-        precision,
+        precision = 0.1,
         id = "root",
         anchorX = "center",
         anchorY = "center",
@@ -118,7 +118,7 @@ export function buildRoot<T extends BaseNode, P extends YogaProperties, C, A ext
           yoga,
           nodeMap: new Map(),
           bucket: new Bucket(),
-          precision: precision ?? 0.001,
+          precision,
           requestLayoutCalculation: () => (dirtyRef.current = true),
         }),
         [precision, yoga],
