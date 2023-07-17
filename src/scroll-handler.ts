@@ -1,5 +1,5 @@
 import { EventHandlers, ThreeEvent } from "@react-three/fiber/dist/declarations/src/core/events.js";
-import { Object3D, Vector3 } from "three";
+import { Object3D, Vector2, Vector3 } from "three";
 
 const distanceHelper = new Vector3();
 const localPointHelper = new Vector3();
@@ -27,11 +27,10 @@ export abstract class ScrollHandler implements EventHandlers {
 
   //root object all interactions relate too
   protected abstract readonly bucket: Object3D;
-  private pointerInteractionMap = new Map<
-    number,
-    { prevIntersection: Vector3; hasPrevIntersection: boolean }
-  >();
+  private prevInteractionMap = new Map<number, { timestamp: number; point: Vector3 }>();
   protected abstract parent: ScrollHandler | undefined;
+
+  protected scrollVelocity = new Vector2();
 
   customEvents: ExtendedEventHandlers = {};
 
@@ -55,23 +54,26 @@ export abstract class ScrollHandler implements EventHandlers {
   };
 
   onPointerUp = (event: ThreeEvent<PointerEvent>) => {
-    this.getPointerInteractionData(event.pointerId).hasPrevIntersection = false;
+    this.prevInteractionMap.delete(event.pointerId);
     this.customEvents.onPointerUp?.(extendEvent(event));
   };
 
-  onPointerOut = (event: ThreeEvent<PointerEvent>) => {
-    this.getPointerInteractionData(event.pointerId).hasPrevIntersection = false;
-    this.customEvents.onPointerOut?.(extendEvent(event));
-  };
+  onPointerOut = this.onPointerUp;
 
   onPointerDown = (event: ThreeEvent<PointerEvent>) => {
     this.customEvents.onPointerDown?.(extendEvent(event));
     if (event.defaultPrevented) {
       return;
     }
-    const interactionData = this.getPointerInteractionData(event.pointerId);
-    interactionData.hasPrevIntersection = true;
-    this.bucket.worldToLocal(interactionData.prevIntersection.copy(event.point));
+    let interaction = this.prevInteractionMap.get(event.pointerId);
+    if (interaction == null) {
+      this.prevInteractionMap.set(
+        event.pointerId,
+        (interaction = { timestamp: 0, point: new Vector3() }),
+      );
+    }
+    interaction.timestamp = event.timeStamp / 1000;
+    this.bucket.worldToLocal(interaction.point.copy(event.point));
   };
 
   onPointerEnter = (event: ThreeEvent<PointerEvent>): void => {
@@ -79,27 +81,39 @@ export abstract class ScrollHandler implements EventHandlers {
     if (event.defaultPrevented || event.buttons != 1) {
       return;
     }
-    const interactionData = this.getPointerInteractionData(event.pointerId);
-    interactionData.hasPrevIntersection = true;
-    this.bucket.worldToLocal(interactionData.prevIntersection.copy(event.point));
+    let interaction = this.prevInteractionMap.get(event.pointerId);
+    if (interaction == null) {
+      this.prevInteractionMap.set(
+        event.pointerId,
+        (interaction = { timestamp: 0, point: new Vector3() }),
+      );
+    }
+    interaction.timestamp = event.timeStamp / 1000;
+    this.bucket.worldToLocal(interaction.point.copy(event.point));
   };
 
   onPointerMove = (event: ThreeEvent<PointerEvent>): void => {
-    const interactionData = this.getPointerInteractionData(event.pointerId);
+    const prevInteraction = this.prevInteractionMap.get(event.pointerId);
     this.customEvents.onPointerMove?.(extendEvent(event));
-    if (event.defaultPrevented || !interactionData.hasPrevIntersection) {
+    if (event.defaultPrevented || prevInteraction == null) {
       return;
     }
     this.bucket.worldToLocal(localPointHelper.copy(event.point));
-    distanceHelper.copy(localPointHelper).sub(interactionData.prevIntersection);
-    interactionData.prevIntersection.copy(localPointHelper);
+    distanceHelper.copy(localPointHelper).sub(prevInteraction.point);
+    const timestamp = event.timeStamp / 1000;
+    const deltaTime = timestamp - prevInteraction.timestamp;
+
+    prevInteraction.point.copy(localPointHelper);
+    prevInteraction.timestamp = timestamp;
 
     if (this.onScroll(distanceHelper.x, distanceHelper.y)) {
+      this.scrollVelocity.set(distanceHelper.x, distanceHelper.y).divideScalar(deltaTime);
       event.stopPropagation();
     }
   };
 
   onWheel = (event: ThreeEvent<WheelEvent>): void => {
+    this.scrollVelocity.set(0, 0);
     this.customEvents.onWheel?.(extendEvent(event));
     if (event.defaultPrevented || !(event.nativeEvent.target instanceof HTMLElement)) {
       return;
@@ -117,19 +131,26 @@ export abstract class ScrollHandler implements EventHandlers {
     this.customEvents.onClick?.(extendEvent(event));
   };
 
-  private getPointerInteractionData(pointerId: number) {
-    let interactionData = this.pointerInteractionMap.get(pointerId);
-    if (interactionData == null) {
-      this.pointerInteractionMap.set(
-        pointerId,
-        (interactionData = {
-          hasPrevIntersection: false,
-          prevIntersection: new Vector3(),
-        }),
-      );
-    }
-    return interactionData;
-  }
-
   protected abstract onScroll(distanceX: number, distanceY: number): boolean;
+
+  applyScrollVelocity(deltaTime: number): void {
+    if (
+      this.prevInteractionMap.size > 0 ||
+      (this.scrollVelocity.y === 0 && this.scrollVelocity.x === 0)
+    ) {
+      return;
+    }
+
+    this.onScroll(this.scrollVelocity.x * deltaTime, this.scrollVelocity.y * deltaTime);
+
+    this.scrollVelocity.multiplyScalar(0.9); //damping scroll factor
+
+    if (Math.abs(this.scrollVelocity.x) < 0.01) {
+      this.scrollVelocity.x = 0;
+    }
+
+    if (Math.abs(this.scrollVelocity.y) < 0.01) {
+      this.scrollVelocity.y = 0;
+    }
+  }
 }

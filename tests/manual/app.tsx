@@ -18,6 +18,7 @@ import {
   RootContainer,
   RootText,
   KoestlichTestCanvas,
+  noAnimation,
 } from "@coconut-xr/koestlich";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Fullscreen } from "./fullscreen.js";
@@ -148,108 +149,112 @@ export default function Index() {
                     sizeX={width}
                     sizeY={height}
                   >
-                    <DefaultStyleProvider>
-                      <Suspense fallback={null}>
-                        <Image index={1} id="image0" classes={[imageClass]} url="example.png">
-                          <Text
-                            positionType="absolute"
-                            positionLeft={30}
-                            positionTop={30}
-                          >
-                            I am outside of the picture
-                          </Text>
-                        </Image>
-                      </Suspense>
-
-                      <Object
-                        object={obj}
-                        width={200}
-                        height={100}
-                        index={1.5}
-                        color={red ? "red" : "blue"}
-                        id="rounded"
-                        onClick={() => setRed((red) => !red)}
-                      ></Object>
-
-                      <Suspense fallback={null}>
-                        <Image
-                          borderRadius={50}
-                          border={10}
-                          borderColor="green"
-                          index={2}
-                          id="image1"
-                          classes={[imageClass]}
-                          url="example.png"
-                        />
-                      </Suspense>
-                      <Suspense fallback={null}>
-                        <Image
-                          borderRadius={10}
-                          border={10}
-                          borderColor="red"
-                          index={2.5}
-                          id="image2"
-                          width={100}
-                          url="test.png"
-                        />
-                      </Suspense>
-
-                      <Suspense fallback={null}>
-                        <SVG id="svg1" index={3} url="example.svg" height={100} />
-                        <SVG id="svg2" index={4} color={0xffff00} url="example.svg" height={200} />
-                        <SVG id="svg3" index={4} url="mozilla.svg" height={200} />
-                      </Suspense>
-                      <CustomContainer
-                        borderRadius={10}
-                        padding={10}
-                        index={5}
-                        id="x"
-                        variant="success"
-                      >
+                    <Container animation={noAnimation}>
+                      <DefaultStyleProvider>
                         <Suspense fallback={null}>
-                          <Text
-                            backgroundColor="red"
-                            index={0}
-                            padding={10}
-                            paddingLeft={20}
-                            color={0x0}
-                            fontSize={32}
-                            id="c-xr"
-                          >
-                            Coconut XR
-                          </Text>
+                          <Image index={1} id="image0" classes={[imageClass]} url="example.png">
+                            <Text positionType="absolute" positionLeft={30} positionTop={30}>
+                              I am outside of the picture
+                            </Text>
+                          </Image>
                         </Suspense>
-                        <Suspense>
-                          <Text index={1} color={0x0} id="lorem-ipsum">
-                            "But I must explain to you how all this mistaken idea of denouncing
-                            pleasure and praising pain was born and I will give you a complete
-                            account of the system, and expound the actual teachings of the great
-                            explorer of the truth, the master-builder of human happiness."
-                          </Text>
-                        </Suspense>
-                      </CustomContainer>
-                      <Container index={6}>
+
+                        <Object
+                          object={obj}
+                          width={200}
+                          height={100}
+                          index={1.5}
+                          color={red ? "red" : "blue"}
+                          id="rounded"
+                          onClick={() => setRed((red) => !red)}
+                        ></Object>
+
                         <Suspense fallback={null}>
-                          <GLTF
-                            scaleX={1}
-                            scaleY={1}
-                            alignItems="center"
-                            justifyContent="center"
-                            id="gltf"
-                            url="example.glb"
-                            width={200}
-                            index={5}
+                          <Image
+                            borderRadius={50}
+                            border={10}
+                            borderColor="green"
+                            index={2}
+                            id="image1"
+                            classes={[imageClass]}
+                            url="example.png"
+                          />
+                        </Suspense>
+                        <Suspense fallback={null}>
+                          <Image
+                            borderRadius={10}
+                            border={10}
+                            borderColor="red"
+                            index={2.5}
+                            id="image2"
+                            width={100}
+                            url="test.png"
+                          />
+                        </Suspense>
+
+                        <Suspense fallback={null}>
+                          <SVG id="svg1" index={3} url="example.svg" height={100} />
+                          <SVG
+                            id="svg2"
+                            index={4}
+                            color={0xffff00}
+                            url="example.svg"
                             height={200}
-                          >
-                            <Suspense fallback={null}>
-                              <Text index={0} fontSize={8} id="text2" color={0x0}>
-                                COCONUT XR
-                              </Text>
-                            </Suspense>
-                          </GLTF>
+                          />
+                          <SVG id="svg3" index={4} url="mozilla.svg" height={200} />
                         </Suspense>
-                      </Container>
-                    </DefaultStyleProvider>
+                        <CustomContainer
+                          borderRadius={10}
+                          padding={10}
+                          index={5}
+                          id="x"
+                          variant="success"
+                        >
+                          <Suspense fallback={null}>
+                            <Text
+                              backgroundColor="red"
+                              index={0}
+                              padding={10}
+                              paddingLeft={20}
+                              color={0x0}
+                              fontSize={32}
+                              id="c-xr"
+                            >
+                              Coconut XR
+                            </Text>
+                          </Suspense>
+                          <Suspense>
+                            <Text index={1} color={0x0} id="lorem-ipsum">
+                              "But I must explain to you how all this mistaken idea of denouncing
+                              pleasure and praising pain was born and I will give you a complete
+                              account of the system, and expound the actual teachings of the great
+                              explorer of the truth, the master-builder of human happiness."
+                            </Text>
+                          </Suspense>
+                        </CustomContainer>
+                        <Container index={6}>
+                          <Suspense fallback={null}>
+                            <GLTF
+                              scaleX={1}
+                              scaleY={1}
+                              alignItems="center"
+                              justifyContent="center"
+                              id="gltf"
+                              url="example.glb"
+                              width={200}
+                              index={5}
+                              height={200}
+                            >
+                              <Suspense fallback={null}>
+                                <Text index={0} fontSize={8} id="text2" color={0x0}>
+                                  COCONUT XR
+                                </Text>
+                              </Suspense>
+                            </GLTF>
+                          </Suspense>
+                        </Container>
+                      </DefaultStyleProvider>
+                    </Container>
                   </RootObject>
                 </group>
               </>

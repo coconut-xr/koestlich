@@ -126,7 +126,9 @@ For text fields and text areas, we provide the [@coconut-xr/input](https://githu
 ## Animations
 
 Animations are built into **koestlich** and work out of the box. Almost all properties can be animated. In contrast to HTML/CSS, elements can transition from one place in a layout to another, a feature often referred to as AutoTransition. To declare how UI elements relate between two different layouts, the `id` property is used. Placing the same `id` property on two UI components in different layouts will keep the underlying UI element alive and automatically transition. However, both UI components need to have the same type. Therefore, it is impossible to transition an Image to a Text component.
-Koestlich provides the animation property to control birth, death, and transition behavior. The following example shows how the state is controlled via a button, which changes the ordering of components via the index parameter and animates the button's color between green and red.
+All Koestlich components have the `animation` property, which can either be set to one of the default animations (`noAnimation`, `distanceFadeAnimation` - default) or can be set to a custom animation.
+
+The following example shows how the state is controlled via a button, which changes the ordering of components via the index parameter and animates the button's color between green and red.
 
 [CodeSandbox](https://codesandbox.io/s/koestlich-animations-gnthy9?file=/src/app.tsx)
 
@@ -313,7 +315,13 @@ class CardGeometry extends ExtrudeGeometry {
 
 ## Overflow, Scroll, and Clipping
 
-**Koestlich** handles clipping and scrolling for you. You only need to specify overflow "scroll" or "hidden" on any container. First, however, we need to configure react-three/fiber to support visual clipping and clipping of events, which is done via `<Canvas events={clippingEvents} gl={{ localClippingEnabled: true }}>`.
+**Koestlich** handles clipping and scrolling for you. You only need to specify `overflow` "scroll" or "hidden" on any container. First, however, we need to configure react-three/fiber to support visual clipping and clipping of events, which is done via `<Canvas events={clippingEvents} gl={{ localClippingEnabled: true }}>`.
+
+#### Important:
+
+All components are animated by default using the `distanceFadeAnimation`. For a snappy scroll experience, the animation can be disabled by providing the `noAnimation` animation on the direct children of the scroll container.
+
+The following example shows a scrollable user interface using the `noAnimation` property to deliver a snappy scroll experience.
 
 [CodeSandbox](https://codesandbox.io/s/koestlich-overflow-c9nkvc?file=/src/app.tsx)
 
@@ -322,7 +330,7 @@ class CardGeometry extends ExtrudeGeometry {
 ```tsx
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import { RootContainer, Container, clippingEvents } from "@coconut-xr/koestlich";
+import { RootContainer, Container, clippingEvents, noAnimation } from "@coconut-xr/koestlich";
 
 export default function App() {
   return (
@@ -335,8 +343,10 @@ export default function App() {
         flexDirection="row"
         overflow="scroll"
       >
-        <Container width={750} margin={48} backgroundColor="green" />
-        <Container width={750} margin={48} backgroundColor="blue" />
+        <Container animation={noAnimation}>
+          <Container width={750} margin={48} backgroundColor="green" />
+          <Container width={750} margin={48} backgroundColor="blue" />
+        </Container>
       </RootContainer>
     </Canvas>
   );
