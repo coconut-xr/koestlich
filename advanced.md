@@ -1,9 +1,5 @@
 # Advanced
 
-## Precision
-
-The unit for expressing sizes in 2D layouts often corresponds to pixels. However, in 3D layouts, no such uniform unit exists. For use cases like WebXR, 1 unit should correspond to 1 meter. However, in other use cases, another unit may be more reasonable. We provide the `precision` parameter on the root component to support different units. The default precision is `0.001`. The precision expresses the smallest possible difference between two values. The precision influeces the layout computation, the z-offset between nested components, and the scroll speed. If z-fighting occurs or the scrolling is too slow/fast the precision should be modified.
-
 ## Classes and DefaultStyleProvider
 
 **Koestlich** implements support for classes and inherited property values. The following code shows how classes and the `DefaultStyleProvider` can reduce style descriptions. In the following example, one `DefaultStyleProvider` sets the `borderRadius` to `0.1` for all `Containers`. The `borderRadius` style is inherited and extended with `margin = 0.1` from a second `DefaultStyleProvider`. The constant `blue` acts as a CSS class and assigns the `backgroundColor` to two components.
