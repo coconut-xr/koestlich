@@ -25,10 +25,9 @@ function reversePainterSortStable(a: RenderItem, b: RenderItem) {
     b.z = bBucket.screenSpaceZ;
   }
 
-  //TODO: this won't work for e.g. GLTFs (because objects somewhere in the gltf can have a different orientation => position.z not the same direction)
   if (aBucket != null && aBucket === bBucket) {
     aBucket.getWorldPosition(positionNormalHelper).sub(cameraWorldPosition);
-    let distance = b.object.position.z - a.object.position.z;
+    let distance = getZ(b.object, bBucket) - getZ(a.object, aBucket);
     if (positionNormalHelper.dot(aBucket.getWorldDirection(normalHelper)) < 0) {
       distance = -distance;
     }
@@ -38,6 +37,14 @@ function reversePainterSortStable(a: RenderItem, b: RenderItem) {
     return b.z - a.z;
   }
   return a.id - b.id;
+}
+
+const positonHelper = new Vector3();
+
+function getZ(object: Object3D, bucket: Bucket): number {
+  object.getWorldPosition(positonHelper);
+  bucket.worldToLocal(positonHelper);
+  return positonHelper.z;
 }
 
 export function patchRenderOrder(renderer: WebGLRenderer): void {

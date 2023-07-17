@@ -14,6 +14,7 @@ import {
   getParentScale,
   globalFromLocalTransformation,
   localFromGlobalTransformation,
+  noTransition,
   Transformation,
   Transition,
 } from "./transition.js";
@@ -102,6 +103,38 @@ export const distanceFadeAnimation: AnimationConfig = {
     }
   },
   transition: distanceTransition(),
+};
+
+export const noAnimation: AnimationConfig = {
+  isDead: (state) => {
+    if ("backgroundOpacity" in state && state.backgroundOpacity instanceof Vector1) {
+      return state.backgroundOpacity.x <= 0.001;
+    }
+    return true;
+  },
+  toBirthState: (state) => {
+    if ("opacity" in state && state.opacity instanceof Vector1) {
+      state.opacity.set(0);
+    }
+    if ("backgroundOpacity" in state && state.backgroundOpacity instanceof Vector1) {
+      state.backgroundOpacity.set(0);
+    }
+    if ("borderOpacity" in state && state.borderOpacity instanceof Vector1) {
+      state.borderOpacity.set(0);
+    }
+  },
+  toDeathState: (state) => {
+    if ("opacity" in state && state.opacity instanceof Vector1) {
+      state.opacity.set(0);
+    }
+    if ("backgroundOpacity" in state && state.backgroundOpacity instanceof Vector1) {
+      state.backgroundOpacity.set(0);
+    }
+    if ("borderOpacity" in state && state.borderOpacity instanceof Vector1) {
+      state.borderOpacity.set(0);
+    }
+  },
+  transition: noTransition,
 };
 
 const minDepth = zFightingOffset;

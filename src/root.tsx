@@ -148,6 +148,7 @@ export function buildRoot<T extends BaseNode, P extends YogaProperties, C, A ext
         }
         rootStorage.bucket.position.x = currentAnimationState.scale.x * anchorXMap[anchorX];
         rootStorage.bucket.position.y = currentAnimationState.scale.y * anchorYMap[anchorY];
+        rootStorage.bucket.updateInverseMatrixWorld();
       });
       useEffect(() => patchRenderOrder(renderer), [renderer]);
 

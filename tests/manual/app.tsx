@@ -12,7 +12,6 @@ import {
   ContainerNode,
   DefaultStyleProvider,
   buildComponent,
-  clippingEvents,
   flexAPI,
   Object,
   RootObject,
@@ -21,11 +20,12 @@ import {
   KoestlichTestCanvas,
 } from "@coconut-xr/koestlich";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Fullscreen } from "./fullscreen";
+import { Fullscreen } from "./fullscreen.js";
 import { OrbitControls } from "@react-three/drei";
 import { Group, Mesh, MeshPhongMaterial, MOUSE, PlaneGeometry } from "three";
-import { RoundedBoxGeometry } from "three-stdlib/geometries/RoundedBoxGeometry";
+import { RoundedBoxGeometry } from "three-stdlib/geometries/RoundedBoxGeometry.js";
 import { makeBorderMaterial } from "@coconut-xr/xmaterials";
+import { XWebPointers, noEvents } from "@coconut-xr/xinteraction/react";
 
 const imageClass = {
   height: 0.3,
@@ -78,13 +78,14 @@ export default function Index() {
         toggle show
       </button>
       <Canvas
-        events={clippingEvents}
+        events={noEvents}
         shadows
         dpr={window.devicePixelRatio}
         gl={{ localClippingEnabled: true }}
         style={{ height: "100vh" }}
       >
         <color attach="background" args={[0]} />
+        <XWebPointers />
         <RotateUI />
         <AppleUI />
         <directionalLight
@@ -100,6 +101,7 @@ export default function Index() {
               target={[0.5 * ratio, -0.5, 0]}
               enableZoom={false}
               enablePan={false}
+              enableRotate={false}
               minDistance={1}
               maxDistance={1}
               mouseButtons={{
@@ -136,15 +138,13 @@ export default function Index() {
                 </group>
                 <group position={[0, 0, -1]}>
                   <RootObject
-                    padding={0.03}
+                    padding={50}
                     color="gray"
-                    precision={0.002}
                     id="root"
                     object={bgObj}
                     overflow="scroll"
                     anchorX="left"
                     anchorY="top"
-                    pixelSize={1}
                     sizeX={width}
                     sizeY={height}
                   >
@@ -152,10 +152,9 @@ export default function Index() {
                       <Suspense fallback={null}>
                         <Image index={1} id="image0" classes={[imageClass]} url="example.png">
                           <Text
-                            fontSize={0.1}
                             positionType="absolute"
-                            positionLeft={0.3}
-                            positionTop={0.26}
+                            positionLeft={30}
+                            positionTop={30}
                           >
                             I am outside of the picture
                           </Text>
@@ -164,8 +163,8 @@ export default function Index() {
 
                       <Object
                         object={obj}
-                        width={0.2}
-                        height={0.2}
+                        width={200}
+                        height={100}
                         index={1.5}
                         color={red ? "red" : "blue"}
                         id="rounded"
@@ -174,8 +173,8 @@ export default function Index() {
 
                       <Suspense fallback={null}>
                         <Image
-                          borderRadius={0.1}
-                          border={0.01}
+                          borderRadius={50}
+                          border={10}
                           borderColor="green"
                           index={2}
                           id="image1"
@@ -185,24 +184,24 @@ export default function Index() {
                       </Suspense>
                       <Suspense fallback={null}>
                         <Image
-                          borderRadius={0.02}
-                          border={0.01}
+                          borderRadius={10}
+                          border={10}
                           borderColor="red"
                           index={2.5}
                           id="image2"
-                          width={0.1}
+                          width={100}
                           url="test.png"
                         />
                       </Suspense>
 
                       <Suspense fallback={null}>
-                        <SVG id="svg1" index={3} url="example.svg" height={0.05} />
-                        <SVG id="svg2" index={4} color={0xffff00} url="example.svg" height={0.1} />
-                        <SVG id="svg3" index={4} url="mozilla.svg" height={0.2} />
+                        <SVG id="svg1" index={3} url="example.svg" height={100} />
+                        <SVG id="svg2" index={4} color={0xffff00} url="example.svg" height={200} />
+                        <SVG id="svg3" index={4} url="mozilla.svg" height={200} />
                       </Suspense>
                       <CustomContainer
-                        borderRadius={0.05}
-                        padding={0.05}
+                        borderRadius={10}
+                        padding={10}
                         index={5}
                         id="x"
                         variant="success"
@@ -211,17 +210,17 @@ export default function Index() {
                           <Text
                             backgroundColor="red"
                             index={0}
-                            padding={0.03}
-                            paddingLeft={0.1}
+                            padding={10}
+                            paddingLeft={20}
                             color={0x0}
-                            fontSize={0.1}
+                            fontSize={32}
                             id="c-xr"
                           >
                             Coconut XR
                           </Text>
                         </Suspense>
                         <Suspense>
-                          <Text index={1} fontSize={0.05} color={0x0} id="lorem-ipsum">
+                          <Text index={1} color={0x0} id="lorem-ipsum">
                             "But I must explain to you how all this mistaken idea of denouncing
                             pleasure and praising pain was born and I will give you a complete
                             account of the system, and expound the actual teachings of the great
@@ -238,12 +237,12 @@ export default function Index() {
                             justifyContent="center"
                             id="gltf"
                             url="example.glb"
-                            width={0.2}
+                            width={200}
                             index={5}
-                            height={0.2}
+                            height={200}
                           >
                             <Suspense fallback={null}>
-                              <Text index={0} fontSize={0.01} id="text2" color={0x0}>
+                              <Text index={0} fontSize={8} id="text2" color={0x0}>
                                 COCONUT XR
                               </Text>
                             </Suspense>

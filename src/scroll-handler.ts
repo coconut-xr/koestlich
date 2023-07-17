@@ -26,13 +26,12 @@ export abstract class ScrollHandler implements EventHandlers {
   //TODO: this probably does not work correctly with objects that were scaled via flexbox transformation
 
   //root object all interactions relate too
-  protected abstract bucket: Object3D;
+  protected abstract readonly bucket: Object3D;
   private pointerInteractionMap = new Map<
     number,
     { prevIntersection: Vector3; hasPrevIntersection: boolean }
   >();
   protected abstract parent: ScrollHandler | undefined;
-  public abstract readonly precision: number;
 
   customEvents: ExtendedEventHandlers = {};
 
@@ -105,8 +104,8 @@ export abstract class ScrollHandler implements EventHandlers {
     if (event.defaultPrevented || !(event.nativeEvent.target instanceof HTMLElement)) {
       return;
     }
-    const xScroll = -event.deltaX * this.precision;
-    const yScroll = event.deltaY * this.precision;
+    const xScroll = -event.deltaX;
+    const yScroll = event.deltaY;
 
     if (!this.onScroll(xScroll, yScroll)) {
       return;
