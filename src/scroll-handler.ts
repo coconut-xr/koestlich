@@ -72,7 +72,7 @@ export abstract class ScrollHandler implements EventHandlers {
         (interaction = { timestamp: 0, point: new Vector3() }),
       );
     }
-    interaction.timestamp = event.timeStamp / 1000;
+    interaction.timestamp = performance.now() / 1000;
     this.bucket.worldToLocal(interaction.point.copy(event.point));
   };
 
@@ -88,7 +88,7 @@ export abstract class ScrollHandler implements EventHandlers {
         (interaction = { timestamp: 0, point: new Vector3() }),
       );
     }
-    interaction.timestamp = event.timeStamp / 1000;
+    interaction.timestamp = performance.now() / 1000;
     this.bucket.worldToLocal(interaction.point.copy(event.point));
   };
 
@@ -100,14 +100,17 @@ export abstract class ScrollHandler implements EventHandlers {
     }
     this.bucket.worldToLocal(localPointHelper.copy(event.point));
     distanceHelper.copy(localPointHelper).sub(prevInteraction.point);
-    const timestamp = event.timeStamp / 1000;
+    const timestamp = performance.now() / 1000;
     const deltaTime = timestamp - prevInteraction.timestamp;
 
     prevInteraction.point.copy(localPointHelper);
     prevInteraction.timestamp = timestamp;
 
     if (this.onScroll(distanceHelper.x, distanceHelper.y)) {
-      this.scrollVelocity.set(distanceHelper.x, distanceHelper.y).divideScalar(deltaTime);
+      if (deltaTime > 0.01) {
+        //more then 10 ms
+        this.scrollVelocity.set(distanceHelper.x, distanceHelper.y).divideScalar(deltaTime);
+      }
       event.stopPropagation();
     }
   };
