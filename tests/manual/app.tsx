@@ -44,7 +44,64 @@ const customAPI = {
 
 const CustomContainer = buildComponent(ContainerNode, useContainer, customAPI);
 
-export default function Index() {
+export default function Test() {
+  const [row, setRow] = useState(true);
+
+  return (
+    <Canvas
+      events={noEvents}
+      shadows
+      dpr={window.devicePixelRatio}
+      gl={{ localClippingEnabled: true }}
+      style={{ height: "100vh" }}
+    >
+      <color attach="background" args={[0]} />
+      <XWebPointers />
+      <directionalLight shadow-mapSize={2048} castShadow intensity={0.5} position={[0.1, 0.1, 1]} />
+      <ambientLight color={0xffffff} intensity={0.5} />
+      <Fullscreen
+        camera={(ratio) => (
+          <OrbitControls
+            target={[0, 0, 0]}
+            enableZoom={false}
+            enablePan={false}
+            enableRotate={false}
+            minDistance={1}
+            maxDistance={1}
+            mouseButtons={{
+              LEFT: MOUSE.RIGHT,
+              MIDDLE: MOUSE.MIDDLE,
+              RIGHT: MOUSE.LEFT,
+            }}
+          />
+        )}
+      >
+        {(width, height) => (
+          <RootContainer
+            pixelSize={1}
+            precision={0.001}
+            sizeX={width}
+            sizeY={height}
+            backgroundColor="green"
+            alignItems="stretch"
+          >
+            <Container backgroundColor="black" gapRow={0} gapColumn={0} flexDirection={row ? "row" : "column"}>
+              <Container
+                aspectRatio={1}
+                height={0.1}
+                onClick={() => setRow(!row)}
+                backgroundColor="red"
+              />
+              <Container aspectRatio={1} height={0.1} backgroundColor="red" />
+            </Container>
+          </RootContainer>
+        )}
+      </Fullscreen>
+    </Canvas>
+  );
+}
+
+export function Index() {
   const [show, setShow] = useState(true);
   const [red, setRed] = useState(true);
 
@@ -149,7 +206,7 @@ export default function Index() {
                     sizeX={width}
                     sizeY={height}
                   >
-                    <Container animation={noAnimation}>
+                    <Container flexDirection={red ? "row" : "column"}>
                       <DefaultStyleProvider>
                         <Suspense fallback={null}>
                           <Image index={1} id="image0" classes={[imageClass]} url="example.png">

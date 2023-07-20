@@ -492,7 +492,7 @@ export abstract class BaseNode<S extends AnimationState = AnimationState> extend
 
     for (const [key, value] of Object.entries(this.target)) {
       if (key != "translate" && key != "scale") {
-        this.animationConfig.transition(this.current[key], value, deltaTime);
+        this.animationConfig.transition(this.current[key], value, deltaTime, false);
       }
     }
     applyTransitionOnTransformation(

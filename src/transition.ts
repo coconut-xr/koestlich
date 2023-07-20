@@ -1,8 +1,8 @@
-import { Vector2, Vector3, Vector4 } from "three";
-import { saveDivide } from "./utils.js";
-import { Vector1, VectorX } from "./vector.js";
+import { Vector3 } from "three";
+import { saveDivide, saveDivideNumber } from "./utils.js";
+import { VectorX } from "./vector.js";
 
-export type Transition = (from: VectorX, to: VectorX, delta: number) => void;
+export type Transition = (from: VectorX, to: VectorX, delta: number, isScale: boolean) => void;
 
 const zero = new Vector3(0, 0, 0);
 const one = new Vector3(1, 1, 1);
@@ -10,6 +10,8 @@ const one = new Vector3(1, 1, 1);
 export type Transformation = Readonly<{ translate: Vector3; scale: Vector3 }>;
 
 const defaultTransformation: Transformation = { translate: zero, scale: one };
+
+const distanceHelper = new Vector3();
 
 export function applyTransitionOnTransformation(
   transition: Transition,
@@ -23,19 +25,23 @@ export function applyTransitionOnTransformation(
   const { translate: globalTranslate, scale: globalScale } = global;
   const { translate: localTranslate, scale: localScale } = local;
 
-  const globalDistanceToLocalTarget = localTranslate.distanceTo(localTargetTranslate);
-  const globalDistanceToGlobalTarget = globalTranslate.distanceTo(globalTargetTranslate);
+  const localDistance = distanceHelper
+    .copy(localTranslate)
+    .sub(localTargetTranslate)
+    .multiply(parentCurrent.scale)
+    .lengthSq();
+  const globalDistance = globalTranslate.distanceToSquared(globalTargetTranslate);
 
-  if (globalDistanceToGlobalTarget < globalDistanceToLocalTarget) {
-    transition(globalTranslate, globalTargetTranslate, deltaTime);
-    transition(globalScale, globalTargetScale, deltaTime);
-
-    localFromGlobalTransformation(local, global, parentCurrent);
-  } else {
-    transition(localTranslate, localTargetTranslate, deltaTime);
-    transition(localScale, localTargetScale, deltaTime);
+  if (localDistance < globalDistance) {
+    transition(localTranslate, localTargetTranslate, deltaTime, false);
+    transition(localScale, localTargetScale, deltaTime, true);
 
     globalFromLocalTransformation(global, local, parentCurrent);
+  } else {
+    transition(globalTranslate, globalTargetTranslate, deltaTime, false);
+    transition(globalScale, globalTargetScale, deltaTime, true);
+
+    localFromGlobalTransformation(local, global, parentCurrent);
   }
 }
 
@@ -121,13 +127,44 @@ export function linearTransition(speed = 5): (from: VectorX, to: VectorX, delta:
   };
 }
 
-export function distanceTransition(speed = 5): (from: VectorX, to: VectorX, delta: number) => void {
-  return (from, to, delta) => {
-    const fromCopy = getHelperClone(from);
-    from
-      .copy(to)
-      .sub(fromCopy)
-      .multiplyScalar(Math.min(1, delta * speed)) //min prevents overshooting
-      .add(fromCopy);
+export function distanceTransition(speed = 5): Transition {
+  return (from, to, delta, isScale) => {
+    //we take this function to clamp delta between 0-1. The function is asympotic to 1 for x going to infinity and starts at 0,0
+    //the weight represents the influence of the to value on the result
+    const weight = 1 - 1 / (1 + delta * speed);
+
+    if (!isScale) {
+      const helper = getHelperClone(to);
+      from.multiplyScalar(1 - weight).add(helper.copy(to).multiplyScalar(weight));
+      return;
+    }
+
+    computeEachComponent(from, (fromValue, componentName) => {
+      const toValue = (to as any)[componentName];
+
+      const mix =
+        Math.min(fromValue, toValue) * (1 - weight) + Math.max(fromValue, toValue) * weight;
+
+      if (toValue >= fromValue) {
+        return mix;
+      }
+      //calculate scale inverse (formular based on trying out)
+      return saveDivideNumber(fromValue * toValue, mix);
+    });
   };
+}
+
+const componentNames = ["x", "y", "z", "w"] as const;
+
+function computeEachComponent(
+  vec: any,
+  callback: (value: number, component: (typeof componentNames)[number]) => number,
+) {
+  for (const componentName of componentNames) {
+    const value = vec[componentName];
+    if (value == null) {
+      return; //we can return here because no "y" implies no "z", "w" and so on
+    }
+    vec[componentName] = callback(value, componentName);
+  }
 }
