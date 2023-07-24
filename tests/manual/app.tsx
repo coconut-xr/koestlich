@@ -44,7 +44,7 @@ const customAPI = {
 
 const CustomContainer = buildComponent(ContainerNode, useContainer, customAPI);
 
-export default function Test() {
+export function Test() {
   const [row, setRow] = useState(true);
 
   return (
@@ -85,7 +85,12 @@ export default function Test() {
             backgroundColor="green"
             alignItems="stretch"
           >
-            <Container backgroundColor="black" gapRow={0} gapColumn={0} flexDirection={row ? "row" : "column"}>
+            <Container
+              backgroundColor="black"
+              gapRow={0}
+              gapColumn={0}
+              flexDirection={row ? "row" : "column"}
+            >
               <Container
                 aspectRatio={1}
                 height={0.1}
@@ -101,7 +106,7 @@ export default function Test() {
   );
 }
 
-export function Index() {
+export default function Index() {
   const [show, setShow] = useState(true);
   const [red, setRed] = useState(true);
 
@@ -159,7 +164,6 @@ export function Index() {
               target={[0.5 * ratio, -0.5, 0]}
               enableZoom={false}
               enablePan={false}
-              enableRotate={false}
               minDistance={1}
               maxDistance={1}
               mouseButtons={{
@@ -173,27 +177,29 @@ export function Index() {
           {(width, height) =>
             show ? (
               <>
-                <group position={[0, 0, 0]}>
-                  <RootContainer
-                    padding={0.03}
-                    id="root"
-                    overflow="scroll"
-                    anchorX="left"
-                    anchorY="top"
-                    pixelSize={1}
-                    sizeX={width}
-                    sizeY={height}
-                  >
-                    <Suspense>
-                      <Text index={1} fontSize={0.05} color={"white"} id="lorem-ipsum">
-                        "But I must explain to you how all this mistaken idea of denouncing pleasure
-                        and praising pain was born and I will give you a complete account of the
-                        system, and expound the actual teachings of the great explorer of the truth,
-                        the master-builder of human happiness."
-                      </Text>
-                    </Suspense>
-                  </RootContainer>
-                </group>
+                {false && (
+                  <group position={[0, 0, 0]}>
+                    <RootContainer
+                      padding={0.03}
+                      id="root"
+                      overflow="scroll"
+                      anchorX="left"
+                      anchorY="top"
+                      pixelSize={1}
+                      sizeX={width}
+                      sizeY={height}
+                    >
+                      <Suspense>
+                        <Text index={1} fontSize={0.05} color={"white"} id="lorem-ipsum">
+                          "But I must explain to you how all this mistaken idea of denouncing
+                          pleasure and praising pain was born and I will give you a complete account
+                          of the system, and expound the actual teachings of the great explorer of
+                          the truth, the master-builder of human happiness."
+                        </Text>
+                      </Suspense>
+                    </RootContainer>
+                  </group>
+                )}
                 <group position={[0, 0, -1]}>
                   <RootObject
                     padding={50}

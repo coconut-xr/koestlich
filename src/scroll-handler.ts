@@ -1,5 +1,6 @@
 import { EventHandlers, ThreeEvent } from "@react-three/fiber/dist/declarations/src/core/events.js";
-import { Object3D, Vector2, Vector3 } from "three";
+import { Vector2, Vector3 } from "three";
+import { Bucket } from "./bucket.js";
 
 const distanceHelper = new Vector3();
 const localPointHelper = new Vector3();
@@ -26,7 +27,7 @@ export abstract class ScrollHandler implements EventHandlers {
   //TODO: this probably does not work correctly with objects that were scaled via flexbox transformation
 
   //root object all interactions relate too
-  protected abstract readonly bucket: Object3D;
+  protected abstract readonly bucket: Bucket;
   private prevInteractionMap = new Map<number, { timestamp: number; point: Vector3 }>();
   protected abstract parent: ScrollHandler | undefined;
 
@@ -53,12 +54,38 @@ export abstract class ScrollHandler implements EventHandlers {
     this.customEvents.onPointerCancel?.(extendEvent(event));
   };
 
+  private onPointerNotPressed = (event: ThreeEvent<PointerEvent>) => {
+    const pointerState = this.bucket.pointerStateMap.get(event.pointerId);
+    if (pointerState == null) {
+      return;
+    }
+    pointerState.pressedHandlers.delete(this);
+    if (pointerState.pressedHandlers.size === 0) {
+      this.bucket.pointerStateMap.delete(event.pointerId);
+    }
+  };
+
+  cleanupHandler() {
+    for (const [key, set] of this.bucket.pointerStateMap) {
+      set.pressedHandlers.delete(this);
+      if (set.pressedHandlers.size != 0) {
+        continue;
+      }
+      this.bucket.pointerStateMap.delete(key);
+    }
+  }
+
   onPointerUp = (event: ThreeEvent<PointerEvent>) => {
     this.prevInteractionMap.delete(event.pointerId);
     this.customEvents.onPointerUp?.(extendEvent(event));
+    this.onPointerNotPressed(event);
   };
 
-  onPointerOut = this.onPointerUp;
+  onPointerOut = (event: ThreeEvent<PointerEvent>) => {
+    this.prevInteractionMap.delete(event.pointerId);
+    this.customEvents.onPointerOut?.(extendEvent(event));
+    this.onPointerNotPressed(event);
+  };
 
   onPointerDown = (event: ThreeEvent<PointerEvent>) => {
     this.customEvents.onPointerDown?.(extendEvent(event));
@@ -74,6 +101,19 @@ export abstract class ScrollHandler implements EventHandlers {
     }
     interaction.timestamp = performance.now() / 1000;
     this.bucket.worldToLocal(interaction.point.copy(event.point));
+
+    let pointerState = this.bucket.pointerStateMap.get(event.pointerId);
+    if (pointerState == null) {
+      this.bucket.pointerStateMap.set(
+        event.pointerId,
+        (pointerState = {
+          isDrag: false,
+          pressedHandlers: new Set(),
+          pressPoint: interaction.point.clone(),
+        }),
+      );
+    }
+    pointerState.pressedHandlers.add(this);
   };
 
   onPointerEnter = (event: ThreeEvent<PointerEvent>): void => {
@@ -98,7 +138,31 @@ export abstract class ScrollHandler implements EventHandlers {
     if (event.defaultPrevented || prevInteraction == null) {
       return;
     }
+
+    if (!("pointerId" in event)) {
+      return;
+    }
+
+    const pointerState = this.bucket.pointerStateMap.get(event.pointerId as number);
+
+    if (pointerState == null) {
+      return;
+    }
+
     this.bucket.worldToLocal(localPointHelper.copy(event.point));
+
+    if (
+      !pointerState.isDrag &&
+      distanceSquaredInXYPlane(localPointHelper, pointerState.pressPoint) >
+        this.bucket.pixelDragThresholdSquared
+    ) {
+      pointerState.isDrag = true;
+    }
+
+    if (!pointerState.isDrag) {
+      return;
+    }
+
     distanceHelper.copy(localPointHelper).sub(prevInteraction.point);
     const timestamp = performance.now() / 1000;
     const deltaTime = timestamp - prevInteraction.timestamp;
@@ -131,6 +195,12 @@ export abstract class ScrollHandler implements EventHandlers {
   };
 
   onClick = (event: ThreeEvent<MouseEvent>): void => {
+    if (
+      "pointerId" in event &&
+      this.bucket.pointerStateMap.get(event.pointerId as number)?.isDrag
+    ) {
+      return;
+    }
     this.customEvents.onClick?.(extendEvent(event));
   };
 
@@ -156,4 +226,10 @@ export abstract class ScrollHandler implements EventHandlers {
       this.scrollVelocity.y = 0;
     }
   }
+}
+
+function distanceSquaredInXYPlane(v1: Vector3, v2: Vector3): number {
+  const xDiff = v2.x - v2.x;
+  const yDiff = v1.y - v2.y;
+  return xDiff * xDiff + yDiff * yDiff;
 }

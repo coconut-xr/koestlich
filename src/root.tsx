@@ -88,6 +88,7 @@ export function buildRoot<T extends BaseNode, P extends YogaProperties, C, A ext
       pixelSize?: number;
       position?: Vector3;
       rotation?: Euler;
+      dragThreshold?: number;
     }
   >(
     (
@@ -104,6 +105,7 @@ export function buildRoot<T extends BaseNode, P extends YogaProperties, C, A ext
         sizeY,
         children,
         classes,
+        dragThreshold = 16,
         ...props
       },
       ref,
@@ -123,6 +125,7 @@ export function buildRoot<T extends BaseNode, P extends YogaProperties, C, A ext
         }),
         [precision, yoga],
       );
+      rootStorage.bucket.pixelDragThresholdSquared = dragThreshold * dragThreshold;
       const defaultProperties = useDefaultStyles();
       const properties = translateProperties<P, A>(
         api,

@@ -271,6 +271,7 @@ export abstract class BaseNode<S extends AnimationState = AnimationState> extend
       this.nextParent.removeChild(this);
     }
     this.cleanupReference();
+    this.cleanupHandler();
     this.onCleanup();
   }
 
