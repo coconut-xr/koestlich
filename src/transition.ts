@@ -123,7 +123,7 @@ export function linearTransition(speed = 5): (from: VectorX, to: VectorX, delta:
       from.copy(to);
       return;
     }
-    from.multiplyScalar(Math.min(1, (speed * delta) / distance)).add(fromCopy);
+    from.multiplyScalar(Math.min(1, saveDivideNumber(speed * delta, distance))).add(fromCopy);
   };
 }
 

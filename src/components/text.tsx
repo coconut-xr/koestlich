@@ -42,7 +42,7 @@ import { applyEventHandlers } from "../events.js";
 import { BaseNode } from "../node.js";
 import { flexAPI } from "../properties/index.js";
 import { buildRoot } from "../root.js";
-import { saveDivide, saveDivideScalar } from "../utils.js";
+import { saveDivide, saveDivideNumber, saveDivideScalar } from "../utils.js";
 import { Vector1 } from "../vector.js";
 import {
   ContainerProperties,
@@ -405,8 +405,7 @@ export class TextNode extends BaseNode<TextState> {
       .multiply(current.scale)
       .add(current.translate);
 
-    const textScaleMultiplier =
-      this.globalOuterScale.y == 0 ? 0 : current.scale.y / this.globalOuterScale.y;
+    const textScaleMultiplier = saveDivideNumber(current.scale.y, this.globalOuterScale.y);
 
     // write bounds info to mesh properties:
 

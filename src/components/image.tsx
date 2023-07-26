@@ -5,7 +5,7 @@ import {
   Plane,
   PlaneGeometry,
   RepeatWrapping,
-  sRGBEncoding,
+  SRGBColorSpace,
   Texture,
   Vector2,
   Vector3,
@@ -243,10 +243,10 @@ export function useImage(
   children: ReactNode | undefined,
 ): ReactNode | undefined {
   //TODO: stop updating texture value on the node
-  const texture = useLoader(PlatformConstants.TextureLoader, url);
+  const texture: Texture = useLoader(PlatformConstants.TextureLoader, url);
   const gl = useThree((state) => state.gl);
   useEffect(() => {
-    texture.encoding = sRGBEncoding;
+    texture.colorSpace = SRGBColorSpace;
     texture.wrapS = texture.wrapT = RepeatWrapping;
     texture.matrixAutoUpdate = false;
     gl.initTexture(texture);

@@ -18,7 +18,7 @@ import {
   Transformation,
   Transition,
 } from "./transition.js";
-import { asVector3, saveDivide } from "./utils.js";
+import { asVector3, saveDivide, saveDivideNumber } from "./utils.js";
 import { Vector1, VectorX } from "./vector.js";
 import {
   EDGE_BOTTOM,
@@ -207,8 +207,8 @@ export abstract class BaseNode<S extends AnimationState = AnimationState> extend
     const scaleX = this.current?.scale.x ?? 1;
     const scaleY = this.current?.scale.y ?? 1;
 
-    this.normalizedScrollOffset.x += scaleX === 0 ? 0 : distanceX / scaleX;
-    this.normalizedScrollOffset.y += scaleY === 0 ? 0 : distanceY / scaleY;
+    this.normalizedScrollOffset.x += saveDivideNumber(distanceX, scaleX);
+    this.normalizedScrollOffset.y += saveDivideNumber(distanceY, scaleY);
 
     this.updateScroll();
     if (
