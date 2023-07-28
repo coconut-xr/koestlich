@@ -44,6 +44,27 @@ const customAPI = {
 
 const CustomContainer = buildComponent(ContainerNode, useContainer, customAPI);
 
+export default function X() {
+  return (
+    <Canvas style={{ position: "absolute", inset: 0 }} gl={{ localClippingEnabled: true }}>
+      <OrbitControls enableRotate={false} />
+      <RootContainer
+        backgroundColor="red"
+        sizeX={2}
+        sizeY={1}
+        flexDirection="row"
+        overflow="scroll"
+        dragThreshold={0}
+      >
+        <Container flexDirection="row" animation={noAnimation}>
+          <Container width={750} margin={48} backgroundColor="green" />
+          <Container width={750} margin={48} backgroundColor="blue" />
+        </Container>
+      </RootContainer>
+    </Canvas>
+  );
+}
+
 export function Test() {
   const [row, setRow] = useState(true);
 
@@ -106,7 +127,7 @@ export function Test() {
   );
 }
 
-export default function Index() {
+export function Index() {
   const [show, setShow] = useState(true);
   const [red, setRed] = useState(true);
 
@@ -211,6 +232,7 @@ export default function Index() {
                     anchorY="top"
                     sizeX={width}
                     sizeY={height}
+                    animation={noAnimation}
                   >
                     <Container flexDirection={red ? "row" : "column"}>
                       <DefaultStyleProvider>

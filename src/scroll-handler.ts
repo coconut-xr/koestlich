@@ -28,7 +28,7 @@ export abstract class ScrollHandler implements EventHandlers {
 
   //root object all interactions relate too
   protected abstract readonly bucket: Bucket;
-  private prevInteractionMap = new Map<number, { timestamp: number; point: Vector3 }>();
+  protected prevInteractionMap = new Map<number, { timestamp: number; point: Vector3 }>();
   protected abstract parent: ScrollHandler | undefined;
 
   protected scrollVelocity = new Vector2();
@@ -205,27 +205,6 @@ export abstract class ScrollHandler implements EventHandlers {
   };
 
   protected abstract onScroll(distanceX: number, distanceY: number): boolean;
-
-  applyScrollVelocity(deltaTime: number): void {
-    if (
-      this.prevInteractionMap.size > 0 ||
-      (this.scrollVelocity.y === 0 && this.scrollVelocity.x === 0)
-    ) {
-      return;
-    }
-
-    this.onScroll(this.scrollVelocity.x * deltaTime, this.scrollVelocity.y * deltaTime);
-
-    this.scrollVelocity.multiplyScalar(0.9); //damping scroll factor
-
-    if (Math.abs(this.scrollVelocity.x) < 0.01) {
-      this.scrollVelocity.x = 0;
-    }
-
-    if (Math.abs(this.scrollVelocity.y) < 0.01) {
-      this.scrollVelocity.y = 0;
-    }
-  }
 }
 
 function distanceSquaredInXYPlane(v1: Vector3, v2: Vector3): number {

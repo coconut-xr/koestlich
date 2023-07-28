@@ -36,13 +36,19 @@ export const zFightingOffset = 0.5;
 const helper2 = new Vector2();
 const helper3 = new Vector3();
 
-const one2 = new Vector2(1, 1);
-const zero2 = new Vector2(0, 0);
-
 const zero = new Vector3(0, 0, 0);
 const one = new Vector3(1, 1, 1);
 
+const zero2 = new Vector2(0, 0);
+const one2 = new Vector2(1, 1);
+
+const vector3Helper = new Vector3();
+
 const scrollOffsetCache = new Vector3();
+
+const invertY = new Vector3(1, -1, 1);
+
+const springConstant = 10000;
 
 export enum SetPropertyEffect {
   Changed,
@@ -145,6 +151,8 @@ export abstract class BaseNode<S extends AnimationState = AnimationState> extend
   protected nextParent: BaseNode | undefined;
   protected parent: BaseNode | undefined;
 
+  protected normalizedScrollOffset = new Vector3();
+
   protected properties: YogaProperties = {};
 
   public abstract target: Readonly<S>;
@@ -170,7 +178,6 @@ export abstract class BaseNode<S extends AnimationState = AnimationState> extend
 
   protected manualTransformation = { translate: new Vector3(), scale: new Vector3(1, 1, 1) };
 
-  protected normalizedScrollOffset = new Vector3();
   protected depth: number;
 
   protected clippingPlanes: Array<Plane> | null = null;
@@ -210,7 +217,6 @@ export abstract class BaseNode<S extends AnimationState = AnimationState> extend
     this.normalizedScrollOffset.x += saveDivideNumber(distanceX, scaleX);
     this.normalizedScrollOffset.y += saveDivideNumber(distanceY, scaleY);
 
-    this.updateScroll();
     if (
       scrollOffsetCache.x != this.normalizedScrollOffset.x ||
       scrollOffsetCache.y != this.normalizedScrollOffset.y
@@ -220,22 +226,6 @@ export abstract class BaseNode<S extends AnimationState = AnimationState> extend
     }
 
     return false;
-  }
-
-  private updateScroll(): void {
-    if (this.yoga.getOverflow() != OVERFLOW_SCROLL) {
-      this.normalizedScrollOffset.x = 0;
-      this.normalizedScrollOffset.y = 0;
-    }
-    helper2.copy(this.measuredNormalizedContentBounds.max).sub(one2).max(zero2);
-    this.normalizedScrollOffset.x = Math.min(
-      -this.measuredNormalizedContentBounds.min.x,
-      Math.max(-helper2.x, this.normalizedScrollOffset.x),
-    );
-    this.normalizedScrollOffset.y = Math.max(
-      this.measuredNormalizedContentBounds.min.y,
-      Math.min(helper2.y, this.normalizedScrollOffset.y),
-    );
   }
 
   /**
@@ -358,7 +348,10 @@ export abstract class BaseNode<S extends AnimationState = AnimationState> extend
     }
     this.parent = this.nextParent;
 
-    this.updateScroll();
+    if (this.yoga.getOverflow() != OVERFLOW_SCROLL) {
+      this.normalizedScrollOffset.x = 0;
+      this.normalizedScrollOffset.y = 0;
+    }
     this.updateTransformationTarget(false);
 
     this.onLayout();
@@ -546,6 +539,53 @@ export abstract class BaseNode<S extends AnimationState = AnimationState> extend
     }
 
     this.onUpdate(this.current);
+  }
+
+  applyScrollVelocity(deltaTime: number): void {
+    if (this.prevInteractionMap.size > 0) {
+      return;
+    }
+
+    const { max, min } = this.measuredNormalizedContentBounds;
+    helper2.copy(max).sub(one2).max(zero2);
+
+    vector3Helper
+      .set(-min.x, -min.y, 0)
+      .add(this.normalizedScrollOffset)
+      .multiply(invertY)
+      .multiply(this.parent?.current?.scale ?? one)
+      .multiplyScalar(-springConstant)
+      .min(zero);
+
+    const leftRubber = vector3Helper.x * deltaTime;
+    const upRubber = -vector3Helper.y * deltaTime;
+
+    vector3Helper
+      .set(helper2.x, helper2.y, 0)
+      .add(this.normalizedScrollOffset)
+      .multiply(invertY)
+      .multiply(this.parent?.current?.scale ?? one)
+      .multiplyScalar(-springConstant)
+      .max(one);
+
+    const rightRubber = vector3Helper.x * deltaTime;
+    const downRibber = -vector3Helper.y * deltaTime;
+
+    this.onScroll(
+      this.scrollVelocity.x * deltaTime + rightRubber + leftRubber,
+      this.scrollVelocity.y * deltaTime + upRubber + downRibber,
+    );
+
+    this.scrollVelocity.multiplyScalar(0.9); //damping scroll factor
+    //TODO: calculate spring
+
+    if (Math.abs(this.scrollVelocity.x) < 0.01) {
+      this.scrollVelocity.x = 0;
+    }
+
+    if (Math.abs(this.scrollVelocity.y) < 0.01) {
+      this.scrollVelocity.y = 0;
+    }
   }
 
   /**
