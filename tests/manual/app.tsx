@@ -54,11 +54,12 @@ export default function X() {
         flexDirection="row"
         dragThreshold={0}
         padding={100}
-        overflow="scroll"
       >
-        <Container flexDirection="row" flexGrow={1} animation={noAnimation}>
-          <Container width={750} margin={48} backgroundColor="green" />
-          <Container width={750} margin={48} backgroundColor="blue" />
+        <Container overflow="scroll" flexDirection="row" flexGrow={1}>
+          <Container flexDirection="column" flexGrow={1} animation={noAnimation}>
+            <Container height={750} margin={48} backgroundColor="green" />
+            <Container height={750} margin={48} backgroundColor="blue" />
+          </Container>
         </Container>
       </RootContainer>
     </Canvas>
