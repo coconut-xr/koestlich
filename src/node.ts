@@ -35,6 +35,7 @@ export const zFightingOffset = 0.5;
 
 const helper2 = new Vector2();
 const helper3 = new Vector3();
+const maxHelper = new Vector2();
 
 const zero = new Vector3(0, 0, 0);
 const one = new Vector3(1, 1, 1);
@@ -48,7 +49,7 @@ const scrollOffsetCache = new Vector3();
 
 const invertY = new Vector3(1, -1, 1);
 
-const springConstant = 10000;
+const springConstant = 30;
 
 export enum SetPropertyEffect {
   Changed,
@@ -207,6 +208,12 @@ export abstract class BaseNode<S extends AnimationState = AnimationState> extend
   protected onScroll(distanceX: number, distanceY: number): boolean {
     if (this.yoga.getOverflow() != OVERFLOW_SCROLL) {
       return false;
+    }
+
+    if (this.prevInteractionMap.size > 0) {
+      this.getOverscroll(helper2);
+      distanceX *= 1 / Math.exp(0.0005 * Math.abs(helper2.x));
+      distanceY *= 1 / Math.exp(0.0005 * Math.abs(helper2.y));
     }
 
     scrollOffsetCache.copy(this.normalizedScrollOffset);
@@ -541,43 +548,48 @@ export abstract class BaseNode<S extends AnimationState = AnimationState> extend
     this.onUpdate(this.current);
   }
 
-  applyScrollVelocity(deltaTime: number): void {
-    if (this.prevInteractionMap.size > 0) {
-      return;
-    }
-
+  getOverscroll(target: Vector2) {
     const { max, min } = this.measuredNormalizedContentBounds;
-    helper2.copy(max).sub(one2).max(zero2);
+    maxHelper.copy(max).sub(one2).max(zero2);
 
     vector3Helper
       .set(-min.x, -min.y, 0)
       .add(this.normalizedScrollOffset)
       .multiply(invertY)
-      .multiply(this.parent?.current?.scale ?? one)
+      .multiply(this.current?.scale ?? one)
       .multiplyScalar(-springConstant)
       .min(zero);
 
-    const leftRubber = vector3Helper.x * deltaTime;
-    const upRubber = -vector3Helper.y * deltaTime;
+    const rightRubber = vector3Helper.x;
+    const downRubber = -vector3Helper.y;
 
     vector3Helper
-      .set(helper2.x, helper2.y, 0)
+      .set(maxHelper.x, maxHelper.y, 0)
       .add(this.normalizedScrollOffset)
       .multiply(invertY)
-      .multiply(this.parent?.current?.scale ?? one)
+      .multiply(this.current?.scale ?? one)
       .multiplyScalar(-springConstant)
       .max(one);
 
-    const rightRubber = vector3Helper.x * deltaTime;
-    const downRibber = -vector3Helper.y * deltaTime;
+    const leftRubber = vector3Helper.x;
+    const upRubber = -vector3Helper.y;
+
+    target.set(rightRubber + leftRubber, upRubber + downRubber);
+  }
+
+  applyScrollVelocity(deltaTime: number): void {
+    if (this.prevInteractionMap.size > 0) {
+      return;
+    }
+
+    this.getOverscroll(helper2);
 
     this.onScroll(
-      this.scrollVelocity.x * deltaTime + rightRubber + leftRubber,
-      this.scrollVelocity.y * deltaTime + upRubber + downRibber,
+      (this.scrollVelocity.x + helper2.x) * deltaTime,
+      (this.scrollVelocity.y + helper2.y) * deltaTime,
     );
 
     this.scrollVelocity.multiplyScalar(0.9); //damping scroll factor
-    //TODO: calculate spring
 
     if (Math.abs(this.scrollVelocity.x) < 0.01) {
       this.scrollVelocity.x = 0;

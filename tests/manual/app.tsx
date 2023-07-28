@@ -47,16 +47,16 @@ const CustomContainer = buildComponent(ContainerNode, useContainer, customAPI);
 export default function X() {
   return (
     <Canvas style={{ position: "absolute", inset: 0 }} gl={{ localClippingEnabled: true }}>
-      <OrbitControls enableRotate={false} />
       <RootContainer
         backgroundColor="red"
         sizeX={2}
         sizeY={1}
         flexDirection="row"
-        overflow="scroll"
         dragThreshold={0}
+        padding={100}
+        overflow="scroll"
       >
-        <Container flexDirection="row" animation={noAnimation}>
+        <Container flexDirection="row" flexGrow={1} animation={noAnimation}>
           <Container width={750} margin={48} backgroundColor="green" />
           <Container width={750} margin={48} backgroundColor="blue" />
         </Container>

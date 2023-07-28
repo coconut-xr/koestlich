@@ -1,6 +1,6 @@
 {
   "name": "@coconut-xr/koestlich",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "homepage": "https://coconut-xr.github.io/koestlich",
   "license": "SEE LICENSE IN LICENSE",
   "description": "user interfaces for Three.js",
