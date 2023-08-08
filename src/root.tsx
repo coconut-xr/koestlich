@@ -11,7 +11,7 @@ import React, {
 import { Bucket } from "./bucket.js";
 import { UseComponent } from "./component.js";
 import { BaseNode, NodeClass, useNode } from "./node.js";
-import { Euler, useFrame, useThree, Vector3, Vector3Props } from "@react-three/fiber";
+import { Euler, useFrame, useThree, Vector3 } from "@react-three/fiber";
 import {
   flexAPI,
   PropertiesFromAPI,
