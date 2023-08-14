@@ -1,0 +1,35 @@
+name: Deployment
+
+on:
+    push:
+        branches: [develop]
+
+jobs:
+    publish-npm-package:
+        runs-on: ubuntu-latest
+        permissions:
+          contents: read
+          packages: write 
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Setup Node
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+                  registry-url: https://registry.npmjs.org/
+
+            - name: Install Dependencies
+              run: npm install
+
+            - name: Check
+              run: npm run check
+
+            - name: Build
+              run: npm run build
+
+            - name: Deploy
+              run: npm publis --tag beta --access public
+              env:
+                NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

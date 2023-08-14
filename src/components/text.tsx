@@ -677,15 +677,13 @@ export function useText(
 
   let structuralChanges = false;
 
-  const measureGlyphFn = useMemo<MeasureFunction>(() => {
-    structuralChanges = true;
-    return (w, wMode, h, hMode) => measureGlyph(text, glyphProperties, w, h);
-  }, [...measureGlyphDependencies(text, glyphProperties)]);
-
   useEffect(() => {
-    setMeasureFunc(node.yoga, node.precision, measureGlyphFn);
+    structuralChanges = true;
+    setMeasureFunc(node.yoga, node.precision, (w, wMode, h, hMode) =>
+      measureGlyph(text, glyphProperties, w, h),
+    );
     node["requestLayoutCalculation"]();
-  }, [measureGlyphFn, node]);
+  }, [...measureGlyphDependencies(text, glyphProperties), node]);
 
   useEffect(() => {
     //update must happen in useEffect to respect the lifeclycles when reusing nodescolorHelper.set(color ?? textDefaults["color"])

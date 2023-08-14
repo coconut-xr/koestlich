@@ -109,6 +109,7 @@ export function Test() {
 export default function Index() {
   const [show, setShow] = useState(true);
   const [red, setRed] = useState(true);
+  const [bold, setBold] = useState(false);
 
   const obj = useMemo(() => {
     const x = new Mesh(
@@ -274,17 +275,34 @@ export default function Index() {
                           variant="success"
                         >
                           <Suspense fallback={null}>
-                            <Text
-                              backgroundColor="red"
-                              index={0}
-                              padding={10}
-                              paddingLeft={20}
-                              color={0x0}
-                              fontSize={32}
-                              id="c-xr"
-                            >
-                              Coconut XR
-                            </Text>
+                            {bold && (
+                              <Text
+                                backgroundColor="red"
+                                index={0}
+                                padding={10}
+                                paddingLeft={20}
+                                color={0x0}
+                                fontSize={16}
+                                fontFamily="roboto"
+                                onClick={() => setBold(!bold)}
+                              >
+                                Coconut XR
+                              </Text>
+                            )}
+                            {!bold && (
+                              <Text
+                                backgroundColor="red"
+                                index={0}
+                                padding={10}
+                                paddingLeft={20}
+                                color={0x0}
+                                fontSize={32}
+                                fontFamily="opensans"
+                                onClick={() => setBold(!bold)}
+                              >
+                                Coconut XR
+                              </Text>
+                            )}
                           </Suspense>
                           <Suspense>
                             <Text index={1} color={0x0} id="lorem-ipsum">
