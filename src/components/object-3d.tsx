@@ -325,11 +325,11 @@ export function useSVGFromText(
   } & BaseObject3DProperties,
   children: ReactNode | undefined,
 ): ReactNode | undefined {
-  const result = svgLoader.parse(text);
   const object = useMemo(() => {
+    const { paths } = svgLoader.parse(text);
     const object = new Object3D();
     let i = 0;
-    for (const path of result.paths) {
+    for (const path of paths) {
       const shapes = SVGLoader.createShapes(path);
       const material = new MeshBasicMaterial({
         color: path.color,
@@ -348,7 +348,7 @@ export function useSVGFromText(
       }
     }
     return object;
-  }, [result]);
+  }, [text]);
   return useObject(node, { object, depth: 0, ...props }, children, true);
 }
 
