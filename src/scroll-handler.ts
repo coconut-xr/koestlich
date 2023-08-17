@@ -28,6 +28,7 @@ export abstract class ScrollHandler implements EventHandlers {
 
   //root object all interactions relate too
   protected abstract readonly bucket: Bucket;
+  protected isDying = false;
   private prevInteractionMap = new Map<number, { timestamp: number; point: Vector3 }>();
   protected abstract parent: ScrollHandler | undefined;
 
@@ -36,21 +37,39 @@ export abstract class ScrollHandler implements EventHandlers {
   customEvents: ExtendedEventHandlers = {};
 
   onContextMenu = (event: ThreeEvent<MouseEvent>) => {
+    if (this.isDying) {
+      return;
+    }
     this.customEvents.onContextMenu?.(extendEvent(event));
   };
   onDoubleClick = (event: ThreeEvent<MouseEvent>) => {
+    if (this.isDying) {
+      return;
+    }
     this.customEvents.onDoubleClick?.(extendEvent(event));
   };
   onPointerOver = (event: ThreeEvent<PointerEvent>) => {
+    if (this.isDying) {
+      return;
+    }
     this.customEvents.onPointerOver?.(extendEvent(event));
   };
   onPointerLeave = (event: ThreeEvent<PointerEvent>) => {
+    if (this.isDying) {
+      return;
+    }
     this.customEvents.onPointerLeave?.(extendEvent(event));
   };
   onPointerMissed(event: MouseEvent) {
+    if (this.isDying) {
+      return;
+    }
     this.customEvents.onPointerMissed?.(event);
   }
   onPointerCancel = (event: ThreeEvent<PointerEvent>) => {
+    if (this.isDying) {
+      return;
+    }
     this.customEvents.onPointerCancel?.(extendEvent(event));
   };
 
@@ -76,18 +95,27 @@ export abstract class ScrollHandler implements EventHandlers {
   }
 
   onPointerUp = (event: ThreeEvent<PointerEvent>) => {
+    if (this.isDying) {
+      return;
+    }
     this.prevInteractionMap.delete(event.pointerId);
     this.customEvents.onPointerUp?.(extendEvent(event));
     this.onPointerNotPressed(event);
   };
 
   onPointerOut = (event: ThreeEvent<PointerEvent>) => {
+    if (this.isDying) {
+      return;
+    }
     this.prevInteractionMap.delete(event.pointerId);
     this.customEvents.onPointerOut?.(extendEvent(event));
     this.onPointerNotPressed(event);
   };
 
   onPointerDown = (event: ThreeEvent<PointerEvent>) => {
+    if (this.isDying) {
+      return;
+    }
     this.customEvents.onPointerDown?.(extendEvent(event));
     if (event.defaultPrevented) {
       return;
@@ -117,6 +145,9 @@ export abstract class ScrollHandler implements EventHandlers {
   };
 
   onPointerEnter = (event: ThreeEvent<PointerEvent>): void => {
+    if (this.isDying) {
+      return;
+    }
     this.customEvents.onPointerEnter?.(extendEvent(event));
     if (event.defaultPrevented || event.buttons != 1) {
       return;
@@ -133,6 +164,9 @@ export abstract class ScrollHandler implements EventHandlers {
   };
 
   onPointerMove = (event: ThreeEvent<PointerEvent>): void => {
+    if (this.isDying) {
+      return;
+    }
     const prevInteraction = this.prevInteractionMap.get(event.pointerId);
     this.customEvents.onPointerMove?.(extendEvent(event));
     if (event.defaultPrevented || prevInteraction == null) {
@@ -180,6 +214,9 @@ export abstract class ScrollHandler implements EventHandlers {
   };
 
   onWheel = (event: ThreeEvent<WheelEvent>): void => {
+    if (this.isDying) {
+      return;
+    }
     this.scrollVelocity.set(0, 0);
     this.customEvents.onWheel?.(extendEvent(event));
     if (event.defaultPrevented || !(event.nativeEvent.target instanceof HTMLElement)) {
@@ -195,6 +232,9 @@ export abstract class ScrollHandler implements EventHandlers {
   };
 
   onClick = (event: ThreeEvent<MouseEvent>): void => {
+    if (this.isDying) {
+      return;
+    }
     if (
       "pointerId" in event &&
       this.bucket.pointerStateMap.get(event.pointerId as number)?.isDrag

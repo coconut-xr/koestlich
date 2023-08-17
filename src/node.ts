@@ -177,8 +177,6 @@ export abstract class BaseNode<S extends AnimationState = AnimationState> extend
   protected overflowClipped = false;
   protected clippingBounds = new Vector4();
 
-  protected isDying = false;
-
   public index = 0;
 
   public animationConfig: AnimationConfig = distanceFadeAnimation;
