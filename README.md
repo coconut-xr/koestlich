@@ -39,7 +39,7 @@ We currently provide bindings to [react-three/fiber](https://github.com/pmndrs/r
 - WebXR Interactions - [@coconut-xr/natuerlich](https://github.com/coconut-xr/natuerlich)
 - Text Fields & Text Areas - [@coconut-xr/input](https://github.com/coconut-xr/input)
 - Pre-designed UI Components - [@coconut-xr/apfel-kruemel](https://github.com/coconut-xr/apfel-kruemel)
-- Lucice Icons for Koestlich - [@coconut-xr/lucide-koestlich](https://github.com/coconut-xr/lucide-koestlich)
+- Lucide Icons for Koestlich - [@coconut-xr/lucide-koestlich](https://github.com/coconut-xr/lucide-koestlich)
 
 ## React Native
 
