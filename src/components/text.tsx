@@ -656,11 +656,11 @@ export function useText(
     material,
     ...props
   }: TextProperties & YogaProperties,
-  children: string | undefined,
+  children: string | Array<string> | undefined,
 ): undefined {
   const font = useFont(fontFamily);
 
-  const text = children ?? textDefaults["children"];
+  const text = Array.isArray(children) ? children.join("") : children ?? textDefaults["children"];
 
   const glyphProperties = useMemo<GlyphProperties>(
     () => ({

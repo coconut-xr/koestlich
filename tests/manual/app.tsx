@@ -294,7 +294,7 @@ export default function Index() {
                                 fontFamily="roboto"
                                 onClick={() => setBold(!bold)}
                               >
-                                Coconut XR
+                                Coconut {"XR"}!
                               </Text>
                             )}
                             {!bold && (
@@ -308,7 +308,7 @@ export default function Index() {
                                 fontFamily="opensans"
                                 onClick={() => setBold(!bold)}
                               >
-                                Coconut XR
+                              Coconut {"XR"}!
                               </Text>
                             )}
                           </Suspense>
