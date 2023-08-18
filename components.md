@@ -135,7 +135,7 @@ The image renders a 2D plane with an image. The image also has the properties of
 
 ## Text
 
-Renders a string into individual glyphs based on a multi-channel signed distance function. The text requires the provision of a FontFamilyProvider. The text also has the properties of the container to render a background.
+Renders a string or array of strings into individual glyphs based on a multi-channel signed distance function. The text requires the provision of a FontFamilyProvider. The text also has the properties of the container to render a background.
 
 | Parameter            | Description                                                                                                                                           |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
