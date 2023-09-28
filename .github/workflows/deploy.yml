@@ -23,11 +23,6 @@ jobs:
           run: |
               npm ci
               npm run build
-
-        - name: Copy README.md and images to public
-          run: |
-            sed -i 's+./docs/+./+g' README.md
-            cp README.md public/README.md
         
         - name: Copy docs to public
           run: |
