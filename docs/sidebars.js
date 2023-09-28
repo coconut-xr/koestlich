@@ -60,11 +60,6 @@ const sidebars = {
     },
     {
       type: "link",
-      label: "Ecosystem - Input",
-      href: "https://github.com/coconut-xr/input",
-    },
-    {
-      type: "link",
       label: "Github",
       href: "https://github.com/coconut-xr/koestlich",
     },
