@@ -1,6 +1,6 @@
 import React from "react";
 
-export function YouTubeEmbed({
+export default function YouTubeEmbed({
   path,
 }: {
   path: string;
