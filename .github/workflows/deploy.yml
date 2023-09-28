@@ -11,16 +11,33 @@ jobs:
         - name: Checkout code
           uses: actions/checkout@v2
 
-        - name: Copy README.md
+        - name: Copy README.md to docs
           run: |
-            cp README.md docs/README.md
-            cp -r images docs/images
+              sed -i 1s/^/---\\nid:\ main-doc\\nslug:\ \\/\\n---\\n\\nimport\ Image\ from\ \'@theme\\/IdealImage\'\;\\n\\n/ README.md
+              sed -i -r s/'<img\ src=\"\.\/docs\/static\/images\/([A-Za-z0-9_-]*.[pngifj]*)\"\ width=\"([0-9.%]*)\">'/'<Image\ img=\{require\(\`\@site\/static\/images\/\1\`)\}\ style={{width:\ \"\2\"}}\/>'/g README.md
+              sed -i s/'https\:\/\/coconut-xr.github.io\/koestlich/'/g README.md
+              cp README.md docs/docs/README.md
+
+        - name: Install and Build docusaurus docs
+          working-directory: docs
+          run: |
+              npm ci
+              npm run build
+
+        - name: Copy README.md and images to public
+          run: |
+            sed -i 's+./docs/+./+g' README.md
+            cp README.md public/README.md
+        
+        - name: Copy docs to public
+          run: |
+            cp -r docs/build/* public
 
         - name: Deploy
           uses: JamesIves/github-pages-deploy-action@4.1.5
           with:
             branch: gh-pages
-            folder: docs
+            folder: public
     publish-npm-package:
         runs-on: ubuntu-latest
         permissions:

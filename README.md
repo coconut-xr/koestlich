@@ -5,7 +5,7 @@
 [![Twitter](https://img.shields.io/twitter/follow/coconut_xr?style=flat-square)](https://twitter.com/coconut_xr)
 [![Discord](https://img.shields.io/discord/1087727032240185424?style=flat-square&label=discord)](https://discord.gg/RbyaXJJaJM)
 
-![header image](./images/koestlich-header.jpg)
+<img src="./docs/static/images/header.jpg" width="100%">
 
 _user interfaces for Three.js_
 
@@ -15,24 +15,20 @@ We currently provide bindings to [react-three/fiber](https://github.com/pmndrs/r
 
 `npm install @coconut-xr/koestlich`
 
-[<span style="font-size: 2rem">⤷ Getting Started</span>](https://coconut-xr.github.io/koestlich/#/getting-started)
+## Check out the [Getting Started](https://coconut-xr.github.io/koestlich/category/getting-started)
 
 ## Examples
 
 - [Dashboard](https://codesandbox.io/s/koestlich-dashboard-example-8hjx90)
 
-<img src="./images/dashboard.gif"  width="250">
+<img src="./docs/static/images/dashboard.gif" width="35%">
 
-## [Documentation](https://coconut-xr.github.io/koestlich)
+## [Documentation](https://coconut-xr.github.io/koestlich/)
 
-- [Getting Started](https://coconut-xr.github.io/koestlich/#/getting-started)
-  introduces **koestlich**'s features by example
-- [Advanced](https://coconut-xr.github.io/koestlich/#/advanced)
-  introducing classes, default styles, and custom property APIs
-- [Components](https://coconut-xr.github.io/koestlich/#/components)
-  Description of available components and their API
-- [Library Development](https://coconut-xr.github.io/koestlich/#/library-development)
-  information for developing custom component libraries
+- <a href="https://coconut-xr.github.io/koestlich/category/getting-started">Getting Started</a> Introduces **koestlich**'s features by example
+- <a href="https://coconut-xr.github.io/koestlich/advanced">Advanced</a> Introducing classes, default styles, and custom property APIs
+- <a href="https://coconut-xr.github.iokoestlich/#/components">Components</a> Description of available components and their API
+- <a href="https://coconut-xr.github.io/koestlich/#/library-development">Library Development</a> Information for developing custom component libraries
 
 ## Ecosystem
 
