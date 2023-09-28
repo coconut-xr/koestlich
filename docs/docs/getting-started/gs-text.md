@@ -3,7 +3,43 @@ import { CodesandboxEmbed } from '../CodesandboxEmbed.tsx'
 
 # Text
 
-The Text component enables rendering text using multi-channel signed distance functions (MSDF). A font can be created from a .ttf file to an MSDF representation as a JSON and a corresponding texture using [`msdf-bmfont-xml`](https://www.npmjs.com/package/msdf-bmfont-xml). We provide a set of precompiled MSDF fonts from [here](https://github.com/coconut-xr/msdf-fonts). In the following, a Text is rendered with the Roboto font family.
+The Text component enables rendering text using multi-channel signed distance functions (MSDF). A font can be created from a .ttf file to an MSDF representation as a JSON and a corresponding texture using [`msdf-bmfont-xml`](https://www.npmjs.com/package/msdf-bmfont-xml). We provide a set of precompiled MSDF fonts from [here](https://github.com/coconut-xr/msdf-fonts). There you will find a list of fonts you can instantly use in your applications. In the following, a Text is rendered with the Roboto font family.
+
+
+## Adding other fonts
+
+:::info
+Via the `FontFamilyProvider`, additional MSDF fonts can be added.
+
+```tsx
+<FontFamilyProvider
+  fontFamilies={{
+    otherFont: ["https://coconut-xr.github.io/msdf-fonts/", "inter.json"],
+  }}
+  defaultFontFamily="otherFont"
+></FontFamilyProvider>
+```
+
+:::
+
+### Generating your own msdf-fonts
+
+:::info
+For the precompiled fonts we provide, we have set up GitHub actions [here](https://github.com/coconut-xr/msdf-fonts/blob/main/.github/workflows/deploy.yml).
+:::
+
+Here is an example on how we compile the `Robot Medium` :
+
+```bash
+fontforge -lang=ff -c 'Open($1); SelectAll(); RemoveOverlap(); Generate($2)' font.ttf roboto.ttf 
+
+npx msdf-bmfont -f json roboto.ttf -i charset.txt -m 256,512 -o public/roboto -s 48
+```
+
+The `fontforge` step is necessary because msdf-bmfont has a problem with overlapping paths which is creating weird artificats.
+The step merges overlapping paths into one and therefore eliminates the artificats.
+
+## Code Example
 
 <CodesandboxEmbed path="koestlich-text-b8ymnm"/>
 
@@ -32,16 +68,7 @@ export default function App() {
 }
 ```
 
-Via the `FontFamilyProvider`, additional MSDF fonts can be added.
-
-```tsx
-<FontFamilyProvider
-  fontFamilies={{
-    otherFont: ["<baseUrl>", "<pathToJson>"],
-  }}
-  defaultFontFamily="otherFont"
-></FontFamilyProvider>
-```
+## Textfields and Textareas
 
 For text fields and text areas, we provide the [@coconut-xr/input](https://github.com/coconut-xr/input) library.
 
