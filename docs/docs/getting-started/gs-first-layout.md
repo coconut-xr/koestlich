@@ -1,5 +1,5 @@
 import Image from '@theme/IdealImage';
-import { CodesandboxEmbed } from '../codesandboxEmbed.tsx'
+import { CodesandboxEmbed } from '../CodesandboxEmbed.tsx'
 
 # First Layout
 
