@@ -1,5 +1,5 @@
 import Image from '@theme/IdealImage';
-import { YouTubeEmbed } from "./YouTubeEmbed.tsx"
+import { YouTubeEmbed } from "../components/YouTubeEmbed.tsx"
 
 # Tutorials on the Coconut XR Ecosystem
 
