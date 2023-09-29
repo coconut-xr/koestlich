@@ -59,6 +59,29 @@ const sidebars = {
       id: "library-development"
     },
     {
+      type: "category",
+      label: "Ecosystem",
+      collapsed: true,
+      collapsible: true,
+      items: [
+        {
+          type: "link",
+          label: "koestlich",
+          href: "https://github.com/coconut-xr/koestlich",
+        },
+        {
+          type: "link",
+          label: "natuerlich",
+          href: "https://github.com/coconut-xr/natuerlich",
+        },
+        {
+          type: "link",
+          label: "apfel-kruemel",
+          href: "https://github.com/coconut-xr/apfel-kruemel",
+        },
+      ],
+    },
+    {
       type: "link",
       label: "Github",
       href: "https://github.com/coconut-xr/koestlich",
