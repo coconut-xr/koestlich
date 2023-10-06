@@ -219,7 +219,7 @@ export abstract class ScrollHandler implements EventHandlers {
     }
     this.scrollVelocity.set(0, 0);
     this.customEvents.onWheel?.(extendEvent(event));
-    if (event.defaultPrevented || !(event.nativeEvent.target instanceof HTMLElement)) {
+    if (event.defaultPrevented) {
       return;
     }
     const xScroll = -event.deltaX;
