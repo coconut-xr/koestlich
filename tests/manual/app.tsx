@@ -25,7 +25,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Fullscreen } from "./fullscreen.js";
 import { OrbitControls } from "@react-three/drei";
 import { Group, Mesh, MeshPhongMaterial, MOUSE, PlaneGeometry } from "three";
-import { RoundedBoxGeometry } from "three-stdlib/geometries/RoundedBoxGeometry.js";
+import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { makeBorderMaterial } from "@coconut-xr/xmaterials";
 import { XWebPointers, noEvents } from "@coconut-xr/xinteraction/react";
 
