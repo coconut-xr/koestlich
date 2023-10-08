@@ -39,6 +39,8 @@ npx msdf-bmfont -f json roboto.ttf -i charset.txt -m 256,512 -o public/roboto -s
 The `fontforge` step is necessary because msdf-bmfont has a problem with overlapping paths which is creating weird artificats.
 The step merges overlapping paths into one and therefore eliminates the artificats.
 
+Alternatively, use this [online tool](https://msdf-bmfont.donmccurdy.com/) to generate the MSDF for you.
+
 ## Code Example
 
 <CodesandboxEmbed path="koestlich-text-b8ymnm"/>
