@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/no-unknown-property */
-import { Suspense, useMemo, useRef, useState } from "react";
+import { ReactNode, Suspense, useMemo, useRef, useState } from "react";
 import {
   Image,
   Text,
@@ -34,7 +34,7 @@ const text = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 133 78">
 <path fill="#FFF" d="M86,22l-1-2h3v2h-2M83,19l-2,1l-1-2h2l1,1M122,57l-1-2c-1,0-1,1-3,1c0-1,0-3,0-4h2l1,2c1-1,2-1,3-1c1,1,1,2,0,3l-2,1M113,56c0-1,0-2,0-3c0-1,1-2,3-2c0,4,0,4-3,5M109,55c0-1-1-3,0-4h2c1,2,0,4-2,4M106,54l-2-2c-1,0-2,1-3,0c-1,0-1-2,0-4c1,0,2,0,3,1v2c1,0,2-1,3-1c1,0,0,2,0,3l-1,1M96,50c-2-1-1-2-1-4c2,0,3,0,4,2c-1,1-2,2-3,2"/>
 <path fill="#ED1C24" d="M40,75v-2c-2,0-9,2-9-2c0-2,5-8,3-8c-3-6-7-11-10-17c2-1,0-3,2-6c3-1,2,4,5,3c-4-17,5-22,5-22c-3,0-4,0-6,1c1-7,11-14,17-15c5-1,15-3,18,2c0,1-1,2-1,3c4,0,10-4,15-5c2-1,4-1,7,0l1,2c-7-3-17,3-23,6c-1,0-2,1-3,1l1,1c3,1,4,2,8,2c1,1,2,2,3,3c1,1,2,2,3,2c0-2,0-2-1-4c1-2-1-3,2-5c2,0,2,1,3,1c-4,4-2,8,10,9c1,0,3,1,3-2c-2,0-2-2-2-3l2,1c1,3,27,7,31,12c1,2,0,3-4,5c0,2,2,5,3,6l2-2l1,1c0,2,0,3,0,5v1c-1,0-2,0-3,0c-4-1-9-1-13-1c-11-5-25-16-36-20c-2-1-1-1-4-1c0,2,1,2,3,3c3,4,6,6,5,11l-1,2c-4,0-1-8-4-9c-10,8,5,25,13,20c-4-2-4-4-4-5c10,5,31,10,33,11c0,1-4,1-4,2c-5,1-13-2-17-4c-5-1-11,7-22,4c-2-1-13-8-15-8c0,4,9,12,11,13l0,2c-2,2-5,5-5,7"/>
 <path d="M80,24c3,1,11,4,9,5c-3,0-8,0-9-3v-2m-36-4l-2,2c0-1,1-3,1-3c3-6,9-8,14-7l0,1c-8,2-6,12-7,12c-2-1-3-5-6-5m0,34c0-6-8-17,3-22c1,0-2,15,7,19v2c-2,0-3,0-5,0c-1-2-1-1-2-1c0,2,1,5,1,7c-1-1-3-3-4-5m14-26c0-2-2-3,0-4c2,0,3-2,3-4c2,0,5,2,6,3c0,2-1,2-2,4c1,2,1,2,1,4h-1c-2,0-8-1-8,1c-2,0-3,0-5,0c-1-1,1-2,1-3c2,0,3-1,5-1"/>
-</svg>`
+</svg>`;
 
 const imageClass = {
   height: 0.3,
@@ -114,6 +114,16 @@ export function Test() {
   );
 }
 
+function Rotate({ children }: { children?: ReactNode }) {
+  const groupRef = useRef<Group>(null);
+  useFrame((_, delta) => {
+    if (groupRef.current != null) {
+      groupRef.current.rotation.y += Math.PI * delta;
+    }
+  });
+  return <group ref={groupRef}>{children}</group>;
+}
+
 export default function Index() {
   const [show, setShow] = useState(true);
   const [red, setRed] = useState(true);
@@ -166,6 +176,20 @@ export default function Index() {
           intensity={0.5}
           position={[0.1, 0.1, 1]}
         />
+        <group position={[1, -0.3, 0]}>
+          <Rotate>
+            <RootContainer
+              flexDirection="column"
+              borderRadius={8}
+              pixelSize={0.002}
+              padding={10}
+              paddingRight={200}
+              backgroundColor="green"
+            >
+              <Container backgroundOpacity={0.5} backgroundColor="black" width={100} height={100} />
+            </RootContainer>
+          </Rotate>
+        </group>
         <ambientLight color={0xffffff} intensity={0.5} />
         <Fullscreen
           camera={(ratio) => (
@@ -308,7 +332,7 @@ export default function Index() {
                                 fontFamily="opensans"
                                 onClick={() => setBold(!bold)}
                               >
-                              Coconut {"XR"}!
+                                Coconut {"XR"}!
                               </Text>
                             )}
                           </Suspense>

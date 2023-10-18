@@ -1,10 +1,14 @@
-import { Object3D, RenderItem, TextureLoader, Vector3, WebGLRenderer } from "three";
+import { Object3D, Quaternion, RenderItem, TextureLoader, Vector3, WebGLRenderer } from "three";
 import { Bucket } from "./bucket.js";
 
 const normalHelper = new Vector3();
 const positionNormalHelper = new Vector3();
 
 export const cameraWorldPosition = new Vector3();
+
+const positonHelper1 = new Vector3();
+const positonHelper2 = new Vector3();
+const quaternionHelper = new Quaternion();
 
 function reversePainterSortStable(a: RenderItem, b: RenderItem) {
   if (a.groupOrder !== b.groupOrder) {
@@ -27,7 +31,10 @@ function reversePainterSortStable(a: RenderItem, b: RenderItem) {
 
   if (aBucket != null && aBucket === bBucket) {
     aBucket.getWorldPosition(positionNormalHelper).sub(cameraWorldPosition);
-    let distance = getZ(b.object, bBucket) - getZ(a.object, aBucket);
+    b.object.getWorldPosition(positonHelper1).sub(a.object.getWorldPosition(positonHelper2));
+    aBucket.getWorldQuaternion(quaternionHelper);
+    positonHelper1.applyQuaternion(quaternionHelper.invert());
+    let distance = positonHelper1.z;
     if (positionNormalHelper.dot(aBucket.getWorldDirection(normalHelper)) < 0) {
       distance = -distance;
     }
@@ -37,14 +44,6 @@ function reversePainterSortStable(a: RenderItem, b: RenderItem) {
     return b.z - a.z;
   }
   return a.id - b.id;
-}
-
-const positonHelper = new Vector3();
-
-function getZ(object: Object3D, bucket: Bucket): number {
-  object.getWorldPosition(positonHelper);
-  bucket.worldToLocal(positonHelper);
-  return positonHelper.z;
 }
 
 export function patchRenderOrder(renderer: WebGLRenderer): void {
