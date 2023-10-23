@@ -61,33 +61,3 @@ jobs:
               run: npm publish --access public
               env:
                 NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-    publish-github-package:
-        runs-on: ubuntu-latest
-        permissions:
-          contents: read
-          packages: write 
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
-
-            - name: Setup Node
-              uses: actions/setup-node@v3
-              with:
-                  node-version: 18
-                  registry-url: https://npm.pkg.github.com/
-
-            - name: Install Dependencies
-              run: npm install
-              env:
-                NODE_AUTH_TOKEN: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
-
-            - name: Check
-              run: npm run check
-
-            - name: Build
-              run: npm run build
-
-            - name: Deploy
-              run: npm publish
-              env:
-                NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
