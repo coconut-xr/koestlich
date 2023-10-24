@@ -57,7 +57,7 @@
     "three": ">=0.140.0"
   },
   "dependencies": {
-    "@coconut-xr/flex": "^3.0.3",
+    "@coconut-xr/flex": "^3.0.4",
     "@coconut-xr/glyph": "^0.0.6",
     "@coconut-xr/xmaterials": "^0.0.3",
     "suspend-react": "*",
