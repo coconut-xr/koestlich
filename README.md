@@ -1,3 +1,7 @@
+
+> [!CAUTION]
+> This library is deprecated. Use the successor [pmndrs/uikit](https://github.com/pmndrs/uikit) instead.
+
 # @coconut-xr/koestlich
 
 [![Version](https://img.shields.io/npm/v/@coconut-xr/koestlich?style=flat-square)](https://npmjs.com/package/@coconut-xr/koestlich)
